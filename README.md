@@ -5,5 +5,5 @@ Class project for CS290.
 * Andrew Ekstedt
 * Brandon Chatham
 * Jacob Mahugh
-* Michael
+* Michael Elliott
 * Xiaoli Sun
