@@ -4,6 +4,7 @@ Class project for CS290.
 
 * Andrew Ekstedt
 * Brandon Chatham
+* Ian McQuoid
 * Jacob Mahugh
 * Michael Elliott
 * Xiaoli Sun
