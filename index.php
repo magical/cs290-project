@@ -11,7 +11,7 @@
 
   <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-	  <div class="container" style="width: 81%;">
+	  <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Project</a>
 		</div>
@@ -23,7 +23,7 @@
 	  </div>
 	</nav>
 
-	<div class="container" style="width: 81%">
+	<div class="container">
 	  
       <div class="masthead">
         <nav>
@@ -37,13 +37,13 @@
           </ul>
         </nav>
       </div>
-	  
+
       <div class="jumbotron">
         <h1>Welcome!</h1>
         <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Button</a></p>
       </div>
-	  
+
       <div class="container" style="width: 100%;">
 		<div class="row">
           <div class="col-md-4">
@@ -67,7 +67,7 @@
 			<p><a class="btn btn-default" href="#" role="button">Button &raquo;</a></p>
 		  </div>
 		</div>
-	  </div>	
+	  </div>
 
 	  <footer class="footer">
 		<div class="container">
@@ -76,8 +76,8 @@
           ?></p>
 		</div>
 	  </footer>
-	  
+
 	</div>
-	
+
   </body>
 </html>
