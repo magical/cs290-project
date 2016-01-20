@@ -27,7 +27,7 @@ $stmt->bindValue("email", "bob@oregonstate.edu");
 $stmt->bindValue("name", "Bob '; DROP TABLE STUDENTS; --");
 $stmt->execute();
 
-$stmt = $db->prepare("select * from student");
+$stmt = $db->prepare("select * from students");
 $stmt->execute();
 echo '<table border=1>';
 foreach ($stmt as $row) {
