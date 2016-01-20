@@ -29,7 +29,7 @@
         <nav>
           <ul class="nav nav-justified">
             <li><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
+            <li><a href="create.php">Create</a></li>
             <li><a href="#">Link</a></li>
             <li><a href="#">Link</a></li>
             <li><a href="#">Link</a></li>
