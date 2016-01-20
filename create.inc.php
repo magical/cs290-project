@@ -38,10 +38,10 @@ CREATE TABLE users (
 $db->exec('
 CREATE TABLE courses (
     id INTEGER,
-    department VARCHAR(255), -- eg MTH
-    course VARCHAR(255), -- eg MTH252
-    year INTEGER, -- eg 2016
-    title VARCHAR(255), -- eg Integral Calculus
+    department VARCHAR(255),    -- eg CS
+    course VARCHAR(255),        -- eg CS290
+    year INTEGER,               -- eg 2016
+    title VARCHAR(255),         -- eg Web Development
 
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
@@ -71,7 +71,7 @@ $stmt = $db->prepare("INSERT INTO users VALUES (:id, :email, :name)");
 
 $stmt->bindValue("id", 1);
 $stmt->bindValue("email", "bob@oregonstate.edu");
-$stmt->bindValue("name", "Bob '; DROP TABLE STUDENTS; --");
+$stmt->bindValue("name", "Robert'); DROP TABLE Students;-- ");
 $stmt->execute();
 
 $stmt->bindValue("id", 2);
@@ -88,6 +88,35 @@ $stmt->bindValue("year", 2016);
 $stmt->bindValue("title", "Web Development");
 $stmt->execute();
 
+$stmt->bindValue("id", 2);
+$stmt->bindValue("department", "MTH");
+$stmt->bindValue("course", "MTH252");
+$stmt->bindValue("year", 2016);
+$stmt->bindValue("title", "Integral Calculus");
+$stmt->execute();
+
+$stmt = $db->prepare("INSERT INTO groups (id, course_id) VALUES (:id, :course_id)");
+
+$stmt->bindValue("id", 1);
+$stmt->bindValue("course_id", 1);
+$stmt->execute();
+$stmt->bindValue("id", 2);
+$stmt->bindValue("course_id", 1);
+$stmt->execute();
+
+$stmt = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
+
+$stmt->bindValue("group_id", 1);
+$stmt->bindValue("user_id", 1);
+$stmt->execute();
+
+$stmt->bindValue("group_id", 1);
+$stmt->bindValue("user_id", 2);
+$stmt->execute();
+
+$stmt->bindValue("group_id", 2);
+$stmt->bindValue("user_id", 2);
+$stmt->execute();
 // Display values
 
 echo "<!doctype html>\n";
@@ -122,4 +151,22 @@ foreach ($stmt as $row) {
 }
 echo "</table>\n";
 
+$stmt = $db->prepare("SELECT * FROM groups");
+$stmt->execute();
+$stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
+echo "<h1>Groups</h1>\n";
+echo "<table border=1>\n";
+echo "  <tr><th>id<th>course id<th>members</tr>\n";
+foreach ($stmt as $row) {
+    echo '  <tr>';
+    echo '<td>'.htmlspecialchars($row['id']).'</td>';
+    echo '<td>'.htmlspecialchars($row['course_id']).'</td>';
+    echo '<td>';
+    $stmt2->bindValue("group_id", $row['id']);
+    $stmt2->execute();
+    foreach ($stmt2 as $row2) {
+        echo htmlspecialchars($row2['email']) . '<br>';
+    }
+    echo "</tr>\n";
+}
 ?>
