@@ -2,9 +2,9 @@ Class project for CS290.
 
 **Project members**
 
-* Andrew Ekstedt
 * Brandon Chatham
-* Ian McQuoid
-* Jacob Mahugh
+* Andrew Ekstedt
 * Michael Elliott
+* Jacob Mahugh
+* Ian McQuoid
 * Xiaoli Sun
