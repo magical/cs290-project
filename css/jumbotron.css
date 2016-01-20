@@ -1,0 +1,18 @@
+body {
+	padding-top: 70px;
+	padding-bottom: 20px;
+}
+
+.jumbotron {
+	padding-bottom: 18px;
+	padding-top: 18px;
+	margin-top: 12;
+	margin-bottom: 12;
+}
+
+@media (min-width: 768px) {
+	.col-md-4 {
+	  	width: 33.33333333%;
+	  	float: left;
+	}
+}
