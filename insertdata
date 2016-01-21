@@ -1,0 +1,27 @@
+<?php
+$servername = "oniddb.cws.oregonstate.edu";
+$username = "sunxiao-db";
+$password = "hdVdjkiqCISFWYKU";
+$dbname = "sunxiao-db";
+
+$db=new mysqli($servername, $username, $password, $dbname);
+
+if($db->connect_error){
+    die("Connection failed: ". $db->connect_error);
+}
+
+$insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, coursenum)
+VALUES ('932051695', 'Xiaoli', 'Sun', '5417409063', 'sunxiao@oregonstate.edu', 'CS290')";
+$insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, coursenum)
+VALUES ('924037563', 'Michael', 'Jordan', '5417409063', 'jmichael@oregonstate.edu', 'CS290')";
+$insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, coursenum)
+VALUES ('111111111', 'Claudio', 'Marchisio', '5417409063', 'mclaudio@oregonstate.edu', 'CS290')";
+
+if(mysqli_query($db, $insert) === true){
+  echo "Row Inserted successfully";
+}else{
+  echo "Error :". $insert . "<br>" . mysqli_error($db);
+}
+
+mysqli_close($db);
+?>
