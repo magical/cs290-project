@@ -16,9 +16,9 @@
           <a class="navbar-brand" href="#">Project</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
-		  <form class="navbar-form navbar-right" action="signin.html" method="get">
-			<button type="submit" class="btn btn-success">Sign in</button>
-		  </form>
+		  <div class="navbar-form navbar-right">
+			<a class="btn btn-success" href="signin.html" role="button">Sign in</a>
+		  </div>
 		</div>
 	  </div>
 	</nav>
