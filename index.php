@@ -3,7 +3,6 @@
   <head>
 	<title>CS 290</title>
 	<?php include('_head.html');?>
-	<link rel="stylesheet" href="css/jumbotron.css">
   </head>
 
   <body>
