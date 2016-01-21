@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Project</a>
+          <a class="navbar-brand" href="#">Study Group Finder</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 		  <div class="navbar-form navbar-right">
