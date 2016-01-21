@@ -8,7 +8,7 @@
 
   <body>
 
-	<?php include('_header.html');?>
+	<?php include('_nav.html');?>
 
       <div class="jumbotron">
         <h1>Welcome!</h1>
