@@ -1,0 +1,30 @@
+<?php
+$servername = "oniddb.cws.oregonstate.edu";
+$username = "sunxiao-db";
+$password = "hdVdjkiqCISFWYKU";
+$dbname = "sunxiao-db";
+
+$db=new mysqli($servername, $username, $password, $dbname);
+
+if($db->connect_error){
+    die("Connection failed: ". $db->connect_error);
+}
+
+$table = "CREATE TABLE Student(
+studentid INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+fname VARCHAR(30) NOT NULL,
+lname VARCHAR(30) NOT NULL,
+cellphone INT(10) UNSIGNED,
+email VARCHAR(50),
+coursenum VARCHAR(10),
+regdate TIMESTAMP
+)";
+
+if($db->query($table) === true){
+  echo "Table created successfully";
+}else{
+  echo "Error creating table: ". $db->error;
+}
+
+$db->close();
+?>
