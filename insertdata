@@ -16,6 +16,8 @@ $insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, cours
 VALUES ('924037563', 'Michael', 'Jordan', '5417409063', 'jmichael@oregonstate.edu', 'CS290')";
 $insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, coursenum)
 VALUES ('111111111', 'Claudio', 'Marchisio', '5417409063', 'mclaudio@oregonstate.edu', 'CS290')";
+$insert = "INSERT INTO Student (studentid, fname, lname, cellphone, email, coursenum)
+VALUES ('932531553', 'Brandon', 'Chatham', '5033171236', 'chathamb@oregonstate.edu', 'CS290')";
 
 if(mysqli_query($db, $insert) === true){
   echo "Row Inserted successfully";
