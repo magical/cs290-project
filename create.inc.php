@@ -38,9 +38,9 @@ CREATE TABLE users (
     -- major_id INTEGER,
     -- standing_id INTEGER,
 
-    PRIMARY KEY (id)
     -- FOREIGN KEY (major_id) REFERENCES majors (id),
     -- FOREIGN KEY (standing_id) REFERENCES class_standings (id),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
@@ -60,9 +60,9 @@ CREATE TABLE user_courses (
     user_id INTEGER,
     course_id INTEGER, -- TODO(ae): course_section_id instead of course_id?
 
-    PRIMARY KEY (user_id, course_id),
     FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (course_id) REFERENCES courses (id)
+    FOREIGN KEY (course_id) REFERENCES courses (id),
+    PRIMARY KEY (user_id, course_id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
@@ -70,8 +70,8 @@ CREATE TABLE groups (
     id INTEGER,
     course_id INTEGER,
 
-    PRIMARY KEY (id),
-    FOREIGN KEY (course_id) REFERENCES courses (id)
+    FOREIGN KEY (course_id) REFERENCES courses (id),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
@@ -79,9 +79,9 @@ CREATE TABLE group_members (
     group_id INTEGER,
     user_id INTEGER,
 
-    PRIMARY KEY (group_id, user_id),
     FOREIGN KEY (group_id) REFERENCES groups (id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY (group_id, user_id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 // Insert values
