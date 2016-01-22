@@ -27,13 +27,4 @@ CREATE TABLE accounts (
     PRIMARY KEY (email)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
-// Insert values
-
-$stmt = $db->prepare("INSERT INTO accounts (email, username, pass_hash) VALUES (:email, :username, :pass_hash)");
-
-$stmt->bindValue("email", "user@host.tld");
-$stmt->bindValue("username", "user");
-$stmt->bindValue("pass_hash", password_hash("pass", PASSWORD_BCRYPT));
-$stmt->execute();
-
 ?>
