@@ -26,15 +26,28 @@
 
       $stmt = $db->prepare("SELECT * FROM users");
       $stmt->execute();
+      $stmt2 = $db->prepare("
+        SELECT courses.course as course
+        FROM courses
+        JOIN user_courses ON user_courses.course_id = courses.id
+        WHERE user_courses.user_id = :user_id
+      ");
       echo "<h1>Users</h1>\n";
       echo "<table class=table>\n";
-      echo "  <tr><th>id<th>name<th>email<th>phone<th>created at</tr>\n";
+      echo "  <tr><th>id<th>name<th>email<th>phone<th>courses<th>created at</tr>\n";
       foreach ($stmt as $row) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['name']).'</td>';
           echo '<td>'.htmlspecialchars($row['email']).'</td>';
           echo '<td>'.htmlspecialchars($row['phone']).'</td>';
+          echo '<td>';
+          $stmt2->bindValue('user_id', $row['id']);
+          $stmt2->execute();
+          foreach ($stmt2 as $row2) {
+              echo htmlspecialchars($row2['course']).'<br>';
+          }
+          echo '</td>';
           echo '<td>'.htmlspecialchars($row['created_at']).'</td>';
           echo "</tr>\n";
       }
