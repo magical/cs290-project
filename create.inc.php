@@ -1,6 +1,6 @@
 <?php
 
-include "config.php";
+require_once "config.php";
 
 // Connect to the database
 
