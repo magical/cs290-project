@@ -19,12 +19,14 @@ $stmt = $db->prepare("SELECT * FROM users");
 $stmt->execute();
 echo "<h1>Users</h1>\n";
 echo "<table border=1>\n";
-echo "  <tr><th>id<th>name<th>email</tr>\n";
+echo "  <tr><th>id<th>name<th>email<th>phone<th>created at</tr>\n";
 foreach ($stmt as $row) {
     echo '  <tr>';
     echo '<td>'.htmlspecialchars($row['id']).'</td>';
     echo '<td>'.htmlspecialchars($row['name']).'</td>';
     echo '<td>'.htmlspecialchars($row['email']).'</td>';
+    echo '<td>'.htmlspecialchars($row['phone']).'</td>';
+    echo '<td>'.htmlspecialchars($row['created_at']).'</td>';
     echo "</tr>\n";
 }
 echo "</table>\n";
