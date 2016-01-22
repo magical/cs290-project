@@ -6,7 +6,7 @@
   </head>
 
   <body>
-    <?php include 'includes/_nav.html';?>
+    <?php include 'includes/_nav.php';?>
 
       <div class="jumbotron">
         <h1>Welcome!</h1>
