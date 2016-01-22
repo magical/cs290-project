@@ -176,7 +176,8 @@ $stmt->execute();
 
 // Display values
 
-echo '<!doctype html>';
-include 'view.inc.php';
+$db = null;
+
+include 'display.php';
 
 ?>
