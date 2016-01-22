@@ -40,6 +40,7 @@ CREATE TABLE users (
 
     -- FOREIGN KEY (major_id) REFERENCES majors (id),
     -- FOREIGN KEY (standing_id) REFERENCES class_standings (id),
+    UNIQUE (email),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
