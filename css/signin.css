@@ -9,11 +9,11 @@ body {
   padding: 15px;
   margin: 0 auto;
 }
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
+.form-signin .form-signin-heading {
   margin-bottom: 10px;
 }
 .form-signin .checkbox {
+  margin-bottom: 10px;
   font-weight: normal;
 }
 .form-signin .form-control {
@@ -37,4 +37,17 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+.form-signin .separator {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.btn-orange {
+  background-color: #C34500;
+  color: #F5F2ED;
+}
+.btn-orange:hover {
+  background-color: #aa3c00;
+  color: #F5F2ED;
 }
