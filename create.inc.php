@@ -28,6 +28,9 @@ CREATE TABLE users (
     id INTEGER,
     email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
+    -- TIMESTAMP is a year 2038 bug waiting to happen,
+    -- but CURRENT_TIMESTAMP wont work with DATETIME
+    -- until MySQL 5.6
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     -- Optional data
