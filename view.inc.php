@@ -18,7 +18,7 @@ try {
 $stmt = $db->prepare("SELECT * FROM users");
 $stmt->execute();
 echo "<h1>Users</h1>\n";
-echo "<table border=1>\n";
+echo "<table class=table>\n";
 echo "  <tr><th>id<th>name<th>email<th>phone<th>created at</tr>\n";
 foreach ($stmt as $row) {
     echo '  <tr>';
@@ -34,7 +34,7 @@ echo "</table>\n";
 $stmt = $db->prepare("SELECT * FROM courses");
 $stmt->execute();
 echo "<h1>Courses</h1>\n";
-echo "<table border=1>\n";
+echo "<table class=table>\n";
 echo "  <tr><th>id<th>dept<th>course<th>title<th>year</tr>\n";
 foreach ($stmt as $row) {
     echo '  <tr>';
@@ -51,7 +51,7 @@ $stmt = $db->prepare("SELECT * FROM groups");
 $stmt->execute();
 $stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
 echo "<h1>Groups</h1>\n";
-echo "<table border=1>\n";
+echo "<table class=table>\n";
 echo "  <tr><th>id<th>course id<th>members</tr>\n";
 foreach ($stmt as $row) {
     echo '  <tr>';
