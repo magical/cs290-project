@@ -55,16 +55,19 @@
       }
       echo "</table>\n";
 
-      $stmt = $db->prepare("SELECT * FROM groups");
+      $stmt = $db->prepare("
+          SELECT groups.id as id, courses.id as course_id, courses.course as course
+          FROM groups
+          JOIN courses ON groups.course_id = courses.id");
       $stmt->execute();
       $stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
       echo "<h1>Groups</h1>\n";
       echo "<table class=table>\n";
-      echo "  <tr><th>id<th>course id<th>members</tr>\n";
+      echo "  <tr><th>id<th>course<th>members</tr>\n";
       foreach ($stmt as $row) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
-          echo '<td>'.htmlspecialchars($row['course_id']).'</td>';
+          echo '<td>'.htmlspecialchars($row['course']).'</td>';
           echo '<td>';
           $stmt2->bindValue("group_id", $row['id']);
           $stmt2->execute();
