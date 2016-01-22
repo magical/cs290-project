@@ -5,7 +5,13 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-form navbar-right">
-            <a class="btn btn-success" href="signin.html" role="button">Sign in</a>
+            <?php
+              if (array_key_exists("isLoggedIn", $_SESSION) && $_SESSION["isLoggedIn"] == 1) {
+                  echo '<a class="btn btn-danger" href="logout.php" role="button">Sign out</a>';
+              } else {
+                  echo '<a class="btn btn-success" href="signin.php" role="button">Sign in</a>';
+              }
+            ?>
           </div>
         </div>
       </div>
