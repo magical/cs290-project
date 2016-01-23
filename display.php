@@ -35,7 +35,7 @@
       echo "<h1>Users</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
       echo "  <thead><tr><th>id<th>name<th>email<th>phone<th>courses<th>created at</tr></thead>\n";
-      foreach ($stmt as $row) {
+      while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['name']).'</td>';
@@ -44,7 +44,7 @@
           echo '<td>';
           $stmt2->bindValue('user_id', $row['id']);
           $stmt2->execute();
-          foreach ($stmt2 as $row2) {
+          while ($row2 = $stmt2->fetch()) {
               echo htmlspecialchars($row2['course']).'<br>';
           }
           echo '</td>';
@@ -58,7 +58,7 @@
       echo "<h1>Courses</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
       echo "  <thead><tr><th>id<th>dept<th>course<th>title<th>year</tr></thead>\n";
-      foreach ($stmt as $row) {
+      while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['department']).'</td>';
@@ -78,14 +78,14 @@
       echo "<h1>Groups</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
       echo "  <thead><tr><th>id<th>course<th>members</tr></thead>\n";
-      foreach ($stmt as $row) {
+      while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['course']).'</td>';
           echo '<td>';
           $stmt2->bindValue("group_id", $row['id']);
           $stmt2->execute();
-          foreach ($stmt2 as $row2) {
+          while ($row2 = $stmt2->fetch()) {
               echo htmlspecialchars($row2['email']) . '<br>';
           }
           echo "</tr>\n";
