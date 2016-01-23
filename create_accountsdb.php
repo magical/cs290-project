@@ -27,4 +27,6 @@ CREATE TABLE accounts (
     PRIMARY KEY (email)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
+header("Location: index.php");
+exit();
 ?>
