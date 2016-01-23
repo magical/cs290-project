@@ -33,8 +33,8 @@
         WHERE user_courses.user_id = :user_id
       ");
       echo "<h1>Users</h1>\n";
-      echo "<table class=table>\n";
-      echo "  <tr><th>id<th>name<th>email<th>phone<th>courses<th>created at</tr>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>name<th>email<th>phone<th>courses<th>created at</tr></thead>\n";
       foreach ($stmt as $row) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
@@ -56,8 +56,8 @@
       $stmt = $db->prepare("SELECT * FROM courses");
       $stmt->execute();
       echo "<h1>Courses</h1>\n";
-      echo "<table class=table>\n";
-      echo "  <tr><th>id<th>dept<th>course<th>title<th>year</tr>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>dept<th>course<th>title<th>year</tr></thead>\n";
       foreach ($stmt as $row) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
@@ -76,8 +76,8 @@
       $stmt->execute();
       $stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
       echo "<h1>Groups</h1>\n";
-      echo "<table class=table>\n";
-      echo "  <tr><th>id<th>course<th>members</tr>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>course<th>members</tr></thead>\n";
       foreach ($stmt as $row) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
