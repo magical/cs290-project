@@ -21,6 +21,6 @@ $stmt->bindValue("username", "user");
 $stmt->bindValue("pass_hash", password_hash("pass", PASSWORD_BCRYPT));
 $stmt->execute();
 
-header("Location: index.php");
+header("Location: signin.php");
 exit();
 ?>
