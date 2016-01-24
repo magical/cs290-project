@@ -27,4 +27,3 @@ foreach ($stmt as $row) {
 
 header("Location: index.php");
 exit();
-?>

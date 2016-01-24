@@ -6,4 +6,3 @@ if (array_key_exists("isLoggedIn", $_SESSION) && $_SESSION["isLoggedIn"] == 1) {
 } else {
 	include 'includes/_signup.html';
 }
-?>

@@ -10,5 +10,3 @@ $dbuser = 'database';
 $dbpass = 'password';
 
 $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8";
-
-?>

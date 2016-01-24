@@ -22,4 +22,3 @@ $stmt->execute();
 
 header("Location: signin.php");
 exit();
-?>

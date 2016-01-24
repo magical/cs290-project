@@ -185,4 +185,3 @@ $db = null;
 
 include 'display.php';
 
-?>
