@@ -1,4 +1,5 @@
 <?php session_start();?>
+<?php require_once 'includes/all.php'; ?>
 <!DOCTYPE html>
 <html>
   <head>

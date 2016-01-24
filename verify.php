@@ -1,17 +1,8 @@
 <?php
 session_start();
+require_once "includes/all.php";
 
-require_once "config.php";
-
-// Connect to the database
-
-try {
-	$db = new PDO($dsn, $dbuser, $dbpass);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-	echo "Error connecting to database";
-	die();
-}
+$db = connect_db();
 
 $stmt = $db->prepare("SELECT password_hash FROM users WHERE email=:email");
 $stmt->bindValue("email", $_POST["email"]);

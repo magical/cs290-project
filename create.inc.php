@@ -1,17 +1,10 @@
 <?php
 
-require_once "config.php";
+require_once "includes/all.php";
 
 // Connect to the database
 
-try {
-    // TODO(ae): persistent?
-    $db = new PDO($dsn, $dbuser, $dbpass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Error connecting to database";
-    die();
-}
+$db = connect_db();
 
 // Drop tables
 

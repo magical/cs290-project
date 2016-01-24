@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (array_key_exists("isLoggedIn", $_SESSION) && $_SESSION["isLoggedIn"] == 1) {
+require_once 'includes/all.php';
+if (is_logged_in()) {
 	header("Location: index.php");
 	exit();
 } else {
