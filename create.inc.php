@@ -25,7 +25,7 @@ $db->exec('DROP TABLE IF EXISTS users');
 
 $db->exec('
 CREATE TABLE users (
-    id INTEGER,
+    id INTEGER AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     -- TIMESTAMP is a year 2038 bug waiting to happen,
@@ -46,7 +46,7 @@ CREATE TABLE users (
 
 $db->exec('
 CREATE TABLE courses (
-    id INTEGER,
+    id INTEGER AUTO_INCREMENT,
     department VARCHAR(255),    -- eg CS
     course VARCHAR(255),        -- eg CS290
     year INTEGER,               -- eg 2016
@@ -68,7 +68,7 @@ CREATE TABLE user_courses (
 
 $db->exec('
 CREATE TABLE groups (
-    id INTEGER,
+    id INTEGER AUTO_INCREMENT,
     course_id INTEGER,
 
     FOREIGN KEY (course_id) REFERENCES courses (id),
