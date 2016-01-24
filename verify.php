@@ -15,6 +15,7 @@ try {
 
 //TODO: Protect against SQL injection
 $stmt = $db->prepare("SELECT * FROM accounts WHERE email='".$_POST["email"]."'");
+
 $stmt->execute();
 
 foreach ($stmt as $row) {

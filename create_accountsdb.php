@@ -21,10 +21,10 @@ $db->exec('DROP TABLE IF EXISTS accounts');
 $db->exec('
 CREATE TABLE accounts (
     email VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
     pass_hash VARCHAR(60) NOT NULL,
 
-    PRIMARY KEY (email)
+	UNIQUE (email)
+	PRIMARY KEY (email)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 header("Location: index.php");
