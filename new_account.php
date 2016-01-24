@@ -14,11 +14,10 @@ try {
 
 // Insert values
 
-//TODO: Protect against SQL injection
-$stmt = $db->prepare("INSERT INTO accounts (email, pass_hash) VALUES (:email, :pass_hash)");
+$stmt = $db->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)");
 
 $stmt->bindValue("email", $_POST["email"]);
-$stmt->bindValue("pass_hash", password_hash($_POST["password"], PASSWORD_BCRYPT));
+$stmt->bindValue("password_hash", password_hash($_POST["password"], PASSWORD_BCRYPT));
 $stmt->execute();
 
 header("Location: signin.php");

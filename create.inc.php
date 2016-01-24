@@ -34,6 +34,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     -- Optional data
+    password_hash VARCHAR(255),
     phone VARCHAR(255),
     -- major_id INTEGER,
     -- standing_id INTEGER,

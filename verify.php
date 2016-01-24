@@ -13,13 +13,12 @@ try {
 	die();
 }
 
-//TODO: Protect against SQL injection
-$stmt = $db->prepare("SELECT * FROM accounts WHERE email='".$_POST["email"]."'");
-
+$stmt = $db->prepare("SELECT password_hash FROM users WHERE email=:email");
+$stmt->bindValue("email", $_POST["email"]);
 $stmt->execute();
 
 foreach ($stmt as $row) {
-	if (password_verify($_POST["password"], $row["pass_hash"])) {
+	if (password_verify($_POST["password"], $row["password_hash"])) {
 		$_SESSION["isLoggedIn"] = 1;
 	} else {
 		$_SESSION["isLoggedIn"] = 0;
