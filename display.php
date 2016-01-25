@@ -20,7 +20,7 @@
       $stmt = $db->prepare("SELECT * FROM users");
       $stmt->execute();
       $stmt2 = $db->prepare("
-        SELECT courses.course as course
+        SELECT courses.department, courses.number
         FROM courses
         JOIN user_courses ON user_courses.course_id = courses.id
         WHERE user_courses.user_id = :user_id
@@ -38,7 +38,7 @@
           $stmt2->bindValue('user_id', $row['id']);
           $stmt2->execute();
           while ($row2 = $stmt2->fetch()) {
-              echo htmlspecialchars($row2['course']).'<br>';
+              echo htmlspecialchars($row2['department'].$row2['number']).'<br>';
           }
           echo '</td>';
           echo '<td>'.htmlspecialchars($row['created_at']).'</td>';
@@ -50,12 +50,12 @@
       $stmt->execute();
       echo "<h1>Courses</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
-      echo "  <thead><tr><th>id<th>dept<th>course<th>title<th>year</tr></thead>\n";
+      echo "  <thead><tr><th>id<th>dept<th>num<th>title<th>year</tr></thead>\n";
       while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['department']).'</td>';
-          echo '<td>'.htmlspecialchars($row['course']).'</td>';
+          echo '<td>'.htmlspecialchars($row['number']).'</td>';
           echo '<td>'.htmlspecialchars($row['title']).'</td>';
           echo '<td>'.htmlspecialchars($row['year']).'</td>';
           echo "</tr>\n";
@@ -63,7 +63,7 @@
       echo "</table>\n";
 
       $stmt = $db->prepare("
-          SELECT groups.id as id, courses.id as course_id, courses.course as course
+          SELECT groups.id as id, courses.id as course_id, courses.department, courses.number
           FROM groups
           JOIN courses ON groups.course_id = courses.id");
       $stmt->execute();
@@ -74,7 +74,7 @@
       while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
-          echo '<td>'.htmlspecialchars($row['course']).'</td>';
+          echo '<td>'.htmlspecialchars($row['department'].$row['number']).'</td>';
           echo '<td>';
           $stmt2->bindValue("group_id", $row['id']);
           $stmt2->execute();
