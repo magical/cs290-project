@@ -1,5 +1,7 @@
 <?php
 
+// create.php - (re)creates the database and populates with test data
+
 require_once "includes/all.php";
 
 // Connect to the database
@@ -62,10 +64,10 @@ CREATE TABLE users (
 $db->exec('
 CREATE TABLE courses (
     id INTEGER AUTO_INCREMENT,
-    department VARCHAR(255),    -- eg CS
-    course VARCHAR(255),        -- eg CS290
-    year INTEGER,               -- eg 2016
+    department VARCHAR(10),     -- eg CS
+    number VARCHAR(10),         -- eg 290
     title VARCHAR(255),         -- eg Web Development
+    year INTEGER,               -- eg 2016
     -- TODO(ae): term instead of year?
 
     PRIMARY KEY (id)
@@ -161,18 +163,18 @@ $stmt->bindValue("name", "Brandon Chatham");
 $stmt->bindValue("phone", "8005550004");
 $stmt->execute();
 
-$stmt = $db->prepare("INSERT INTO courses (id, department, course, year, title) VALUES (:id, :department, :course, :year, :title)");
+$stmt = $db->prepare("INSERT INTO courses (id, department, number, year, title) VALUES (:id, :department, :number, :year, :title)");
 
 $stmt->bindValue("id", 1);
 $stmt->bindValue("department", "CS");
-$stmt->bindValue("course", "CS290");
+$stmt->bindValue("number", "290");
 $stmt->bindValue("year", 2016);
 $stmt->bindValue("title", "Web Development");
 $stmt->execute();
 
 $stmt->bindValue("id", 2);
 $stmt->bindValue("department", "MTH");
-$stmt->bindValue("course", "MTH252");
+$stmt->bindValue("number", "252");
 $stmt->bindValue("year", 2016);
 $stmt->bindValue("title", "Integral Calculus");
 $stmt->execute();
@@ -214,9 +216,10 @@ $stmt->bindValue("group_id", 2);
 $stmt->bindValue("user_id", 2);
 $stmt->execute();
 
-// Display values
+// Close database connection
 
 $db = null;
 
-include 'display.php';
+// Display values
 
+include 'display.php';
