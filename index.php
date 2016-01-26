@@ -18,7 +18,18 @@
 
       <div class="container" style="width: 100%;">
         <div class="row">
-          <div class="col-md-6">
+		  <div class="col-md-6 col-md-push-6">
+            <h2>Testimonials</h2>
+            <blockquote>
+              <p>Study Group Finder changed my life.</p>
+              <footer>Barack Obama</footer>
+            </blockquote>
+            <blockquote>
+              <p>ur app sucks lol</p>
+              <footer>anonymous</footer>
+            </blockquote>
+          </div>
+          <div class="col-md-6 col-md-pull-6">
             <h2>Team Members</h2>
             <ul>
               <li>Brandon Chatham
@@ -29,17 +40,6 @@
               <li>Xiaoli Sun
             </ul>
             <p><a class="btn btn-default" href="about.php" role="button">More about us &raquo;</a></p>
-          </div>
-		  <div class="col-md-6">
-            <h2>Testimonials</h2>
-            <blockquote>
-              <p>Study Group Finder changed my life.</p>
-              <footer>Barack Obama</footer>
-            </blockquote>
-            <blockquote>
-              <p>ur app sucks lol</p>
-              <footer>anonymous</footer>
-            </blockquote>
           </div>
         </div>
       </div>
