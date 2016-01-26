@@ -18,7 +18,7 @@
 
       <div class="container" style="width: 100%;">
         <div class="row">
-		  <div class="col-md-6 col-md-push-6">
+          <div class="col-md-6 col-md-push-6">
             <h2>Testimonials</h2>
             <blockquote>
               <p>Study Group Finder changed my life.</p>
