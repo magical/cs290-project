@@ -1,6 +1,6 @@
 <?php
 
-if ($_POST["password"] == $_POST["passwordConfirm"]) {
+if ($_POST["password"] == $_POST["passwordConfirm"] && $_SERVER["HTTP_REFERER"] == "http://web.engr.oregonstate.edu/~elliomic/cs290-project/signup.php") {
 	require_once "includes/all.php";
 	
 	// Connect to the database
