@@ -12,7 +12,7 @@ foreach ($stmt as $row) {
 	if (password_verify($_POST["password"], $row["password_hash"])) {
 		$_SESSION["isLoggedIn"] = 1;
 	} else {
-		$_SESSION["isLoggedIn"] = 0;
+		unset($_SESSION["isLoggedIn"]);
 	}
 }
 
