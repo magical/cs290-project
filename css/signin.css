@@ -19,9 +19,7 @@ body {
 .form-signin .form-control {
   position: relative;
   height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   padding: 10px;
   font-size: 16px;
 }
@@ -40,4 +38,19 @@ body {
 }
 .form-signin button[type="submit"] {
   margin-top: 10px;
+}
+
+.btn-osu {
+  color: #fff;
+  background-color: #C34500;
+  border-color: #B23E00;
+}
+.btn-osu:hover, .btn-osu:focus {
+  color: #fff;
+  background-color: #B23E00;
+  border-color: #A33900;
+}
+.btn-osu:active {
+  background-color: #A33900;
+  border-color: #933400;
 }
