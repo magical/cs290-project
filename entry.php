@@ -1,5 +1,5 @@
 <?php session_start();?>
-<?php require_once 'includes/all.php'; ?>
+<?php require_once 'includes/functions.php'; ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,7 +9,7 @@
   <body>
       <?php include 'includes/_nav.php';?>
 	 <h1> Profile </h1>
-	 <p> Please fill out the information </p>
+	 <h4> Please fill out this information </h4>
 	 <form action="#"> <select name="standingselect">
 		<option value="0"> Select Class Standing </option>
 		<option value="1"> First-Year </option>
@@ -56,25 +56,33 @@
 			if (array_key_exists("t2", $_REQUEST))
 				echo ' '.htmlspecialchars($_REQUEST["t2"]);
 
-			if ($_REQUEST["standingselect"] == "0") {
-				echo "<p text-color="Red"> ERROR: Please choose class standing </p>";
-			}
-			elseif ($_REQUEST["collegeselect"] == "0") {
-				echo "<p text-color="red"> ERROR: Please choose college </p>";
-			}
-			elseif($_REQUEST["campus"] == "0") {
-				echo "<p text-color="red"> ERROR: Please choose campus </p>";
-			}
-			else {
-			$db = connect_db();
+		if ($_REQUEST["standingselect"] == "0") {
+				echo "<p> ERROR: Please choose class standing </p>";
+		}
+		elseif ($_REQUEST["collegeselect"] == "0") {
+				echo "<p> ERROR: Please choose college </p>";
+		}
+		elseif($_REQUEST["campus"] == "0") {
+				echo "<p> ERROR: Please choose campus </p>";
+		}
+		else {
+		
+		
+
+			//$db = connect_db(); //not working for me, probably because i need a version on my own machine, but i cant find it
+			
+			
+
 			//RETRIEVE USERID FROM USERS SESSION - CODE HERE
 			
 			//UP THERE SEE THAT NOTE PLEASE :)
 			//This is a temporary user ID
+		//	$sql = UPDATE 'users'
+			//		 SET 'standing_id'
 			
-			
-			$userID = 2;
-			
+			//$mysqli->query("update users set standing_id=$_REQUEST["standingselect"] major_id=$_REQUEST["collegeselect"] time1_id=$_REQUEST["t1"] time2_id=$_REQUEST["t2"] campus_id=$_REQUEST["campus"] where id=2");
+			//$db = null;
+		}
 			
 /*				$dbhost = 'odu';
 			$dbname = 'mb';
@@ -92,7 +100,6 @@
 			mysql_close($mysql_handle);
 			
 */
-			}
 			//insert this into table 
 
 		?>
