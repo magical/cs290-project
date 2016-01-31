@@ -163,43 +163,69 @@ $stmt->bindValue("name", "Brandon Chatham");
 $stmt->bindValue("phone", "8005550004");
 $stmt->execute();
 
-$stmt = $db->prepare("INSERT INTO courses (id, department, number, year, title) VALUES (:id, :department, :number, :year, :title)");
+// This is a fun one.
+// Insert rows into the courses table from catalog.csv
 
-$stmt->bindValue("id", 1);
-$stmt->bindValue("department", "CS");
-$stmt->bindValue("number", "290");
-$stmt->bindValue("year", 2016);
-$stmt->bindValue("title", "Web Development");
-$stmt->execute();
+$fp = fopen("catalog.csv", "r");
+if ($fp === false) {
+  die("couldn't open catalog.csv");
+}
 
-$stmt->bindValue("id", 2);
-$stmt->bindValue("department", "MTH");
-$stmt->bindValue("number", "252");
-$stmt->bindValue("year", 2016);
-$stmt->bindValue("title", "Integral Calculus");
-$stmt->execute();
+$header = fgetcsv($fp);
+if ($header !== array("department", "number", "title", "term")) {
+  die("catalog.csv is not in the correct format");
+}
+
+$stmt = $db->prepare("INSERT INTO courses (department, number, year, title) VALUES (:department, :number, :year, :title)");
+
+while ($row = fgetcsv($fp)) {
+  // ugh
+  $row['department'] = $row[0];
+  $row['number'] = $row[1];
+  $row['title'] = $row[2];
+  $row['term'] = $row[3];
+
+  // ignore honors courses
+  if (substr($row['number'], -1) == 'H') {
+    continue;
+  }
+
+  // just import winter term for now
+  if ($row['term'] === "Winter 2016") {
+    $stmt->bindValue("department", $row['department']);
+    $stmt->bindValue('number', $row['number']);
+    $stmt->bindValue('title', $row['title']);
+    $stmt->bindValue('year', 2016);
+    $stmt->execute();
+  }
+}
+fclose($fp);
+
+// Grab a course id for the next couple inserts.
+$stmt = $db->query("SELECT id FROM courses WHERE department='CS' AND number='290'");
+$cs290_id = $stmt->fetch()['id'];
 
 $stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUE (:user_id, :course_id)");
 
 $stmt->bindValue("user_id", 2);         # Andrew
-$stmt->bindValue("course_id", 1);       # CS290
+$stmt->bindValue("course_id", $cs290_id);       # CS290
 $stmt->execute();
 
 $stmt->bindValue("user_id", 3);         # Xiaoli
-$stmt->bindValue("course_id", 1);
+$stmt->bindValue("course_id", $cs290_id);
 $stmt->execute();
 
 $stmt->bindValue("user_id", 6);         # Brandon
-$stmt->bindValue("course_id", 1);
+$stmt->bindValue("course_id", $cs290_id);
 $stmt->execute();
 
 $stmt = $db->prepare("INSERT INTO groups (id, course_id) VALUES (:id, :course_id)");
 
 $stmt->bindValue("id", 1);
-$stmt->bindValue("course_id", 1);
+$stmt->bindValue("course_id", $cs290_id);
 $stmt->execute();
 $stmt->bindValue("id", 2);
-$stmt->bindValue("course_id", 1);
+$stmt->bindValue("course_id", $cs290_id);
 $stmt->execute();
 
 $stmt = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
