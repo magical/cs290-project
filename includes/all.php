@@ -2,6 +2,12 @@
 
 // all.php - includes all the important include files
 
+// enable error reporting
+// TODO(ae): disable in production
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('html_errors', 1);
+
 // figure out where the root of the project is
 // (our parent directory)
 $root = dirname(dirname(__FILE__));
