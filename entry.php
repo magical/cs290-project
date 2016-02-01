@@ -103,7 +103,7 @@
 				//$stmt->bindValue("campus_id", $campus_id);
 				$stmt->bindValue("user_id", $user_id);
 				$stmt->execute();
-				echo 'success';
+				//echo 'success';
 			}
 		}
 	?>
