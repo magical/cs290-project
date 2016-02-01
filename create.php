@@ -14,7 +14,28 @@ $db->exec('DROP TABLE IF EXISTS user_courses');
 $db->exec('DROP TABLE IF EXISTS courses');
 $db->exec('DROP TABLE IF EXISTS users');
 
+$db->exec('DROP TABLE IF EXISTS colleges');
+$db->exec('DROP TABLE IF EXISTS standings');
+
 // Create tables
+
+$db->exec('
+CREATE TABLE colleges (
+    id INTEGER AUTO_INCREMENT,
+    abbreviation VARCHAR(5),
+    name VARCHAR(255),
+
+    UNIQUE (abbreviation),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
+
+$db->exec('
+CREATE TABLE standings (
+    id INTEGER AUTO_INCREMENT,
+    name VARCHAR(255),
+
+    PRIMARY KEY (id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
 CREATE TABLE users (
@@ -29,11 +50,11 @@ CREATE TABLE users (
     -- Optional data
     password_hash VARCHAR(255),
     phone VARCHAR(255),
-    -- major_id INTEGER,
-    -- standing_id INTEGER,
+    college_id INTEGER,
+    standing_id INTEGER,
 
-    -- FOREIGN KEY (major_id) REFERENCES majors (id),
-    -- FOREIGN KEY (standing_id) REFERENCES class_standings (id),
+    FOREIGN KEY (college_id) REFERENCES colleges (id),
+    FOREIGN KEY (standing_id) REFERENCES standings (id),
     UNIQUE (email),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
@@ -80,6 +101,27 @@ CREATE TABLE group_members (
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 // Insert values
+
+$stmt = $db->prepare("INSERT INTO standings (id, name) VALUES (:id, :name)");
+$stmt->execute(array('id' => 1, 'name' => 'First-year'));
+$stmt->execute(array('id' => 2, 'name' => 'Second-year'));
+$stmt->execute(array('id' => 3, 'name' => 'Third-year'));
+$stmt->execute(array('id' => 4, 'name' => 'Fourth-year'));
+$stmt->execute(array('id' => 5, 'name' => 'Fifth-year or more'));
+
+$stmt = $db->prepare("INSERT INTO colleges (abbreviation, name) VALUES (:abbreviation, :name)");
+$stmt->execute(array('abbreviation' => 'Agr', 'name' => 'Agricultural Sciences'));
+$stmt->execute(array('abbreviation' => 'Bus', 'name' => 'Business'));
+$stmt->execute(array('abbreviation' => 'Ear', 'name' => 'Earth, Ocean, and Atmospheric Sciences'));
+$stmt->execute(array('abbreviation' => 'Edu', 'name' => 'Education'));
+$stmt->execute(array('abbreviation' => 'Eng', 'name' => 'Engineering'));
+$stmt->execute(array('abbreviation' => 'For', 'name' => 'Forestry'));
+$stmt->execute(array('abbreviation' => 'Gra', 'name' => 'Graduate School')); // Do we want this option?
+$stmt->execute(array('abbreviation' => 'Lib', 'name' => 'Liberal Arts'));
+$stmt->execute(array('abbreviation' => 'Pha', 'name' => 'Pharmacy'));
+$stmt->execute(array('abbreviation' => 'Pub', 'name' => 'Public Health and Human Services'));
+$stmt->execute(array('abbreviation' => 'Sci', 'name' => 'Science'));
+$stmt->execute(array('abbreviation' => 'Vet', 'name' => 'Veterinary Medicine'));
 
 $stmt = $db->prepare("INSERT INTO users (id, email, name, phone) VALUES (:id, :email, :name, :phone)");
 

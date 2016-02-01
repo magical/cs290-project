@@ -84,6 +84,34 @@
           echo "</tr>\n";
       }
       echo "</table>\n";
+
+      $stmt = $db->prepare("SELECT * FROM colleges");
+      $stmt->execute();
+      echo "<h1>Colleges</h1>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>abbr<th>name</tr></thead>\n";
+      while ($row = $stmt->fetch()) {
+          echo '    <tr>';
+          echo '<td>'.htmlspecialchars($row['id']).'</td>';
+          echo '<td>'.htmlspecialchars($row['abbreviation']).'</td>';
+          echo '<td>'.htmlspecialchars($row['name']).'</td>';
+          echo "</tr>\n";
+      }
+      echo "</table>\n";
+
+      $stmt = $db->prepare("SELECT * FROM standings");
+      $stmt->execute();
+      echo "<h1>Standings</h1>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>name</thead>\n";
+      while ($row = $stmt->fetch()) {
+          echo '    <tr>';
+          echo '<td>'.htmlspecialchars($row['id']).'</td>';
+          echo '<td>'.htmlspecialchars($row['name']).'</td>';
+          echo "</tr>\n";
+      }
+      echo "</table>\n";
+
     ?>
     <?php include 'includes/_footer.php';?>
   </body>
