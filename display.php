@@ -27,13 +27,15 @@
       ");
       echo "<h1>Users</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
-      echo "  <thead><tr><th>id<th>name<th>email<th>phone<th>courses<th>created at</tr></thead>\n";
+      echo "  <thead><tr><th>id<th>name<th>email<th>phone<th>college_id<th>standing_id<th>courses<th>created at</tr></thead>\n";
       while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['name']).'</td>';
           echo '<td>'.htmlspecialchars($row['email']).'</td>';
           echo '<td>'.htmlspecialchars($row['phone']).'</td>';
+          echo '<td>'.htmlspecialchars($row['college_id']).'</td>';
+          echo '<td>'.htmlspecialchars($row['standing_id']).'</td>';
           echo '<td>';
           $stmt2->bindValue('user_id', $row['id']);
           $stmt2->execute();
