@@ -87,7 +87,9 @@ $db->exec('
 CREATE TABLE groups (
     id INTEGER AUTO_INCREMENT,
     course_id INTEGER,
-
+    
+    name VARCHAR(255) NOT NULL,
+    
     FOREIGN KEY (course_id) REFERENCES courses (id),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
@@ -219,13 +221,15 @@ $stmt->bindValue("user_id", 6);         # Brandon
 $stmt->bindValue("course_id", $cs290_id);
 $stmt->execute();
 
-$stmt = $db->prepare("INSERT INTO groups (id, course_id) VALUES (:id, :course_id)");
+$stmt = $db->prepare("INSERT INTO groups (id, course_id, name) VALUES (:id, :course_id, :name)");
 
 $stmt->bindValue("id", 1);
 $stmt->bindValue("course_id", $cs290_id);
+$stmt->bindValue("name", "Group 1");
 $stmt->execute();
 $stmt->bindValue("id", 2);
 $stmt->bindValue("course_id", $cs290_id);
+$stmt->bindValue("name", "Group 2");
 $stmt->execute();
 
 $stmt = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");

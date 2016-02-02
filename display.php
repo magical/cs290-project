@@ -64,18 +64,19 @@
       echo "</table>\n";
 
       $stmt = $db->prepare("
-          SELECT groups.id as id, courses.id as course_id, courses.department, courses.number
+          SELECT groups.id as id, groups.name, courses.id as course_id, courses.department, courses.number
           FROM groups
           JOIN courses ON groups.course_id = courses.id");
       $stmt->execute();
       $stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
       echo "<h1>Groups</h1>\n";
       echo "<table class=\"table table-bordered table-striped\">\n";
-      echo "  <thead><tr><th>id<th>course<th>members</tr></thead>\n";
+      echo "  <thead><tr><th>id<th>course<th>name<th>members</tr></thead>\n";
       while ($row = $stmt->fetch()) {
           echo '  <tr>';
           echo '<td>'.htmlspecialchars($row['id']).'</td>';
           echo '<td>'.htmlspecialchars($row['department'].$row['number']).'</td>';
+          echo '<td>'.htmlspecialchars($row['name']).'</td>';
           echo '<td>';
           $stmt2->bindValue("group_id", $row['id']);
           $stmt2->execute();
