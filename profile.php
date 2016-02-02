@@ -3,14 +3,14 @@ require_once 'includes/all.php';
 
 // TODO(ae): Require users to be logged in to view this page.
 
-if (!isset($_REQUEST['id'])) {
+if (!isset($_GET['id'])) {
   // um
   header('Status: 404');
   die('404 not found');
 }
 
 $db = connect_db();
-$user = get_user($db, $_REQUEST['id']);
+$user = get_user($db, $_GET['id']);
 if (!$user) {
   header('Status: 404');
   die('no such user');
