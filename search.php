@@ -1,19 +1,21 @@
 <?php
 	
 	require_once "includes/all.php";
+?>
 
-	echo '<body>';
+<body>
 
-	echo '<title>Results</title>';
+	<title>Results</title>
 
-	echo '<h2>Search Results</h2>';
-	
+	<h2>Search Results</h2>
+<?php	
+
 	try{
 	
 		$db = new PDO($dsn, $dbuser, $dbpass);
 		
 		if(!isset($_GET['all'])) {
-		
+
 			$stmnt = $db->prepare("SELECT * FROM groups WHERE LOWER(name) = LOWER(:name)") or die($db);
 			$stmnt->bindValue('name', $_GET['group']);
 			$stmnt->execute();
@@ -44,11 +46,10 @@
 		echo 'Connection Failed: ' . $e->getMessage();
 	
 	}
-
-	echo '<form action = "form.php">';
-	echo '	<br><br><input type = "submit" value = "Search Again"><br>';
-	echo '</form>';
-	
-	
-	echo '</body>';
 ?>
+	<form action = "form.php">
+		<br><br><input type = "submit" value = "Search Again"><br>
+	</form>';
+	
+	
+</body>
