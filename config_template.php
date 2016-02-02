@@ -5,8 +5,8 @@
 // with your own database name and password
 
 $dbhost = 'oniddb.cws.oregonstate.edu';
-$dbname = 'username';
-$dbuser = 'database';
+$dbname = 'database';
+$dbuser = 'username';
 $dbpass = 'password';
 
 $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8";
