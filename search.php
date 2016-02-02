@@ -49,7 +49,7 @@
 ?>
 	<form action = "form.php">
 		<br><br><input type = "submit" value = "Search Again"><br>
-	</form>';
+	</form>
 	
 	
 </body>
