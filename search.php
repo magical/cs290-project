@@ -44,6 +44,10 @@
 		echo 'Connection Failed: ' . $e->getMessage();
 	
 	}
+
+	echo '<form action = "form.php">';
+	echo '	<br><br><input type = "submit" value = "Search Again"><br>';
+	echo '</form>';
 	
 	
 	echo '</body>';
