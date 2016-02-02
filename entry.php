@@ -8,9 +8,14 @@
    <?php include 'includes/_head.html';?>
   <body>
       <?php include 'includes/_nav.php';?>
-	 <h1> Profile </h1>
+      <div class="jumbotron">	 
+	 <h1> Your Profile </h1>
 	 <h4> Please fill out this information </h4>
-	 <form action="#"> <select name="standingselect">
+      </div>
+    <div class="container" style="width:100%">
+      <div class="row"> 
+        <div class="col-md-4">
+	<form action="#"> <select name="standingselect">
 		<option value="0"> Select Class Standing </option>
 		<option value="1"> First-Year </option>
 		<option value="2"> Second-Year </option>
@@ -18,6 +23,9 @@
 		<option value="4"> Fourth-Year </option>
 		<option value="5"> Fifth-Year or more </option>
 	</select>
+
+	</div>
+	<div class="col-md-4">
 	<select name="collegeselect">
 		<!--Using first three letters to indicate college, first capt'd, for consistency -->
 		<option value="0"> Select College </option>
@@ -34,17 +42,28 @@
 		<option value="Sci"> Science </option>
 		<option value="Vet"> Veterinary Medicine </option>
 	</select>
+	</div>
+	<div class="col-md-4">
 	<select name="campus">
 		<option value="0"> Select Campus </option>
 		<option value="Cor"> Corvallis (Main)</option>
 		<option value="Cas"> Cascades </option>
 		<option value="Onl"> Online </option>
 	</select>
-	<h4>Enter your two best times in the format DAY, TI:ME XM (i.e: R, 05:00 PM) </h4>
-	<h5>Use R for Thursday, N for Sunday</h5>
-	<input type="text" name="t1"> 
-	<input type="text" name="t2">
-	<input type="submit">
+	</div>
+       </div>
+     </div>
+   <div class="container" style="width:100%">
+     <div class="row">
+	<div class="col-lg-12">
+	    	<h4>Enter your two best times in the format DAY, TI:ME XM (i.e: R, 05:00 PM) </h4>
+		<h5>Use R for Thursday, N for Sunday</h5>
+		<input type="text" name="t1"> 
+		<input type="text" name="t2">
+		<input type="submit">
+	</div>
+     </div>
+   </div>
 	</form>
 		<?php 
 			if (array_key_exists("standingselect", $_REQUEST))
