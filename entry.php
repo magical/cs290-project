@@ -10,11 +10,15 @@
       <div class="jumbotron">	 
 	 <h1> Your Profile </h1>
 	 <p> Please fill out this information </p>
-      </div>
-    <div class="container" style="width:100%">
+	 </div>
+	 <div class="container" style="width:100%">
+	<form action="" method="POST">
+	<h3> Name </h3> 
+	<input type="text" name="name" class="form-control" style="width: 150px">
+	<input type="text" name="phone" class="form-control" style="width: 150px; text-align: in-line">
+	<p> </p>
       <div class="row"> 
-        <div class="col-md-4">
-	<form action="" method="POST"> 
+		  <div class="col-md-4">
 	<select name="standingselect" class="form-control">
 		<option value="0"> Select Class Standing </option>
 		<option value="1"> First-Year </option>
@@ -23,7 +27,7 @@
 		<option value="4"> Fourth-Year </option>
 		<option value="5"> Fifth-Year or more </option>
 	</select>
-
+	
 	</div>
 	<div class="col-md-4">
 	<select name="collegeselect" class="form-control">
@@ -35,7 +39,6 @@
 		<option value="Edu"> Education </option>
 		<option value="Eng"> Engineering </option>
 		<option value="For"> Forestry </option>
-		<option value="Gra"> Graduate School </option> <!--Do we want this option?-->
 		<option value="Lib"> Liberal Arts </option>
 		<option value="Pha"> Pharmacy </option>
 		<option value="Pub"> Public Health and Human Services </option>
@@ -55,25 +58,105 @@
      </div>
    <div class="container" style="width:100%">
      <div class="row">
-	<div class="col-lg-12">
+	<div class="col-lg-12 form-inline">
 	    	<p>Enter your two best times in the format DAY, TI:ME XM (i.e: R, 05:00 PM) </p>
 		<p>Use R for Thursday, N for Sunday</p>
-		<input type="text" name="t1" class="form-control"> 
-		<input type="text" name="t2" class="form-control">
+<!--		<input type="text" name="t1" class="form-control" style="width: 150px"> -->
+	<select id="t1d" class="form-control">
+		<option value="0"> Select Day </option>
+		<option value="1"> Monday </option>
+		<option value="2"> Tuesday </option>
+		<option value="3"> Wednesday </option>
+		<option value="4"> Thursday </option>
+		<option value="5"> Friday </option>
+		<option value="6"> Saturday </option>
+		<option value="7"> Sunday </option>
+	</select>
+	<select id="t1t" class="form-control">
+		<option value="0"> Select Time </option>
+		<option value="0000"> 12:00 AM </option>
+		<option value="0100"> 1:00 AM </option>
+		<option value="0200"> 2:00 AM </option>
+		<option value="0300"> 3:00 AM </option>
+		<option value="0400"> 4:00 AM </option>
+		<option value="0500"> 5:00 AM </option>
+		<option value="0600"> 6:00 AM </option>	
+		<option value="0700"> 7:00 AM </option>
+		<option value="0800"> 8:00 AM </option>
+		<option value="0900"> 9:00 AM </option>
+		<option value="1000"> 10:00 AM </option>
+		<option value="1100"> 11:00 AM </option>
+		<option value="1200"> 12:00 PM </option>
+		<option value="1300"> 1:00 PM </option>
+		<option value="1400"> 2:00 PM </option>
+		<option value="1500"> 3:00 PM </option>
+		<option value="1600"> 4:00 PM </option>
+		<option value="1700"> 5:00 PM </option>
+		<option value="1800"> 6:00 PM </option>
+		<option value="1900"> 7:00 PM </option>
+		<option value="2000"> 8:00 PM </option>
+		<option value="2100"> 9:00 PM </option>
+		<option value="2200"> 10:00 PM </option>
+		<option value="2300"> 11:00 PM </option>
+	</select>
+	<select id="t2d" class="form-control">
+		<option value="0"> Select Day </option>
+		<option value="1"> Monday </option>
+		<option value="2"> Tuesday </option>
+		<option value="3"> Wednesday </option>
+		<option value="4"> Thursday </option>
+		<option value="5"> Friday </option>
+		<option value="6"> Saturday </option>
+		<option value="7"> Sunday </option>
+	</select>
+	<select id="t2t" class="form-control">
+		<option value="0"> Select Time </option>
+		<option value="0000"> 12:00 AM </option>
+		<option value="0100"> 1:00 AM </option>
+		<option value="0200"> 2:00 AM </option>
+		<option value="0300"> 3:00 AM </option>
+		<option value="0400"> 4:00 AM </option>
+		<option value="0500"> 5:00 AM </option>
+		<option value="0600"> 6:00 AM </option>	
+		<option value="0700"> 7:00 AM </option>
+		<option value="0800"> 8:00 AM </option>
+		<option value="0900"> 9:00 AM </option>
+		<option value="1000"> 10:00 AM </option>
+		<option value="1100"> 11:00 AM </option>
+		<option value="1200"> 12:00 PM </option>
+		<option value="1300"> 1:00 PM </option>
+		<option value="1400"> 2:00 PM </option>
+		<option value="1500"> 3:00 PM </option>
+		<option value="1600"> 4:00 PM </option>
+		<option value="1700"> 5:00 PM </option>
+		<option value="1800"> 6:00 PM </option>
+		<option value="1900"> 7:00 PM </option>
+		<option value="2000"> 8:00 PM </option>
+		<option value="2100"> 9:00 PM </option>
+		<option value="2200"> 10:00 PM </option>
+		<option value="2300"> 11:00 PM </option>
+	</select>	
+	<script> 
+		document.getElementById("t1d").size=7;
+		document.getElementById("t1t").size=7;
+		document.getElementById("t2d").size=7;
+		document.getElementById("t2t").size=7;
+	</script>
 		<input type="submit" class="btn btn-primary">
 	</div>
      </div>
    </div>
 	</form>
+
 	<?php
 		if (array_key_exists("standingselect", $_REQUEST))
 			echo htmlspecialchars($_REQUEST["standingselect"]);
 		if (array_key_exists("collegeselect", $_REQUEST))
 			echo ' '.htmlspecialchars($_REQUEST["collegeselect"]);
-		if (array_key_exists("t1", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t1"]);
-		if (array_key_exists("t2", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t2"]);
+	//	if (array_key_exists("t1", $_REQUEST))
+	//		echo ' '.htmlspecialchars($_REQUEST["t1"]);
+	//	if (array_key_exists("t2", $_REQUEST))
+	//		echo ' '.htmlspecialchars($_REQUEST["t2"]);
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if ($_REQUEST["standingselect"] == "0") {
@@ -82,7 +165,15 @@
 					echo "<p> ERROR: Please choose college </p>";
 			} elseif($_REQUEST["campus"] == "0") {
 					echo "<p> ERROR: Please choose campus </p>";
-			} else {
+			} elseif($_REQUEST["t1t"] == "0") {
+					echo "<p> ERROR: Please choose time 1 </p>";
+			}elseif($_REQUEST["t1d"] == "0") {
+					echo "<p> ERROR: Please choose day 1 </p>";
+			}elseif($_REQUEST["t2t"] == "0") {
+					echo "<p> ERROR: Please choose time 2 </p>";
+			}elseif($_REQUEST["t2d"] == "0") {
+					echo "<p> ERROR: Please choose day 2 </p>";
+			}else {
 				$db = connect_db();
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
