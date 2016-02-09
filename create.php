@@ -18,6 +18,7 @@ $db->exec('DROP TABLE IF EXISTS users');
 
 $db->exec('DROP TABLE IF EXISTS colleges');
 $db->exec('DROP TABLE IF EXISTS standings');
+$db->exec('DROP TABLE IF EXISTS pic');
 
 // Create tables
 
@@ -104,6 +105,16 @@ CREATE TABLE group_members (
     PRIMARY KEY (group_id, user_id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
+$db->exec('
+CREATE TABLE pic (
+    fileid INTEGER NOT NULL AUTO_INCREMENT ,
+    filename VARCHAR(255),
+    filedata mediumblob,
+    filesize INTEGER,
+
+    PRIMARY KEY(fileid)
+    ) ENGINE=InnoDB, CHARACTER SET=UTF8');
+
 // Insert values
 
 $stmt = $db->prepare("INSERT INTO standings (id, name) VALUES (:id, :name)");
@@ -164,7 +175,6 @@ $stmt->bindValue("email", "chathamb@oregonstate.edu");
 $stmt->bindValue("name", "Brandon Chatham");
 $stmt->bindValue("phone", "8005550004");
 $stmt->execute();
-
 // This is a fun one.
 // Insert rows into the courses table from catalog.csv
 
