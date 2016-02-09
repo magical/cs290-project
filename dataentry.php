@@ -9,7 +9,27 @@
     div.dropdown{
         width:300px;
     }
+    .fupld{
+        position: relative;
+        overflow: hidden;
+    }
+    .fupld input.fupl{
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0;
+        margin: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter:alpha(opacity=0);
+    }
     </style>
+    <script>
+    function f(v){
+        document.getElementById("upld").value=v.substring(12);
+    }
+    </script>
     <?php include 'includes/_head.html';?>
   </head>
 
@@ -26,18 +46,30 @@
 
     echo "<div class='container'>";
 
-    echo "<form action='upload.php' class='form-horizontal' role='form' method=post enctype=multipart/form-data>";
+    echo "<form action='upload.php' name='flpd' class='form-horizontal' role='form' method=post enctype=multipart/form-data>";
     
     echo "<div class='jumbotron'>";
     echo "<h2>Upload a Picture</h2>";
     echo "</div>";
 
     echo "<br>";
-    echo "<input type='file' name='fileupload' class='fupl' id='fileup'>";
-    echo "<br>";
-    echo "<input type='submit' class='btn btn-info' name='filesub' value='SUBMIT'>";
-    echo "</form>";
+
+    echo "<div class=col-xs-2>";
+    echo "<input id='upld' class='form-control' name='finp' placeholder='Choose File' disabled='disabled'>";
+    echo "</div>";
+
+    echo "<div class='fupld btn btn-primary'>";
+    echo "<span>UPLOAD</span>";
+    echo "<input type='file' name='fileupload'  onchange=\"f(this.value)\" class='fupl' id='fileup'>";
+    echo "</div>";
+
     echo "<br><br>";
+    echo "<br><br>";
+
+    echo "<div class='subbtn'>";
+    echo "<input type='submit' style='position:relative;' class='btn btn-info' name='filesub' value='SUBMIT'>";
+    echo "</div>";
+    echo "</form>";
     echo "</div>";
 
 
