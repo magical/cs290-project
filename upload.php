@@ -3,40 +3,29 @@ require_once 'includes/all.php';
 
 $db=connect_db();
 
-$pic=$_FILES["fileupload"]["name"];
-$tmp=$_FILES["fileupload"]["tmp_name"];
-$size=$_FILES["fileupload"]["size"];
-
-$uploadOK=1;
-
-$filetype=pathinfo($pic, PATHINFO_EXTENSION);
 
 if(isset($_POST["filesub"])){
-	$check=getimagesize($tmp);
-	if($check == false && file_exists($pic) && $size>1048576 && $filetype!="jpg" && $filetype!="png" && $filetype!="jpeg" && $filetype!="gif"){
-		$uploadOK=0;
+	$pic=$_FILES["fileupload"]["name"];
+	$tmp=$_FILES["fileupload"]["tmp_name"];
+	$size=$_FILES["fileupload"]["size"];
+
+	$filetype=pathinfo($pic, PATHINFO_EXTENSION);
+
+	if($filetype=="jpg" || $filetype=="gif" || $filetype=="jpeg" || $filetype=="png" && $size<=1048576){
+		$filedata=file_get_contents($tmp);
+
+		$stmt=$db->prepare("INSERT INTO pic (filename,filedata, filesize) VALUES (?,?,?)");
+		$stmt->bindParam(1, $pic, PDO::PARAM_STR, 255);
+		$stmt->bindParam(2, $filedata, PDO::PARAM_LOB);
+		$stmt->bindParam(3, $size, PDO::PARAM_INT);
+		$stmt->execute();
+
+
+		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='dataentry.php'</script>";	
 	}else{
-		$uploadOK=1;
+		//header("Location: dataentry.php");	
+		echo "<script type='text/javascript'>alert('Failed to upload'); window.location.href='dataentry.php'</script>";	
 	}
-}
-
-/*if(file_exists($pic) && $size>1048576 && $filetype!="jpg" && $filetype!="png" && $filetype!="jpeg" && $filetype!="gif"){
-	$uploadOK=0;
-}*/
-
-if($uploadOK==1){
-	$filedata=file_get_contents($tmp);
-
-	$stmt=$db->prepare("INSERT INTO pic (filename,filedata, filesize) VALUES (?,?,?)");
-	$stmt->bindParam(1, $pic, PDO::PARAM_STR, 255);
-	$stmt->bindParam(2, $filedata, PDO::PARAM_LOB);
-	$stmt->bindParam(3, $size, PDO::PARAM_INT);
-	$stmt->execute();
-
-
-	header("Location: display.php");
-}else{
-	header("Location: dataentry.php");
 }
 
 $db=null;
