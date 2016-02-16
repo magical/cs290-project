@@ -194,11 +194,16 @@
 				$db = connect_db();
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
+<<<<<<< HEAD
 				//This is a temporary user ID
 				$user_id = 2;
 				$user_name = $_REQUEST["name"];
 				$user_phone = $_REQUEST["phone"];
 
+=======
+				// TODO(ae): don't let non-logged-in users view this page
+				$user_id = get_logged_in_user_id();
+>>>>>>> 0760702595bbc109f2edef832db22bc6b28fa5d8
 
 				// TODO(ae): validate standingselect range
 				$standing_id = $_REQUEST['standingselect'];

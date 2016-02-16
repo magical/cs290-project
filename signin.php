@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $db = connect_db();
 
-  $stmt = $db->prepare("SELECT password_hash FROM users WHERE email=:email");
+  $stmt = $db->prepare("SELECT id, password_hash FROM users WHERE email=:email");
   $stmt->bindValue("email", $email);
   $stmt->execute();
 
@@ -22,10 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors['email'] = 'no account exists with that email address';
   } else {
     if (password_verify($password, $row["password_hash"])) {
-      $_SESSION["isLoggedIn"] = 1;
+      $_SESSION["user_id"] = $row["id"];
     } else {
       $errors['password'] = 'wrong password';
-      unset($_SESSION["isLoggedIn"]);
     }
   }
 
