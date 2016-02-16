@@ -7,6 +7,15 @@ function is_logged_in() {
   return array_key_exists('user_id', $_SESSION);
 }
 
+// Returns the id of the currently logged in user,
+// or 0 if no user is logged in.
+function get_logged_in_user_id() {
+  if (is_logged_in()) {
+    return $_SESSION['user_id'];
+  }
+  return 0;
+}
+
 // Connect to the database and return a new PDO object.
 // If connection is unsuccessful, prints an error and terminates the page.
 function connect_db() {
