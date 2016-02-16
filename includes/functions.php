@@ -41,3 +41,19 @@ function get_user_courses($db, $user_id) {
   $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $rows;
 }
+
+// Returns the full URL of the current page (without query parameters)
+function current_url() {
+  $url = 'http';
+  if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
+    $url .= "s";
+  }
+  $url .= "://";
+  if ($_SERVER["SERVER_PORT"] != "80") {
+    $url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["SCRIPT_NAME"];
+  } else {
+    $url .= $_SERVER["SERVER_NAME"].$_SERVER["SCRIPT_NAME"];
+  }
+
+  return $url;
+}
