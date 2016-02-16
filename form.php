@@ -1,5 +1,17 @@
-<body>
+<?php 
+	require_once 'includes/all.php'; 
+?>
+<head>
 	<title> Search Groups </title>
+	<?php 
+		include 'includes/_head.html';
+	?>
+</head>
+
+<body>
+	<?php 
+		include 'includes/_nav.php';
+	?>
 
 	<h2> Basic Search Page </h2>
 	
@@ -15,5 +27,9 @@
 	</h3>
 	<input type = "submit" name='all'> </br>
 	</form>
+
+	<?php 
+		include 'includes/_footer.php';
+	?>
 	
 </body>

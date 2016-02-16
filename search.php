@@ -1,11 +1,18 @@
 <?php
-	
 	require_once "includes/all.php";
 ?>
 
-<body>
-
+<head>
+	<?php 
+		include 'includes/_head.html';
+	?>
 	<title>Results</title>
+</head>
+
+<body>
+	<?php 
+		include 'includes/_nav.php';
+	?>
 
 	<h2>Search Results</h2>
 <?php	
@@ -51,5 +58,8 @@
 		<br><br><input type = "submit" value = "Search Again"><br>
 	</form>
 	
+	<?php 
+		include 'includes/_footer.php';
+	?>
 	
 </body>
