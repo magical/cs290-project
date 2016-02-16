@@ -177,8 +177,8 @@
 				$db = connect_db();
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
-				//This is a temporary user ID
-				$user_id = 2;
+				// TODO(ae): don't let non-logged-in users view this page
+				$user_id = get_logged_in_user_id();
 
 				// TODO(ae): validate standingselect range
 				$standing_id = $_REQUEST['standingselect'];

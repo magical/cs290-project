@@ -31,6 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindValue("password_hash", password_hash($_POST["password"], PASSWORD_BCRYPT));
     $stmt->execute();
 
+    $user_id = $db->lastInsertId();
+    $_SESSION['user_id'] = $user_id;
+
     header("Location: signin.php");
     exit();
   }
