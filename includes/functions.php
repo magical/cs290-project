@@ -4,7 +4,7 @@
 
 // Reports whether a user is currently logged in.
 function is_logged_in() {
-  return array_key_exists('isLoggedIn', $_SESSION) && $_SESSION['isLoggedIn'] == 1;
+  return array_key_exists('user_id', $_SESSION);
 }
 
 // Connect to the database and return a new PDO object.
