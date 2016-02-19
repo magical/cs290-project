@@ -1,12 +1,13 @@
 <?php
 	require_once "includes/all.php";
 ?>
-
+<!DOCTYPE html>
+<html>
 <head>
+	<title>Results</title>
 	<?php 
 		include 'includes/_head.html';
 	?>
-	<title>Results</title>
 </head>
 
 <body>
@@ -100,3 +101,4 @@
 	?>
 	
 </body>
+</html>
