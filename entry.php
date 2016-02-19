@@ -218,7 +218,7 @@
 						college_id = :college_id,
 						time1 = :time1,
 						time2 = :time2,
-						campus_id = :campus_id,
+						campus_id = :campus_id
 					WHERE id=:user_id");
 				$stmt->bindValue("standing_id", $standing_id);
 				$stmt->bindValue("college_id", $college_id);
