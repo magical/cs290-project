@@ -56,6 +56,10 @@ CREATE TABLE users (
     college_id INTEGER,
     standing_id INTEGER,
 
+    -- Study times
+    time1 VARCHAR(100),
+    time2 VARCHAR(100),
+
     FOREIGN KEY (college_id) REFERENCES colleges (id),
     FOREIGN KEY (standing_id) REFERENCES standings (id),
     UNIQUE (email),
