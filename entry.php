@@ -29,7 +29,7 @@
       <div class="row"> 
 		  <div class="col-md-4">
 	<select name="standingselect" class="form-control">
-		<option value="0"> Select Class Standing </option>
+		<option value=""> Select Class Standing </option>
 		<option value="1"> First-Year </option>
 		<option value="2"> Second-Year </option>
 		<option value="3"> Third-Year </option>
@@ -41,7 +41,7 @@
 	<div class="col-md-4">
 	<select name="collegeselect" class="form-control">
 		<!--Using first three letters to indicate college, first capt'd, for consistency -->
-		<option value="0"> Select College </option>
+		<option value=""> Select College </option>
 		<option value="Agr"> Agricultural Sciences </option>
 		<option value="Bus"> Business </option>
 		<option value="Ear"> Earth, Ocean, and Atmospheric Sciences </option>
@@ -57,7 +57,7 @@
 	</div>
 	<div class="col-md-4">
 	<select name="campus" class="form-control">
-		<option value="0"> Select Campus </option>
+		<option value=""> Select Campus </option>
 		<option value="Cor"> Corvallis (Main)</option>
 		<option value="Cas"> Cascades </option>
 		<option value="Onl"> Online </option>
@@ -72,7 +72,7 @@
 		<p>Use R for Thursday, N for Sunday</p>
 <!--		<input type="text" name="t1" class="form-control" style="width: 150px"> -->
 	<select name="t1d" class="form-control">
-		<option value="0"> Select Day </option>
+		<option value=""> Select Day </option>
 		<option value="1"> Monday </option>
 		<option value="2"> Tuesday </option>
 		<option value="3"> Wednesday </option>
@@ -82,7 +82,7 @@
 		<option value="7"> Sunday </option>
 	</select>
 	<select name="t1t" class="form-control">
-		<option value="A"> Select Time </option>
+		<option value=""> Select Time </option>
 		<option value="0000"> 12:00 AM </option>
 		<option value="0100"> 1:00 AM </option>
 		<option value="0200"> 2:00 AM </option>
@@ -109,7 +109,7 @@
 		<option value="2300"> 11:00 PM </option>
 	</select>
 	<select name="t2d" class="form-control">
-		<option value="0"> Select Day </option>
+		<option value=""> Select Day </option>
 		<option value="1"> Monday </option>
 		<option value="2"> Tuesday </option>
 		<option value="3"> Wednesday </option>
@@ -119,7 +119,7 @@
 		<option value="7"> Sunday </option>
 	</select>
 	<select name="t2t" class="form-control">
-		<option value="A"> Select Time </option>
+		<option value=""> Select Time </option>
 		<option value="0000"> 12:00 AM </option>
 		<option value="0100"> 1:00 AM </option>
 		<option value="0200"> 2:00 AM </option>
@@ -174,19 +174,19 @@
 			echo ' '.htmlspecialchars($_REQUEST["campus"]);
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			if ($_REQUEST["standingselect"] == "0") {
+			if ($_REQUEST["standingselect"] === "") {
 					echo "<p> ERROR: Please choose class standing </p>";
-			} elseif ($_REQUEST["collegeselect"] == "0") {
+			} elseif ($_REQUEST["collegeselect"] === "") {
 					echo "<p> ERROR: Please choose college </p>";
-			} elseif($_REQUEST["campus"] == "0") {
+			} elseif($_REQUEST["campus"] === "") {
 					echo "<p> ERROR: Please choose campus </p>";
-			} elseif($_REQUEST["t1t"] == "0") {
+			} elseif($_REQUEST["t1t"] === "") {
 					echo "<p> ERROR: Please choose time 1 </p>";
-			}elseif($_REQUEST["t1d"] == "0") {
+			}elseif($_REQUEST["t1d"] === "") {
 					echo "<p> ERROR: Please choose day 1 </p>";
-			}elseif($_REQUEST["t2t"] == "0") {
+			}elseif($_REQUEST["t2t"] === "") {
 					echo "<p> ERROR: Please choose time 2 </p>";
-			}elseif($_REQUEST["t2d"] == "0") {
+			}elseif($_REQUEST["t2d"] === "") {
 					echo "<p> ERROR: Please choose day 2 </p>";
 			}else {
 				$t1 = $_REQUEST["t1d"] . $_REQUEST["t1t"];
