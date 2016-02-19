@@ -31,24 +31,59 @@ function connect_db() {
   return $db;
 }
 
+// Accessors
+
+// Gets a user from the database by id.
 function get_user($db, $id) {
   $stmt = $db->prepare('SELECT * FROM users WHERE id = :id');
-  $stmt->bindValue("id", $id);
+  $stmt->bindValue(":id", $id);
   $stmt->execute();
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
   return $row;
 }
 
+// Gets a list of course from the database by user id.
 function get_user_courses($db, $user_id) {
   $stmt = $db->prepare('
     SELECT courses.*
     FROM courses
     JOIN user_courses ON user_courses.course_id = courses.id
     WHERE user_id = :user_id');
-  $stmt->bindValue("user_id", $user_id);
+  $stmt->bindValue(":user_id", $user_id);
   $stmt->execute();
   $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $rows;
+}
+
+// Gets a group from the database by id.
+function get_group($db, $id) {
+  $stmt = $db->prepare('SELECT * FROM groups WHERE id = :id');
+  $stmt->bindValue(":id", $id);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $row;
+}
+
+// Gets a list of users from the database by group id.
+function get_group_members($db, $group_id) {
+  $stmt = $db->prepare('
+    SELECT users.*
+    FROM users
+    JOIN group_members ON group_members.user_id = users.id
+    WHERE group_id = :group_id');
+  $stmt->bindValue(":group_id", $group_id);
+  $stmt->execute();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $rows;
+}
+
+// Gets a course from the database by id.
+function get_course($db, $id) {
+  $stmt = $db->prepare('SELECT * FROM courses WHERE id = :id');
+  $stmt->bindValue(":id", $id);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $row;
 }
 
 // Returns the full URL of the current page (without query parameters)
