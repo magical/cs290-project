@@ -1,6 +1,8 @@
 <?php 
 	require_once 'includes/all.php'; 
 ?>
+<!DOCTYPE html>
+<html>
 <head>
 	<title> Search Groups </title>
 	<?php 
@@ -33,3 +35,4 @@
 	?>
 	
 </body>
+</html>

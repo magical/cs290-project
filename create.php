@@ -15,12 +15,21 @@ $db->exec('DROP TABLE IF EXISTS groups');
 $db->exec('DROP TABLE IF EXISTS user_courses');
 $db->exec('DROP TABLE IF EXISTS courses');
 $db->exec('DROP TABLE IF EXISTS users');
-
-$db->exec('DROP TABLE IF EXISTS colleges');
-$db->exec('DROP TABLE IF EXISTS standings');
 $db->exec('DROP TABLE IF EXISTS pic');
 
+$db->exec('DROP TABLE IF EXISTS campuses');
+$db->exec('DROP TABLE IF EXISTS colleges');
+$db->exec('DROP TABLE IF EXISTS standings');
+
 // Create tables
+
+$db->exec('
+CREATE TABLE campuses (
+    id INTEGER AUTO_INCREMENT,
+    name VARCHAR(255),
+
+    PRIMARY KEY (id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
 CREATE TABLE colleges (
@@ -41,6 +50,17 @@ CREATE TABLE standings (
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 $db->exec('
+CREATE TABLE pic (
+    id INTEGER NOT NULL AUTO_INCREMENT ,
+    filename VARCHAR(255),
+    filedata MEDIUMBLOB,
+    filesize INTEGER,
+
+    PRIMARY KEY (id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
+
+
+$db->exec('
 CREATE TABLE users (
     id INTEGER AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
@@ -53,15 +73,19 @@ CREATE TABLE users (
     -- Optional data
     password_hash VARCHAR(255),
     phone VARCHAR(255),
+    campus_id INTEGER,
     college_id INTEGER,
     standing_id INTEGER,
+    pic_id INTEGER,
 
     -- Study times
     time1 VARCHAR(100),
     time2 VARCHAR(100),
 
+    FOREIGN KEY (campus_id) REFERENCES campuses (id),
     FOREIGN KEY (college_id) REFERENCES colleges (id),
     FOREIGN KEY (standing_id) REFERENCES standings (id),
+    FOREIGN KEY (pic_id) REFERENCES pic (id),
     UNIQUE (email),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
@@ -94,6 +118,11 @@ CREATE TABLE groups (
     course_id INTEGER,
     
     name VARCHAR(255) NOT NULL,
+    time VARCHAR(255),
+    place VARCHAR(255),
+    blurb TEXT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     FOREIGN KEY (course_id) REFERENCES courses (id),
     PRIMARY KEY (id)
@@ -108,16 +137,6 @@ CREATE TABLE group_members (
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (group_id, user_id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
-
-$db->exec('
-CREATE TABLE pic (
-    fileid INTEGER NOT NULL AUTO_INCREMENT ,
-    filename VARCHAR(255),
-    filedata mediumblob,
-    filesize INTEGER,
-
-    PRIMARY KEY(fileid)
-    ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 // Insert values
 
