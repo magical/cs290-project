@@ -1,7 +1,8 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <span class="navbar-brand">Study Group Finder</span>
+          <!--<span class="navbar-brand">Study Group Finder</span>-->
+			 <a href="index.php"><img style="width: 100px; height: 50px" src="images/Logo.jpg"/></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-form navbar-right">
