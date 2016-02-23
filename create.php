@@ -147,12 +147,10 @@ $stmt->execute(array('id' => 3, 'name' => 'Third-year'));
 $stmt->execute(array('id' => 4, 'name' => 'Fourth-year'));
 $stmt->execute(array('id' => 5, 'name' => 'Fifth-year or more'));
 
-$stmt = $db->prepare("INSERT INTO campuses (id, campus) VALUES (:id, :name)");
+$stmt = $db->prepare("INSERT INTO campuses (id, name) VALUES (:id, :name)");
 $stmt->execute(array('id' => 1, 'name' => 'Corvallis (Main)'));
 $stmt->execute(array('id' => 2, 'name' => 'Cascades'));
 $stmt->execute(array('id' => 3, 'name' => 'Online'));
-
-
 
 $stmt = $db->prepare("INSERT INTO colleges (abbreviation, name) VALUES (:abbreviation, :name)");
 $stmt->execute(array('abbreviation' => 'Agr', 'name' => 'Agricultural Sciences'));
