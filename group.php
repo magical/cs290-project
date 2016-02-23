@@ -1,7 +1,11 @@
 <?php
 require_once 'includes/all.php';
 
-// TODO(ae): Require users to be logged in to view this page.
+ 
+if(!is_logged_in()) {
+	header("Location: signin.php");
+	exit(0);
+}
 
 if (!isset($_GET['id'])) {
   // um
