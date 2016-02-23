@@ -50,22 +50,6 @@
       }
       echo "</table>\n";
 
-      $stmt = $db->prepare("SELECT * FROM courses");
-      $stmt->execute();
-      echo "<h1>Courses</h1>\n";
-      echo "<table class=\"table table-bordered table-striped\">\n";
-      echo "  <thead><tr><th>id<th>dept<th>num<th>title<th>year</tr></thead>\n";
-      while ($row = $stmt->fetch()) {
-          echo '  <tr>';
-          echo '<td>'.htmlspecialchars($row['id']).'</td>';
-          echo '<td>'.htmlspecialchars($row['department']).'</td>';
-          echo '<td>'.htmlspecialchars($row['number']).'</td>';
-          echo '<td>'.htmlspecialchars($row['title']).'</td>';
-          echo '<td>'.htmlspecialchars($row['year']).'</td>';
-          echo "</tr>\n";
-      }
-      echo "</table>\n";
-
       $stmt = $db->prepare("
           SELECT groups.id as id, groups.name, courses.id as course_id, courses.department, courses.number
           FROM groups
@@ -86,6 +70,22 @@
           while ($row2 = $stmt2->fetch()) {
               echo htmlspecialchars($row2['email']) . '<br>';
           }
+          echo "</tr>\n";
+      }
+      echo "</table>\n";
+
+      $stmt = $db->prepare("SELECT * FROM courses");
+      $stmt->execute();
+      echo "<h1>Courses</h1>\n";
+      echo "<table class=\"table table-bordered table-striped\">\n";
+      echo "  <thead><tr><th>id<th>dept<th>num<th>title<th>year</tr></thead>\n";
+      while ($row = $stmt->fetch()) {
+          echo '  <tr>';
+          echo '<td>'.htmlspecialchars($row['id']).'</td>';
+          echo '<td>'.htmlspecialchars($row['department']).'</td>';
+          echo '<td>'.htmlspecialchars($row['number']).'</td>';
+          echo '<td>'.htmlspecialchars($row['title']).'</td>';
+          echo '<td>'.htmlspecialchars($row['year']).'</td>';
           echo "</tr>\n";
       }
       echo "</table>\n";
