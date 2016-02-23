@@ -1,7 +1,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <span class="navbar-brand">Study Group Finder</span>
+          <a href="index.php">
+            <img style="width: 100px; height: 50px" src="images/Logo.jpg"
+                 alt="Study Group Finder"/>
+          </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-form navbar-right">
@@ -24,8 +27,15 @@
           <ul class="nav nav-justified">
             <li><a href="index.php">Home</a></li>
             <li><a href="entry.php">Data Entry</a></li>
-            <li><a href="display.php">Data Display</a></li>
-            <li><a href="feature.php">Cool Feature</a></li>
+            <li><a href="dataentry.php">Data Entry 2</a></li>
+            <?php
+              if (is_logged_in()) {
+                echo '<li><a href="profile.php?id='.get_logged_in_user_id().'">Your Profile</a></li>';
+              }
+            ?>
+            <li><a href="group.php?id=1">Group</a></li>
+            <li><a href="form.php">Find Groups</a></li>
+            <li><a href="display.php">Data Dump</a></li>
           </ul>
         </nav>
       </div>

@@ -4,7 +4,20 @@
 
 // Reports whether a user is currently logged in.
 function is_logged_in() {
-  return array_key_exists('user_id', $_SESSION);
+  /*if (isset($_SESSION["onidid"]) && $_SESSION["onidid"] != "") {
+  	 echo '<script language="javascript">';
+	 echo 'alert("ONID")';
+	 echo '</script>'; 
+	 return array_key_exists('onidid', $_SESSION);
+	 
+  }
+  else { */
+   /* echo '<script language="javascript">';
+	 echo 'alert("NO ONID")';
+	 echo '</script>';
+		*/		 
+  	 return array_key_exists('user_id', $_SESSION);
+//}
 }
 
 // Returns the id of the currently logged in user,
@@ -12,6 +25,7 @@ function is_logged_in() {
 function get_logged_in_user_id() {
   if (is_logged_in()) {
     return $_SESSION['user_id'];
+	 
   }
   return 0;
 }
@@ -24,6 +38,8 @@ function connect_db() {
     // TODO(ae): persistent?
     $db = new PDO($dsn, $dbuser, $dbpass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
   } catch (PDOException $e) {
     echo "Error connecting to database";
     exit();
@@ -31,24 +47,59 @@ function connect_db() {
   return $db;
 }
 
+// Accessors
+
+// Gets a user from the database by id.
 function get_user($db, $id) {
   $stmt = $db->prepare('SELECT * FROM users WHERE id = :id');
-  $stmt->bindValue("id", $id);
+  $stmt->bindValue(":id", $id);
   $stmt->execute();
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
   return $row;
 }
 
+// Gets a list of course from the database by user id.
 function get_user_courses($db, $user_id) {
   $stmt = $db->prepare('
     SELECT courses.*
     FROM courses
     JOIN user_courses ON user_courses.course_id = courses.id
     WHERE user_id = :user_id');
-  $stmt->bindValue("user_id", $user_id);
+  $stmt->bindValue(":user_id", $user_id);
   $stmt->execute();
   $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $rows;
+}
+
+// Gets a group from the database by id.
+function get_group($db, $id) {
+  $stmt = $db->prepare('SELECT * FROM groups WHERE id = :id');
+  $stmt->bindValue(":id", $id);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $row;
+}
+
+// Gets a list of users from the database by group id.
+function get_group_members($db, $group_id) {
+  $stmt = $db->prepare('
+    SELECT users.*
+    FROM users
+    JOIN group_members ON group_members.user_id = users.id
+    WHERE group_id = :group_id');
+  $stmt->bindValue(":group_id", $group_id);
+  $stmt->execute();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $rows;
+}
+
+// Gets a course from the database by id.
+function get_course($db, $id) {
+  $stmt = $db->prepare('SELECT * FROM courses WHERE id = :id');
+  $stmt->bindValue(":id", $id);
+  $stmt->execute();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $row;
 }
 
 // Returns the full URL of the current page (without query parameters)

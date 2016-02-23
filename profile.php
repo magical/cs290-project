@@ -1,13 +1,18 @@
 <?php
 require_once 'includes/all.php';
 
-// TODO(ae): Require users to be logged in to view this page.
+
+if (!is_logged_in()) {
+	header("Location: signin.php");
+	exit(0);
+}
+
 
 if (!isset($_GET['id'])) {
   // um
   header('Status: 404');
-  die('404 not found');
-}
+  die('404 not found'); 
+} 
 
 $db = connect_db();
 $user = get_user($db, $_GET['id']);
@@ -17,7 +22,6 @@ if (!$user) {
 }
 
 $courses = get_user_courses($db, $user['id']);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,3 +63,19 @@ $courses = get_user_courses($db, $user['id']);
     <?php include 'includes/_footer.php';?>
   </body>
 </html>
+
+<!---}
+else {
+	?>
+	<script language="javascript">
+	alert("Please Log In")
+	</script>;
+	
+	<!DOCTYPE html> 
+	<html>
+		<body>
+			<a href="index.php"> Click Here To Log In </a>
+		</body>	
+	</html>
+	<?php
+?> ---!>
