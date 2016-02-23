@@ -31,6 +31,10 @@ $courses = get_user_courses($db, $user['id']);
 
     <h1>User profile</h1>
 
+    <?php if ($user['id'] == get_logged_in_user_id()) { ?>
+      <p><a href="dataentry.php" class="btn btn-primary">Edit your profile</a>
+    <?php } ?>
+
     <dl class="dl-horizontal">
       <dt>Name
       <dd><?= htmlspecialchars($user['name']) ?>
