@@ -4,20 +4,7 @@
 
 // Reports whether a user is currently logged in.
 function is_logged_in() {
-  /*if (isset($_SESSION["onidid"]) && $_SESSION["onidid"] != "") {
-  	 echo '<script language="javascript">';
-	 echo 'alert("ONID")';
-	 echo '</script>'; 
-	 return array_key_exists('onidid', $_SESSION);
-	 
-  }
-  else { */
-   /* echo '<script language="javascript">';
-	 echo 'alert("NO ONID")';
-	 echo '</script>';
-		*/		 
-  	 return array_key_exists('user_id', $_SESSION);
-//}
+  return array_key_exists('user_id', $_SESSION);
 }
 
 // Returns the id of the currently logged in user,
@@ -25,7 +12,6 @@ function is_logged_in() {
 function get_logged_in_user_id() {
   if (is_logged_in()) {
     return $_SESSION['user_id'];
-	 
   }
   return 0;
 }
