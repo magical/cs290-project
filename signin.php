@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <a class="btn btn-lg btn-osu btn-block" href="https://login.oregonstate.edu/cas/login?service=http%3A%2F%2Fweb.engr.oregonstate.edu%2F~ekstedta%2Fcs290-dev%2Findex.php">Log in through OSU</a>
         <br>
         <a href="signup.php">Create new account</a>
       </form>
