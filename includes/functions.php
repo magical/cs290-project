@@ -38,6 +38,8 @@ function connect_db() {
     // TODO(ae): persistent?
     $db = new PDO($dsn, $dbuser, $dbpass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
   } catch (PDOException $e) {
     echo "Error connecting to database";
     exit();
