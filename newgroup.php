@@ -6,7 +6,7 @@ $db = connect_db();
 $user_courses = get_user_courses($db, get_logged_in_user_id());
 
 // TODO(ae): if no courses, direct user to add some
-// TODO(ae): there is no UI for adding users
+// TODO(ae): javascript magic for adding users
 
 $form = array();
 $form['course'] = 0;
@@ -14,13 +14,20 @@ $form['name'] = '';
 $form['time'] = '';
 $form['place'] = '';
 $form['members'] = array();
+$form['add_user_query'] = '';
 
 $errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = '';
+    if (array_key_exists('action', $_POST)) {
+      $action = $_POST['action'];
+    }
+
     $form['name'] = $_POST['name'];
     $form['time'] = $_POST['time'];
     $form['place'] = $_POST['place'];
+    $form['add_user_query'] = $_POST['add_user_query'];
 
     // validation
 
@@ -58,9 +65,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
+    // If the user clicked the 'add user' button,
+    // try to find the user and add their id to the member list.
+    if ($action === 'add_user') {
+      $query = $_POST['add_user_query'];
+      if (!$query) {
+        $errors['add_user'] = 'please specify which user to add';
+      } else {
+        $stmt = $db->prepare("SELECT id FROM users WHERE lower(name) = lower(?) OR email = ? LIMIT 2");
+        $stmt->bindValue(1, $query);
+        $stmt->bindValue(2, $query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll();
+        if (count($rows) == 0) {
+          $errors['add_user'] = 'no matching user';
+        } else if (count($rows) > 1) {
+          $errors['add_user'] = 'ambiguous query';
+        } else {
+          $form['members'][] = $rows[0]['id'];
+          $form['add_user_query'] = '';
+        }
+      }
+    }
+
     // create the group
     // TODO(ae): transation
-    if (!count($errors)) {
+    if ($action !== 'add_user' && !count($errors)) {
       $stmt = $db->prepare("INSERT INTO groups (course_id, name, time, place) VALUES (:course_id, :name, :time, :place)");
       $stmt->bindValue(":course_id", $form['course']);
       $stmt->bindValue(":name", $form['name']);
@@ -159,7 +189,7 @@ function has_error($key) {
 
       <h2>Add people</h2>
 
-      <div class="form-group">
+      <div class="form-group <?= has_error('members') ?> <?= has_error('add_user') ?>">
         <?php
           foreach ($form['members'] as $id) {
             echo '<input type="hidden" name="members[]" value="'.htmlspecialchars($id).'">'."\n";
@@ -174,10 +204,37 @@ function has_error($key) {
           ?>
         </ul>
 
+        <?php
+          if (has_error('members')) {
+            echo '<p class="help-block">';
+            echo htmlspecialchars($errors['add_user']);
+          }
+        ?>
+
+        <label for="user-input">Add a user</label>
+        <div class="input-group">
+          <input type="text" id="user-input" class="form-control"
+            name="add_user_query" value="<?=htmlspecialchars($form['add_user_query'])?>">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" name="action" value="add_user">Add</button>
+          </span>
+        </div>
+
+        <?php
+          if (has_error('add_user')) {
+            echo '<p class="help-block">';
+            echo htmlspecialchars($errors['add_user']);
+          }
+        ?>
+
         <p class="help-block">
           Invite people to join your study group.
           They'll get a notification that you've invited them and have the option to join.
           You can always invite more people later.
+
+        <p class="help-block">
+          To add a user, type their name or email address.
+
       </div>
 
       <div class="form-group">
