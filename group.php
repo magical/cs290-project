@@ -27,7 +27,7 @@ $users = get_group_members($db, $group['id']);
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Study Group for <?= htmlspecialchars($course['name']) ?></title>
+    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
     <?php include 'includes/_head.html';?>
   </head>
 
