@@ -26,13 +26,15 @@
 
 	try{
 	
-		$db = new PDO($dsn, $dbuser, $dbpass);
+		$db = connect_db();
 		
 		if(!isset($_GET['all']) && isset($_GET['group'])) {
 
 			$stmnt = $db->prepare("SELECT * 
 								  FROM groups 
+								  JOIN courses ON courses.id=groups.course_id
 								  WHERE LOWER(name) = LOWER(:name) 
+								    AND is_private = FALSE
 								  ORDER BY name 
 								  LIMIT 10
 								  OFFSET :page") or die($db);
@@ -43,16 +45,19 @@
 			
 			$stmnt = $db->prepare("SELECT * 
 								  FROM groups 
-								  WHERE LOWER(name) = LOWER(:name)") or die($db);
+								  JOIN courses ON courses.id=groups.course_id
+								  WHERE LOWER(name) = LOWER(:name)
+								   AND is_private = FALSE") or die($db);
 			$stmnt->bindValue('name', $_GET['group']);
 			$stmnt->execute();
 			
 		}else if(isset($_GET['all'])){	
 			
 			$stmnt = $db->prepare("SELECT * 
-								  FROM groups 
-								  WHERE name 
-								  LIKE '%' 
+								  FROM groups
+								  JOIN courses ON courses.id=groups.course_id
+								  WHERE name LIKE '%' 
+								    AND is_private = FALSE
 								  ORDER BY name 
 								  LIMIT 10
 								  OFFSET :page") or die($db);
@@ -60,27 +65,28 @@
 			$stmnt->execute();
 			$search = $stmnt->fetchAll();
 			
-			$stmnt = $db->prepare("SELECT count(*) button_number
-								  FROM groups 
-								  WHERE name 
-								  LIKE '%'") or die($db);
-			$result = $stmnt->execute();
-			
 		}
+		
+		$stmnt = $db->prepare("SELECT count(*) button_number
+							  FROM groups 
+							  WHERE name LIKE '%'
+						      AND is_private = FALSE") or die($db);
+		$stmnt->execute();
 		if(isset($_GET['all']) || isset($_GET['group'])) {
 			if(!count($search)) {
 				echo 'No groups found' . '<br />';
 			}else {
 				foreach($search as $key) {
-					echo 'Below is an iframe for the "' . htmlspecialchars($key['name']) . '" group' . '<br />';
 					$url = 'group.php?id=' . urlencode($key['id']);
-					echo "<iframe src = $url> </iframe>" . '<br />';
+					echo "<a href='$url'>" . htmlspecialchars($key['name']) . "</a> <br>";
+					echo "Course: " . htmlspecialchars($key['title']). "<br>";
+					echo htmlspecialchars($key['blurb']);
 				}
 			}
 
 			echo '<br>';
 			
-			$buttonNumber = $result->fetch_object()->button_number;
+			$buttonNumber = $stmnt->fetchObject()->button_number / 10;
 			
 
 			$url = 'search.php?';
@@ -89,10 +95,11 @@
 				}else if(isset($_GET['all'])) {
 					$url = $url .'all=' . urlencode($_GET['all']); 
 				}
-
+			
+			echo 'Pages:'; 
 			for($i = 0; $i < $buttonNumber; $i++) {
 
-				echo '<a href = ' . $url . '&page=' . ( $i + 1 ) . ' class = "btn btn-default"> ' . ($i + 1) . ' </a>';	
+				echo '<a href = ' . $url . '&page=' . ( $i + 1 ) . ' class = "btn btn-small"> ' . ($i + 1) . ' </a>';	
 			}
 			if($i) echo '<br>';
 		}
