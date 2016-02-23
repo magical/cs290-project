@@ -116,6 +116,7 @@ $db->exec('
 CREATE TABLE groups (
     id INTEGER AUTO_INCREMENT,
     course_id INTEGER,
+    is_private BOOLEAN DEFAULT FALSE,
     
     name VARCHAR(255) NOT NULL,
     time VARCHAR(255),
