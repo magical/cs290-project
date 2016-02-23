@@ -30,6 +30,7 @@
             <li><a href="dataentry.php">Data Entry 2</a></li>
             <?php
               if (is_logged_in()) {
+                echo '<li><a href="addclass.php">Add Courses</a></li>';
                 echo '<li><a href="profile.php?id='.get_logged_in_user_id().'">Your Profile</a></li>';
               }
             ?>
