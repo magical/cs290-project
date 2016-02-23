@@ -40,6 +40,12 @@
 			$stmnt->execute();
 			$search = $stmnt->fetchAll();
 			
+			$stmnt = $db->prepare("SELECT * 
+								  FROM groups 
+								  WHERE LOWER(name) = LOWER(:name)") or die($db);
+			$stmnt->bindValue('name', $_GET['group']);
+			$stmnt->execute();
+			
 		}else if(isset($_GET['all'])){	
 			
 			$stmnt = $db->prepare("SELECT * 
@@ -52,6 +58,12 @@
 			$stmnt->bindValue('page', $page, PDO::PARAM_INT);
 			$stmnt->execute();
 			$search = $stmnt->fetchAll();
+			
+			$stmnt = $db->prepare("SELECT count(*) button_number
+								  FROM groups 
+								  WHERE name 
+								  LIKE '%'") or die($db);
+			$result = $stmnt->execute();
 			
 		}
 		if(isset($_GET['all']) || isset($_GET['group'])) {
@@ -66,8 +78,9 @@
 			}
 
 			echo '<br>';
-
-			$buttonNumber = (int) ( count($search) / 10);
+			
+			$buttonNumber = $result->fetch_object()->button_number;
+			
 
 			$url = 'search.php?';
 				if(isset($_GET['group'])) {
