@@ -1,4 +1,5 @@
 <?php require_once 'includes/all.php'; ?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -58,9 +59,9 @@
 	<div class="col-md-4">
 	<select name="campus" class="form-control">
 		<option value=""> Select Campus </option>
-		<option value="Cor"> Corvallis (Main)</option>
-		<option value="Cas"> Cascades </option>
-		<option value="Onl"> Online </option>
+		<option value="1"> Corvallis (Main)</option>
+		<option value="2"> Cascades </option>
+		<option value="3"> Online </option>
 	</select>
 	</div>
        </div>
@@ -158,6 +159,10 @@
 	</form>
 
 	<?php
+		if (array_key_exists("name", $_REQUEST))
+			echo ' '.htmlspecialchars($_REQUEST["name"]);
+		if (array_key_exists("phone", $_REQUEST))
+			echo ' '.htmlspecialchars($_REQUEST["phone"]);
 		if (array_key_exists("standingselect", $_REQUEST))
 			echo htmlspecialchars($_REQUEST["standingselect"]);
 		if (array_key_exists("collegeselect", $_REQUEST))
@@ -178,6 +183,8 @@
 					echo "<p> ERROR: Please choose class standing </p>";
 			} elseif ($_REQUEST["collegeselect"] === "") {
 					echo "<p> ERROR: Please choose college </p>";
+			} elseif ($_REQUEST["name"] === "") {
+					echo "<p> ERROR: Please input </p>";
 			} elseif($_REQUEST["campus"] === "") {
 					echo "<p> ERROR: Please choose campus </p>";
 			} elseif($_REQUEST["t1t"] === "") {
@@ -189,15 +196,16 @@
 			}elseif($_REQUEST["t2d"] === "") {
 					echo "<p> ERROR: Please choose day 2 </p>";
 			}else {
+				if (is_logged_in()) {
 				$t1 = $_REQUEST["t1d"] . $_REQUEST["t1t"];
 				$t2 = $_REQUEST["t2d"] . $_REQUEST["t2t"];
 				$db = connect_db();
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
-				// TODO(ae): don't let non-logged-in users view this page
+				// TODO(ae): don't let non-logged-in users view this page - I just made it so that it wouldn't submit non-logged in user info (jm)
 				$user_id = get_logged_in_user_id();
-				$user_name = $_REQUEST["name"];
-				$user_phone = $_REQUEST["phone"];
+				$name = $_REQUEST["name"];
+				$phone = $_REQUEST["phone"];
 
 				// TODO(ae): validate standingselect range
 				$standing_id = $_REQUEST['standingselect'];
@@ -214,12 +222,16 @@
 
 				$stmt = $db->prepare("
 					UPDATE users SET
+						name = :name,
+						phone = :phone,
 						standing_id = :standing_id,
 						college_id = :college_id,
 						time1 = :time1,
 						time2 = :time2,
 						campus_id = :campus_id
 					WHERE id=:user_id");
+				$stmt->bindValue("name", $name);
+				$stmt->bindValue("phone", $phone);
 				$stmt->bindValue("standing_id", $standing_id);
 				$stmt->bindValue("college_id", $college_id);
 				$stmt->bindValue("time1", $t1);
@@ -228,6 +240,12 @@
 				$stmt->bindValue("user_id", $user_id);
 				$stmt->execute();
 				//echo 'success';
+				}
+				else {
+					echo '<script language="javascript">';
+					echo 'alert("Please Log In")';
+					echo '</script>';
+				}
 			}
 		}
 	?>
