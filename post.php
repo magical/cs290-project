@@ -30,7 +30,15 @@ function user_is_in_group($db, $user, $group_id) {
 if (!user_is_in_group($db, $user, $group['id'])) {
   die("you are not in that group");
 }
-$body = $_POST['body'];
+
+$body = trim($_POST['body']);
+if($body === "") {
+  // no body??? let's send you back to the group page
+  $url = "group.php";
+  $url .= "?id=".urlencode($group['id']);
+  header("Location: ".$url);
+  exit(0);
+}
 
 $stmt = $db->prepare("INSERT INTO group_posts (group_id, user_id, body) VALUES (:group_id, :user_id, :body)");
 $stmt->bindValue(":group_id", $group['id'], PDO::PARAM_INT);
