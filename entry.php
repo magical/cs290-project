@@ -28,7 +28,7 @@
 	</table>	
 	<p> </p>
       <div class="row"> 
-		  <div class="col-md-4">
+<!--		  <div class="col-md-4">
 	<select name="standingselect" class="form-control">
 		<option value=""> Select Class Standing </option>
 		<option value="1"> First-Year </option>
@@ -38,7 +38,7 @@
 		<option value="5"> Fifth-Year or more </option>
 	</select>
 	
-	</div>
+	</div> -->
 	<div class="col-md-4">
 	<select name="collegeselect" class="form-control">
 		<!--Using first three letters to indicate college, first capt'd, for consistency -->
@@ -66,12 +66,12 @@
 	</div>
        </div>
      </div>
-   <div class="container" style="width:100%">
+   <!--<div class="container" style="width:100%">
      <div class="row">
 	<div class="col-lg-12 form-inline">
 	    	<p>Enter your two best times in the format DAY, TI:ME XM (i.e: R, 05:00 PM) </p>
 		<p>Use R for Thursday, N for Sunday</p>
-<!--		<input type="text" name="t1" class="form-control" style="width: 150px"> -->
+--		<input type="text" name="t1" class="form-control" style="width: 150px"> --
 	<select name="t1d" class="form-control">
 		<option value=""> Select Day </option>
 		<option value="1"> Monday </option>
@@ -150,12 +150,15 @@
 		document.getElementById("t1d").size=7;
 		document.getElementById("t1t").size=7;
 		document.getElementById("t2d").size=7;
-		document.getElementById("t2t").size=7;
-	</script>
-		<input type="submit" class="btn btn-primary">
-	</div>
+		document.getElementById("t2t").size=7; 
+	</script> -->
+		<p></p>
+		<div class="container">
+		<input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='SUBMIT'> </div>
+		<!--<input type="submit" class="btn btn-primary" style="position:relative">-->
+	<!--</div>
      </div>
-   </div>
+   </div>-->
 	</form>
 
 	<?php
@@ -179,15 +182,15 @@
 			echo ' '.htmlspecialchars($_REQUEST["campus"]);
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			if ($_REQUEST["standingselect"] === "") {
+			/*if ($_REQUEST["standingselect"] === "") {
 					echo "<p> ERROR: Please choose class standing </p>";
-			} elseif ($_REQUEST["collegeselect"] === "") {
+			} */if ($_REQUEST["collegeselect"] === "") {
 					echo "<p> ERROR: Please choose college </p>";
 			} elseif ($_REQUEST["name"] === "") {
 					echo "<p> ERROR: Please input </p>";
 			} elseif($_REQUEST["campus"] === "") {
 					echo "<p> ERROR: Please choose campus </p>";
-			} elseif($_REQUEST["t1t"] === "") {
+			} /*elseif($_REQUEST["t1t"] === "") {
 					echo "<p> ERROR: Please choose time 1 </p>";
 			}elseif($_REQUEST["t1d"] === "") {
 					echo "<p> ERROR: Please choose day 1 </p>";
@@ -195,10 +198,11 @@
 					echo "<p> ERROR: Please choose time 2 </p>";
 			}elseif($_REQUEST["t2d"] === "") {
 					echo "<p> ERROR: Please choose day 2 </p>";
-			}else {
+			} */
+			else {
 				if (is_logged_in()) {
-				$t1 = $_REQUEST["t1d"] . $_REQUEST["t1t"];
-				$t2 = $_REQUEST["t2d"] . $_REQUEST["t2t"];
+				//$t1 = $_REQUEST["t1d"] . $_REQUEST["t1t"];
+				//$t2 = $_REQUEST["t2d"] . $_REQUEST["t2t"];
 				$db = connect_db();
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
@@ -208,7 +212,7 @@
 				$phone = $_REQUEST["phone"];
 
 				// TODO(ae): validate standingselect range
-				$standing_id = $_REQUEST['standingselect'];
+				//$standing_id = $_REQUEST['standingselect'];
 				$campus_id = $_REQUEST['campus'];
 
 				// Look up the college
@@ -224,18 +228,15 @@
 					UPDATE users SET
 						name = :name,
 						phone = :phone,
-						standing_id = :standing_id,
 						college_id = :college_id,
-						time1 = :time1,
-						time2 = :time2,
 						campus_id = :campus_id
 					WHERE id=:user_id");
 				$stmt->bindValue("name", $name);
 				$stmt->bindValue("phone", $phone);
-				$stmt->bindValue("standing_id", $standing_id);
+			//	$stmt->bindValue("standing_id", $standing_id);
 				$stmt->bindValue("college_id", $college_id);
-				$stmt->bindValue("time1", $t1);
-				$stmt->bindValue("time2", $t2);
+			//	$stmt->bindValue("time1", $t1);
+			//	$stmt->bindValue("time2", $t2);
 				$stmt->bindValue("campus_id", $campus_id);
 				$stmt->bindValue("user_id", $user_id);
 				$stmt->execute();
@@ -248,6 +249,33 @@
 				}
 			}
 		}
+	
+    echo "<form action='upload.php' name='flpd' class='form-horizontal' role='form' method=post enctype=multipart/form-data>";
+    
+    echo "<div class='jumbotron'>";
+    echo "<h2>Upload a Picture</h2>";
+    echo "</div>";
+    echo "<div class='container'>";
+
+    echo "<br>";
+
+   /* echo "<div class=col-xs-2>";
+    echo "<input id='upld' class='form-control' name='finp' placeholder='Choose File' disabled='disabled'>";
+    echo "</div>"; */
+	 echo "<h5> Supported File Types: JPEG, JPG, GIF, PNG, less than 1 MB </h5>";
+    echo "<div class='fupld btn btn-primary'>";
+    echo "<span>UPLOAD</span>";
+    echo "<input type='file' name='fileupload'  onchange=\"f(this.value)\" class='fupl' id='fileup'>";
+    echo "</div>";
+
+    echo "<br><br>";
+    echo "<br><br>";
+
+    echo "<div class='subbtn'>";
+    echo "<input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='SUBMIT'>";
+    echo "</div>";
+    echo "</form>";
+    echo "</div>";
 	?>
     <?php include 'includes/_footer.php';?>
   </body>

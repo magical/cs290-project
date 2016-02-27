@@ -1,4 +1,10 @@
 <?php require_once 'includes/all.php'; ?>
+<?php 
+	if(!is_logged_in()) {
+		header("Location: signin.php");
+		exit(0);
+	}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -44,7 +50,7 @@
     $p="SELECT id, department,number FROM courses order by department";
     $s="SELECT id,name FROM standings order by id";
 
-    echo "<div class='container'>";
+    /*echo "<div class='container'>";
 
     echo "<form action='upload.php' name='flpd' class='form-horizontal' role='form' method=post enctype=multipart/form-data>";
     
@@ -71,11 +77,11 @@
     echo "</div>";
     echo "</form>";
     echo "</div>";
-
+	*/
 
     echo "<div class='container'>";
 
-    echo "<form action='entrycheck.php' class='form-horizontal' role='form' method='post' name='dentry'>";
+   /* echo "<form action='' class='form-horizontal' role='form' method='post' name='dentry'>";
 
     echo "<div class='jumbotron'>";
     echo "<h2>Personal Profile</h2>";
@@ -112,10 +118,22 @@
     }
     echo "</select>";
     echo "</div>";
+	 echo "<input type='submit' class='btn btn-info' value='SUBMIT'></form>"; */
+	 
+	 echo "<div class='jumbotron'>";
+    echo "<h2>Study Profile</h2>";
+    echo "</div>";
 
-    echo "<div class='col-sm-3'>";
-    echo "<h5>Please select Your Standings:</h5>";
-    echo "<select name='sta' id='standing' class='form-control'>";
+	echo "<form action='' class='form-horizontal' role='form' method='post' name='dentry'>";
+	 echo "<table width='100%' border='0px'>";
+	 echo "<tr> <td>";
+    //echo "<div class='col-sm-3'>";
+    echo "<h5>Select Your Standing:</h5>";
+	 echo "</td> <td>";
+	 echo "<h5>Please Select Course:</h5>";
+	 echo "</td> </tr>";
+	 echo "<tr> <td>";
+	 echo "<select name='sta' id='sta' class='form-control'>";
     echo "<option class='sopt' value=''>Select Standing</option>";
     foreach ($db->query($s) as $squery) {
       $sname=$squery[name];
@@ -123,13 +141,14 @@
       echo  "<option value='$sid'>$sname</option>";
     }
     echo "</select>";
-    echo "</div>";
-    echo "</div>";
+	 echo "</td>";
+    //echo "</div>";
+    //echo "</div>";
 
-    echo "<div class='dropdown'>";
-    echo "<br><br>";
-    echo "<h5>Please Select Course:</h5>";
-    echo "<select name='coudept' id='cdept' class='form-control'>";
+   // echo "<div class='dropdown'>";
+   // echo "<br><br>";
+	 echo "<td>";
+    echo "<select name='cdept' id='cdept' class='form-control'>";
     echo "<option class='cdt' value=''>Select Course</option>";
     foreach($db->query($p) as $couquery){
       $coud=$couquery[department];
@@ -139,33 +158,59 @@
  
     }
     echo "</select>";
-    echo "</div>";    
-
-    echo "<div class='row'>";
-    echo "<br><br>";
-    echo "<div class='col-sm-3'>";
+    //echo "</div>";    
+	 echo "</td>";
+	 echo "</tr> <tr> <td>";
+	 
+    //echo "<div class='row'>";
+    //echo "<br><br>";
+    //echo "<div class='dropdown'>";
     echo "<h5>Please Select the Day:</h5>";
-    echo "<select name='week' class='form-control'>";
+    echo "</td> <td>";
+	 echo "<h5>Please Select the Time:</h5>";	 
+	 echo "</td> </tr>";
+	 echo "<tr> <td>";
+	 echo "<select name='week1' id='week1' class='form-control'>";
+    echo "<option class='ww' value=''>Select Day</option>";
+    $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday'); 
+    foreach ($week as $value) {
+      echo '<option>'.$value.'</option>';
+    }
+    echo "</select>";
+    //echo "</div>";
+	 echo "</td> <td>";
+    //echo "<div class='dropdown'>";
+    echo "<select name='selt1' id='selt1' class='form-control'>";
+    echo "<option value=''>Select Time</option>";
+    for($i=1;$i<=24;$i++){
+      echo "<option value='$i'>$i:00</option>";
+    }
+    echo "</select>";
+    //echo "</div>";
+
+    //echo "</div>";
+	 echo "</td></tr>";
+	 echo "<tr> <td>";
+	 echo "<select name='week2' id='week2' class='form-control'>";
     echo "<option class='ww' value=''>Select Day</option>";
     $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
     foreach ($week as $value) {
       echo '<option>'.$value.'</option>';
     }
     echo "</select>";
-    echo "</div>";
-
-    echo "<div class='col-sm-3'>";
-    echo "<h5>Please Select the Time:</h5>";
-    echo "<select name='selt' class='form-control'>";
+    //echo "</div>";
+	 echo "</td> <td>";
+    //echo "<div class='dropdown'>";
+    echo "<select name='selt2' id='selt2' class='form-control'>";
     echo "<option value=''>Select Time</option>";
     for($i=1;$i<=24;$i++){
       echo "<option value='$i'>$i:00</option>";
     }
     echo "</select>";
-    echo "</div>";
+    //echo "</div>";
 
-    echo "</div>";
-
+    //echo "</div>";
+	 echo "</td></tr></table>";
 
     echo "<br><br>";
 
@@ -174,8 +219,64 @@
 
     echo "</div>";
 
-    ?>
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+	$db = connect_db();
+
+	$user_id=get_logged_in_user_id();
+	$sid=$_REQUEST["sta"];//standing id
+	$couid=$_REQUEST['cdept'];//course id
+	$day1=$_REQUEST['week1'];//day
+	$time1=$_REQUEST['selt1'];//time
+	$day2=$_REQUEST["week2"];
+	$time2=$_REQUEST['selt2'];
+	$t1="$day1$time1";
+	$t2="$day2$time2";
+	if($sid!='' && $couid!='' && $t1 != '' && $t2 !=''){
+				$stmt = $db->prepare("
+					UPDATE users SET
+						standing_id = :standing_id,
+						time1 = :time1,
+						time2 = :time2
+					WHERE id=:user_id");
+				$stmt->bindValue("standing_id", $sid);
+				$stmt->bindValue("time1", $t1);
+				$stmt->bindValue("time2", $t2);
+				$stmt->bindValue("user_id", $user_id);
+				$stmt->execute();
+	$stmt->execute();
+
+	
+}elseif($sid==='') {
+		echo '<script language="javascript">';
+		echo 'alert("Please Select Standing")';
+		echo '</script>';
+		header("Location: dataentry.php");
+		}
+ elseif($couid===''){
+ 		echo '<script language="javascript">';
+		echo 'alert("Please Select Course")';
+		echo '</script>';
+		header("Location: dataentry.php");
+ }
+ elseif($day1==='' || $day2 === ''){
+ 		echo '<script language="javascript">';
+		echo 'alert("Please Select Day")';
+		echo '</script>';
+		header("Location: dataentry.php");
+ }
+ elseif($time1 ==='' || $time2 === ''){
+ 		echo '<script language="javascript">';
+		echo 'alert("Please Select Time")';
+		echo '</script>';
+		header("Location: dataentry.php");
+ }
+ 
+	
+$db = null;
+}
+
+?>
 
     
     <?php include 'includes/_footer.php';?>
