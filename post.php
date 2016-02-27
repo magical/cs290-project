@@ -44,29 +44,3 @@ $url = "group.php";
 $url .= "?id=".urlencode($group['id']);
 $url .= "#post-".urlencode($post_id);
 header("Location: ".$url);
-
-?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Create a post</title>
-    <?php include 'includes/_head.html';?>
-  </head>
-
-  <body>
-    <?php include 'includes/_nav.php';?>
-
-    <?php /* TODO: preview */ ?>
-
-    <p>Posting to <?= htmlspecialchars($course['title']) ?>
-     <?= htmlspecialchars($group['name']) ?>
-
-    <form action="post.php">
-      <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
-      <textarea name="body"><?= htmlspecialchars($body) ?></textarea>
-      <button>Post</button>
-    </form>
-
-    <?php include 'includes/_footer.php';?>
-  </body>
-</html>
