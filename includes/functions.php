@@ -44,7 +44,7 @@ function get_user($db, $id) {
   return $row;
 }
 
-// Gets a list of course from the database by user id.
+// Gets a list of courses from the database by user id.
 function get_user_courses($db, $user_id) {
   $stmt = $db->prepare('
     SELECT courses.*
