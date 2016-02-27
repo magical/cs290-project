@@ -79,6 +79,20 @@ function get_group_members($db, $group_id) {
   return $rows;
 }
 
+// Gets a list of discussion posts by group id.
+function get_group_posts($db, $group_id) {
+  $stmt = $db->prepare('
+    SELECT group_posts.*, users.name as user_name
+    FROM group_posts
+    JOIN users ON users.id = group_posts.user_id
+    WHERE group_id = :group_id
+    ORDER BY created_at DESC');
+  $stmt->bindValue(":group_id", $group_id);
+  $stmt->execute();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $rows;
+}
+
 // Gets a course from the database by id.
 function get_course($db, $id) {
   $stmt = $db->prepare('SELECT * FROM courses WHERE id = :id');
