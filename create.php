@@ -10,6 +10,7 @@ $db = connect_db();
 
 // Drop tables
 
+$db->exec('DROP TABLE IF EXISTS group_posts');
 $db->exec('DROP TABLE IF EXISTS group_members');
 $db->exec('DROP TABLE IF EXISTS groups');
 $db->exec('DROP TABLE IF EXISTS user_courses');
@@ -137,6 +138,20 @@ CREATE TABLE group_members (
     FOREIGN KEY (group_id) REFERENCES groups (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (group_id, user_id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
+
+// A group_post is a short message posted to a group page.
+$db->exec('
+CREATE TABLE group_posts (
+    id INTEGER AUTO_INCREMENT,
+    group_id    INTEGER,
+    user_id     INTEGER,
+    body        TEXT,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (group_id) REFERENCES groups (id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 // Insert values

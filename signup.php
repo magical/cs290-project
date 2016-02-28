@@ -10,12 +10,19 @@ $errors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $db = connect_db();
 
-  // Check if email is taken
-  $stmt = $db->prepare("SELECT id FROM users WHERE email=:email");
-  $stmt->bindValue("email", $_POST["email"]);
-  $stmt->execute();
-  if ($stmt->fetch()) {
-    $errors['email'] = 'this email address is taken';
+  // Validate email
+  $email = $_POST['email'];
+  if (!preg_match('/@/', $email)) {
+    // Does it look like an email address?
+    $errors['email'] = 'please enter a valid email address';
+  } else {
+    // Check if email is taken
+    $stmt = $db->prepare("SELECT id FROM users WHERE email=:email");
+    $stmt->bindValue("email", $email);
+    $stmt->execute();
+    if ($stmt->fetch()) {
+      $errors['email'] = 'this email address is taken';
+    }
   }
 
   // Check if passwords match
@@ -27,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create a new user
     $stmt = $db->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)");
 
-    $stmt->bindValue("email", $_POST["email"]);
+    $stmt->bindValue("email", $email);
     $stmt->bindValue("password_hash", password_hash($_POST["password"], PASSWORD_BCRYPT));
     $stmt->execute();
 

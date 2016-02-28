@@ -1,124 +1,135 @@
 <?php
 	require_once "includes/all.php";
+
+	$all = isset($_GET['all']);
+
+	$page = 1;
+	if(isset($_GET['page'])) {
+		$page = (int) $_GET['page'];
+	}
+
+	try{
+		$db = connect_db();
+
+		// Construct search query
+		$where = "1";
+		$params = array();
+
+		if (!$all) {
+			if (isset($_GET['group'])) {
+				$where = "$where AND LOWER(name) = LOWER(:name)";
+				$params[":name"] = $_GET['group'];
+			}
+			if (isset($_GET['course'])) {
+				$where = "$where AND course_id = :course_id";
+				$params[":course_id"] = $_GET['course'];
+			}
+		}
+
+		$where = "($where) AND NOT is_private";
+
+		// Get results
+		$stmnt = $db->prepare("SELECT groups.*, courses.title as title
+								FROM groups
+								JOIN courses ON courses.id=groups.course_id
+								WHERE $where
+								ORDER BY name
+								LIMIT 10 OFFSET :offset") or die($db);
+
+		foreach ($params as $key => $value) {
+			$stmnt->bindValue($key, $value);
+		}
+		$stmnt->bindValue(':offset', ($page-1)*10, PDO::PARAM_INT);
+		$stmnt->execute();
+		$search = $stmnt->fetchAll();
+
+		// Get result count
+		$stmnt = $db->prepare("SELECT count(*) FROM groups WHERE $where");
+		foreach ($params as $key => $value) {
+			$stmnt->bindValue($key, $value);
+		}
+		$stmnt->execute();
+
+		$resultCount = $stmnt->fetch()[0];
+		$buttonNumber = ceil($resultCount / 10.0);
+
+		$searchparams = '';
+		if (isset($_GET['all'])) {
+			$searchparams .= '&all=1';
+		} else {
+			if (isset($_GET['group']) && $_GET['group']) {
+				$searchparams .= '&group=' . urlencode($_GET['group']);
+			}
+			if (isset($_GET['course']) && $_GET['course']) {
+				$searchparams .= '&course=' . urlencode($_GET['course']);
+			}
+		}
+		$searchurl = 'search.php?'.trim($searchparams, '&');
+	}catch(PDOException $e) {
+		echo 'Connection Failed: ' . $e->getMessage();
+	}
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Results</title>
-	<?php 
+	<?php
 		include 'includes/_head.html';
 	?>
 </head>
 
 <body>
-	<?php 
-		include 'includes/_nav.php';
-	?>
+	<?php include 'includes/_nav.php' ?>
 
 	<h2>Search Results</h2>
-<?php	
-
-	if(isset($_GET['page'])) {
-		$page = (int) $_GET['page'] * 10;		
-	}else {
-		$page = 0;
-	}
-
-	try{
-	
-		$db = connect_db();
-		
-		if(!isset($_GET['all']) && isset($_GET['group'])) {
-
-			$stmnt = $db->prepare("SELECT * 
-								  FROM groups 
-								  JOIN courses ON courses.id=groups.course_id
-								  WHERE LOWER(name) = LOWER(:name) 
-								    AND is_private = FALSE
-								  ORDER BY name 
-								  LIMIT 10
-								  OFFSET :page") or die($db);
-			$stmnt->bindValue('name', $_GET['group']);
-			$stmnt->bindValue('page', $page, PDO::PARAM_INT);
-			$stmnt->execute();
-			$search = $stmnt->fetchAll();
-			
-			$stmnt = $db->prepare("SELECT * 
-								  FROM groups 
-								  JOIN courses ON courses.id=groups.course_id
-								  WHERE LOWER(name) = LOWER(:name)
-								   AND is_private = FALSE") or die($db);
-			$stmnt->bindValue('name', $_GET['group']);
-			$stmnt->execute();
-			
-		}else if(isset($_GET['all'])){	
-			
-			$stmnt = $db->prepare("SELECT * 
-								  FROM groups
-								  JOIN courses ON courses.id=groups.course_id
-								  WHERE name LIKE '%' 
-								    AND is_private = FALSE
-								  ORDER BY name 
-								  LIMIT 10
-								  OFFSET :page") or die($db);
-			$stmnt->bindValue('page', $page, PDO::PARAM_INT);
-			$stmnt->execute();
-			$search = $stmnt->fetchAll();
-			
-		}
-		
-		$stmnt = $db->prepare("SELECT count(*) button_number
-							  FROM groups 
-							  WHERE name LIKE '%'
-						      AND is_private = FALSE") or die($db);
-		$stmnt->execute();
-		if(isset($_GET['all']) || isset($_GET['group'])) {
+	<div>
+		<?php
+			// Search results
 			if(!count($search)) {
-				echo 'No groups found' . '<br />';
+				echo 'No groups found' . '<br>';
 			}else {
+				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10);
 				foreach($search as $key) {
 					$url = 'group.php?id=' . urlencode($key['id']);
-					echo "<a href='$url'>" . htmlspecialchars($key['name']) . "</a> <br>";
+					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
 					echo "Course: " . htmlspecialchars($key['title']). "<br>";
 					echo htmlspecialchars($key['blurb']);
 				}
 			}
+		?>
+	</div>
 
-			echo '<br>';
-			
-			$buttonNumber = $stmnt->fetchObject()->button_number / 10;
-			
-
-			$url = 'search.php?';
-				if(isset($_GET['group'])) {
-					$url = $url . 'group=' . urlencode($_GET['group']); 	
-				}else if(isset($_GET['all'])) {
-					$url = $url .'all=' . urlencode($_GET['all']); 
+	<nav>
+		<ul class="pagination">
+			<?php
+				// Pagination buttons
+				if ($page <= 1) {
+					echo '<li class="disabled" aria-label="Previous"><span aria-hidden="true">«</span></li>';
+				} else {
+					echo '<li aria-label="Previous"><a href="'.$searchurl.'&page='.($page-1).'">«</a></li>';
 				}
-			
-			echo 'Pages:'; 
-			for($i = 0; $i < $buttonNumber; $i++) {
+				for ($i = 1; $i <= $buttonNumber; $i++) {
+					$url = $searchurl.'&page='.$i;
+					if ($i == $page) {
+						echo '<li class="active"><a href="' . $url . '">' . $i . '</a></li>';
+					} else {
+						echo '<li><a href="' . $url . '">' . $i . '</a></li>';
+					}
+				}
+				if ($page >= $buttonNumber) {
+					echo '<li class="disabled" aria-label="Next"><span aria-hidden="true">»</span></li>';
+				} else {
+					echo '<li aria-label="Previous"><a href="'.$searchurl.'&page='.($page+1).'">»</a></li>';
+				}
+			?>
+		</ul>
+	</nav>
 
-				echo '<a href = ' . $url . '&page=' . ( $i + 1 ) . ' class = "btn btn-small"> ' . ($i + 1) . ' </a>';	
-			}
-			if($i) echo '<br>';
-		}
-		
-	}catch(PDOException $e) {
-	
-		echo 'Connection Failed: ' . $e->getMessage();
-	
-	}
-	
-?>
-	<form action = "form.php">
-		<input type = "submit" value = "Search Again"><br>
+	<form action="form.php">
+		<input type="submit" value="Search Again"><br>
 	</form>
-	
-	
-	<?php 
-		include 'includes/_footer.php';
-	?>
-	
+
+	<?php include 'includes/_footer.php' ?>
 </body>
 </html>

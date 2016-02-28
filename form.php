@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	
 	<title> Search Groups </title>
 	<?php 
 		include 'includes/_head.html';
@@ -22,18 +21,19 @@
 	<form role="form" action = "search.php" method = "get">
 		<div class="form-group">
 			<label for="courseid">Course:</label>
-        	<select name="course" class="form-control">
-          		<?php
-          	 	  foreach ($user_courses as $course) {
-           		    echo '<option value="'.htmlspecialchars($course['id']).'"';
-           	  	 	//if ($course['id'] === $form['course']) {
-               		echo ' selected';
-               		//}
-               		echo '>'.htmlspecialchars($course['department'].' '.$course['number'].' '.$course['title']).'</option>';
-             	  }
-                ?>
-        	</select>
-        </div>
+			<select id="courseid" name="course" class="form-control">
+					<?php
+						foreach ($user_courses as $course) {
+							echo '<option value="'.htmlspecialchars($course['id']).'">';
+							echo htmlspecialchars($course['department'].' '.$course['number'].' '.$course['title']);
+							echo '</option>';
+						}
+						?>
+			</select>
+
+			<p class="help-block">
+				To search for groups for a course not listed above, <a>add yourself to the course</a> first.
+		</div>
 	
 		<div class="form-group">
 			<label for="group">Group Name:</label>
@@ -45,12 +45,13 @@
       	</div>
 	</form>
 	
-	<form action = "search.php" method = "get">
+	<form action="search.php" method="get">
 		<h3>
 			Or alternatively show all groups: </br>		
 		</h3>
 		<div class="form-group">
-			<input type = "submit" name='all'>
+			<input type="hidden" name="all" value="1">
+			<input type="submit">
 		</div>
 	</form>
 
