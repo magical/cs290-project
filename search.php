@@ -52,7 +52,20 @@
 
 		$resultCount = $stmnt->fetch()[0];
 		$buttonNumber = ceil($resultCount / 10.0);
+		$buttonNumber=100;
 
+		$searchparams = '';
+		if (isset($_GET['all'])) {
+			$searchparams .= '&all=1';
+		} else {
+			if (isset($_GET['group']) && $_GET['group']) {
+				$searchparams .= '&group=' . urlencode($_GET['group']);
+			}
+			if (isset($_GET['course']) && $_GET['course']) {
+				$searchparams .= '&course=' . urlencode($_GET['course']);
+			}
+		}
+		$searchurl = 'search.php?'.trim($searchparams, '&');
 	}catch(PDOException $e) {
 		echo 'Connection Failed: ' . $e->getMessage();
 	}
@@ -71,36 +84,48 @@
 	<?php include 'includes/_nav.php' ?>
 
 	<h2>Search Results</h2>
-	<?php
-		// Search results
-		if(!count($search)) {
-			echo 'No groups found' . '<br>';
-		}else {
-			echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10);
-			foreach($search as $key) {
-				$url = 'group.php?id=' . urlencode($key['id']);
-				echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
-				echo "Course: " . htmlspecialchars($key['title']). "<br>";
-				echo htmlspecialchars($key['blurb']);
+	<div>
+		<?php
+			// Search results
+			if(!count($search)) {
+				echo 'No groups found' . '<br>';
+			}else {
+				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10);
+				foreach($search as $key) {
+					$url = 'group.php?id=' . urlencode($key['id']);
+					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
+					echo "Course: " . htmlspecialchars($key['title']). "<br>";
+					echo htmlspecialchars($key['blurb']);
+				}
 			}
-		}
+		?>
+	</div>
 
-		echo '<br>';
-
-		// Pagination buttons
-		$url = 'search.php?';
-			if(isset($_GET['group'])) {
-				$url = $url . 'group=' . urlencode($_GET['group']);
-			}else if(isset($_GET['all'])) {
-				$url = $url . 'all=' . urlencode($_GET['all']);
-			}
-
-		echo 'Pages:';
-		for($i = 0; $i < $buttonNumber; $i++) {
-			echo '<a href=' . $url . '&page=' . ( $i + 1 ) . ' class="btn btn-small">' . ($i + 1) . '</a>';
-		}
-		if($i) echo '<br>';
-	?>
+	<nav>
+		<ul class="pagination">
+			<?php
+				// Pagination buttons
+				if ($page <= 1) {
+					echo '<li class="disabled" aria-label="Previous"><span aria-hidden="true">«</span></li>';
+				} else {
+					echo '<li aria-label="Previous"><a href="'.$searchurl.'&page='.($page-1).'">«</a></li>';
+				}
+				for ($i = 1; $i <= $buttonNumber; $i++) {
+					$url = $searchurl.'&page='.$i;
+					if ($i == $page) {
+						echo '<li class="active"><a href="' . $url . '">' . $i . '</a></li>';
+					} else {
+						echo '<li><a href="' . $url . '">' . $i . '</a></li>';
+					}
+				}
+				if ($page >= $buttonNumber) {
+					echo '<li class="disabled" aria-label="Next"><span aria-hidden="true">»</span></li>';
+				} else {
+					echo '<li aria-label="Previous"><a href="'.$searchurl.'&page='.($page+1).'">»</a></li>';
+				}
+			?>
+		</ul>
+	</nav>
 
 	<form action="form.php">
 		<input type="submit" value="Search Again"><br>
