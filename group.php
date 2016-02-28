@@ -12,6 +12,9 @@ if (!isset($_GET['id'])) {
   die('404 not found');
 }
 
+$uid=get_logged_in_user_id();
+$groid="SELECT group_id FROM group_members WHERE user_id=$uid";
+
 $db = connect_db();
 $group = get_group($db, $_GET['id']);
 if (!$group) {
@@ -32,6 +35,16 @@ $posts = get_group_posts($db, $group['id']);
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="jquery-1.12.0.min.js"></script>
+    <script>
+      function reload(id){
+        $.ajax({
+          url: "group.php?id="+id,
+          success: function(content){
+            $("body").html(content);
+          }
+        })
+      }
+    </script>
     <style>
       article {
         background: #dadada;
@@ -45,6 +58,25 @@ $posts = get_group_posts($db, $group['id']);
   <body>
     <?php include 'includes/_nav.php';?>
 
+    <div class='container'>
+
+    <div class='row'>
+    <div class='col-sm-3'>
+    <label for='name'>Select the group</label>
+    <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
+    <option class='cgop' value=''>Select Group</option>;
+    <?php foreach($db->query($groid) as $groupid){
+      $gid=$groupid['group_id'];
+      $gname="SELECT name FROM groups WHERE id=$gid";
+      foreach($db->query($gname) as $groupname){
+        $groname=$groupname['name'];
+        echo "<option value='$gid'>$groname</option>";
+      }
+    } ?>
+    </select>
+    </div>
+    </div>
+    </div>
 
     <dl class="dl-horizontal">
     <div class="container">
@@ -80,7 +112,6 @@ $posts = get_group_posts($db, $group['id']);
     </a>
     </div>
     <br>
-
     <ul>
       <?php foreach ($users as $user) { ?>
         <li><?= htmlspecialchars($user['name']) ?></li>
