@@ -220,10 +220,7 @@
 
     echo "</div>";
 	
-	foreach($_POST as $name => $content) { // Most people refer to $key => $value
-   echo "The HTML name: $name <br>";
-   echo "The content of it: $content <br>";
-	}
+
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('times', $_POST)) {
 
 	$db = connect_db();
