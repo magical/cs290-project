@@ -53,6 +53,14 @@ $users = get_group_members($db, $group['id']);
         <li><?= htmlspecialchars($user['name']) ?></li>
       <?php } ?>
     </ul>
+	<form action= "calendar.php" method="get"> 
+		<h3> Create a Group Meeting </h3>	
+		<div class="form-group">
+			<input value="Create Group" type="submit" name="">
+		</div>
+	</form>
+	
+
 
     <?php include 'includes/_footer.php';?>
   </body>
