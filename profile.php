@@ -36,20 +36,37 @@ $courses = get_user_courses($db, $user['id']);
     <h1>User profile</h1>
 
     <dl class="dl-horizontal">
-      <dt>Name
+      <dt>Name:
       <dd><?= htmlspecialchars($user['name']) ?>
     </dl>
 
     <h2>Contact</h2>
 
     <dl class="dl-horizontal">
-      <dt>email
+      <dt>Email:
       <dd><?= htmlspecialchars($user['email']) ?>
 
-      <dt>phone
+      <dt>Phone:
       <dd><?= htmlspecialchars($user['phone']) ?>
     </dl>
+	 <form action='entry.php'>
+	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT PROFILE'> </form>
+  
+	 <h2>Times</h2>
+	 
+	 <dl class="dl-horizontal">
+	 	<dt>Time 1:</dt>
+		<dd><?= htmlspecialchars($user['time1']) ?></dd>
+		
+		<dt>Time 2:</dt>
+		<dd><?= htmlspecialchars($user['time2']) ?></dd>
+	 </dl>
+	 
+	 <form action='dataentry.php'>
+	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT TIMES'> </form>
 
+  
+  
     <h2>Classes</h2>
 
     <ul>
@@ -59,6 +76,8 @@ $courses = get_user_courses($db, $user['id']);
                                  $course['title']) ?>
       <?php } ?>
     </ul>
+	 <form action='dataentry.php'>
+	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT CLASSES'> </form>
 
     <?php include 'includes/_footer.php';?>
   </body>
