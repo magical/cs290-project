@@ -29,6 +29,9 @@ $posts = get_group_posts($db, $group['id']);
   <head>
     <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
     <?php include 'includes/_head.html';?>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="jquery-1.12.0.min.js"></script>
     <style>
       article {
         background: #dadada;
@@ -46,7 +49,25 @@ $posts = get_group_posts($db, $group['id']);
 
     <dl class="dl-horizontal">
       <dt>Name
+      <dd><?= htmlspecialchars($group['name']) ?><div class="container">
+    <h2>Study Group</h2>
+    <a href="group_edit.php" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+    </a>
+    </div>
+
+    <dl class="dl-horizontal">
+      <dt>Name
       <dd><?= htmlspecialchars($group['name']) ?>
+
+      <dt>Group Message
+      <dd><?= htmlspecialchars($group['blurb']) ?>
+
+      <dt>Meeting Place
+      <dd><?= htmlspecialchars($group['place']) ?>
+
+      <dt>Meeting Time
+      <dd><?= htmlspecialchars($group['time']) ?>
 
       <dt>Course
       <dd><?= htmlspecialchars($course['department']) ?>
