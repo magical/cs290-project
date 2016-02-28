@@ -73,7 +73,13 @@ $posts = get_group_posts($db, $group['id']);
           <?= htmlspecialchars($course['title']) ?>
     </dl>
 
+    <div class="container">
     <h2>Members</h2>
+    <a href="members_edit.php" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+    </a>
+    </div>
+    <br>
 
     <ul>
       <?php foreach ($users as $user) { ?>
