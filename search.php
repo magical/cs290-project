@@ -52,7 +52,6 @@
 
 		$resultCount = $stmnt->fetch()[0];
 		$buttonNumber = ceil($resultCount / 10.0);
-		$buttonNumber=100;
 
 		$searchparams = '';
 		if (isset($_GET['all'])) {
