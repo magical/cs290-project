@@ -45,11 +45,9 @@ $posts = get_group_posts($db, $group['id']);
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <h1>Study Group</h1>
 
     <dl class="dl-horizontal">
-      <dt>Name
-      <dd><?= htmlspecialchars($group['name']) ?><div class="container">
+    <div class="container">
     <h2>Study Group</h2>
     <a href="group_edit.php" class="btn btn-default btn-sm">
         <span class="glyphicon glyphicon-cog"></span> Edit
