@@ -89,7 +89,7 @@
 			if(!count($search)) {
 				echo 'No groups found' . '<br>';
 			}else {
-				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10);
+				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10), ':<br>';
 				foreach($search as $key) {
 					$url = 'group.php?id=' . urlencode($key['id']);
 					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
