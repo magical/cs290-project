@@ -1,5 +1,6 @@
 <?php
 require_once 'includes/all.php';
+
  
 if(!is_logged_in()) {
 	header("Location: signin.php");
@@ -14,6 +15,7 @@ if (!isset($_GET['id'])) {
 
 $uid=get_logged_in_user_id();
 $groid="SELECT group_id FROM group_members WHERE user_id=$uid";
+
 
 $db = connect_db();
 $group = get_group($db, $_GET['id']);
@@ -38,7 +40,9 @@ $posts = get_group_posts($db, $group['id']);
     <script>
       function reload(id){
         $.ajax({
-          url: "group.php?id="+id,
+          type: "POST",
+          url: "group.php",
+          data: 'id='+id,
           success: function(content){
             $("body").html(content);
           }
@@ -67,7 +71,8 @@ $posts = get_group_posts($db, $group['id']);
     <label for='name'>Select the group</label>
     <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
     <option class='cgop' value=''>Select Group</option>;
-    <?php foreach($db->query($groid) as $groupid){
+    <?php 
+    foreach($db->query($groid) as $groupid){
       $gid=$groupid['group_id'];
       $gname="SELECT name FROM groups WHERE id=$gid";
       foreach($db->query($gname) as $groupname){
@@ -78,14 +83,15 @@ $posts = get_group_posts($db, $group['id']);
     </select>
     </div>
     </div>
-    </div>
+ 
 
     <dl class="dl-horizontal">
     <div class="container">
-    <h2>Study Group</h2>
-    <a href="group_edit.php" class="btn btn-default btn-sm">
+    <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
+    <a href="group_edit.php?id=1" class="btn btn-default btn-sm">
         <span class="glyphicon glyphicon-cog"></span> Edit
     </a>
+    </div>
     </div>
 
     <dl class="dl-horizontal">
@@ -109,7 +115,7 @@ $posts = get_group_posts($db, $group['id']);
 
     <div class="container">
     <h2>Members</h2>
-    <a href="members_edit.php" class="btn btn-default btn-sm">
+    <a href="members_edit.php?id=1" class="btn btn-default btn-sm">
         <span class="glyphicon glyphicon-cog"></span> Edit
     </a>
     </div>
