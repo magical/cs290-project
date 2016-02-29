@@ -77,10 +77,14 @@
 			}else {
 				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10), ':<br>';
 				foreach($search as $key) {
+					echo '<div class="panel panel-default">';
+ 					echo '<div class="panel-body">';
 					$url = 'profile.php?id=' . urlencode($key['id']);
-					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
-					echo "Campus: " . htmlspecialchars($key['campus']). "<br>";
-					echo "Year: " . htmlspecialchars($key['standing']). "<br>";
+						echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
+						echo "Campus: " . htmlspecialchars($key['campus']). "<br>";
+						echo "Year: " . htmlspecialchars($key['standing']). "<br>";
+					echo '</div>';
+					echo '</div>';
 				}
 			}
 		?>
