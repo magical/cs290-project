@@ -1,4 +1,20 @@
-<?php require_once 'includes/all.php'; ?>
+<?php 
+//session_start();
+
+require_once 'includes/all.php';
+
+if (!is_logged_in()) {
+  header("Location: signin.php");
+  exit(0);
+}
+
+$db=connect_db();
+
+$group = get_group($db, $_GET['id']);
+$selectedgid=$group['id'];
+$_SESSION['selgid']=$selectedgid;
+
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -17,6 +33,18 @@
     			}
     		});
     	}
+
+        function reload(id){
+            $.ajax({
+                //type: "POST",
+                url: "group_edit.php",
+                //data:'id='+id,
+                success: function(content){
+                $("body").html(content);
+                }
+            });
+            self.location="group_edit.php?id="+id;
+        }
     </script>
     <?php include 'includes/_head.html';?>
   </head>
@@ -26,20 +54,43 @@
     <?php include 'includes/_nav.php';?>
     <?php
 
-    $db=connect_db();
 
-    $q="SELECT * FROM colleges order by name";
+
+
     $p="SELECT id, department,number FROM courses order by department";
-    $s="SELECT id,name FROM standings order by id";
     $campus="SELECT id,name FROM campuses order by name";
+
+    $uid=get_logged_in_user_id();
+    $groid="SELECT group_id FROM group_members WHERE user_id=$uid";
     ?>
 
     <div class='container'>
 
 	<form action='group_entry.php' class='form-horizontal' role='form' method='post' name='dentry'>
 
+    <div class='row'>
+    <br><br>
+    <div class='col-sm-3'>
+    <label for='name'>Select the group</label>
+    <select name='sgrop' id='greload' onChange="reload(this.value);" class='form-control'>
+    <option value=''>Select Group</option>;
+    <?php 
+    foreach($db->query($groid) as $groupid){
+      $gid=$groupid['group_id'];
+      $gname="SELECT name FROM groups WHERE id=$gid";
+      foreach($db->query($gname) as $groupname){
+        $groname=$groupname['name'];
+        echo "<option value='$gid'>$groname</option>";
+      }
+    } ?>
+    </select>
+    </div>
+    </div>
+
+
+
     <div class='jumbotron'>
-    <h2>Study Group Editing</h2>
+    <h2>Study Group Editing For Group: <?= htmlspecialchars($group['name'])?></h2>
     </div>
 
     <div class='row'>
@@ -103,7 +154,7 @@
     <h4>Change meeting date and time(optional):</h4>
     <div class='col-sm-3'>
     <label for='name'>Select Day:</label>
-    <select name='week' class='form-control'>
+    <select id="swk" name='week' class='form-control'>
     <option class='ww' value=''>Select Day</option>
     <?php $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
     foreach ($week as $value) {
@@ -114,7 +165,7 @@
 
     <div class='col-sm-3'>
     <label for='name'>Select Time:</label>
-    <select name='selt' class='form-control'>
+    <select id="stime" name='selt' class='form-control'>
     <option value=''>Select Time</option>
     <?php
     for($i=1;$i<=24;$i++){
@@ -126,13 +177,6 @@
 
 
     <br><br>
-
-    <div class='jumbotron'>
-    <h2>Group Member Editing</h2>
-    </div>
-
-
-
 
 
     <input type='submit' class='btn btn-info' value='SUBMIT'></form>
