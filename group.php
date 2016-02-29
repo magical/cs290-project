@@ -43,6 +43,7 @@ $posts = get_group_posts($db, $group['id']);
             $("body").html(content);
           }
         })
+        self.location="group.php?id="+id;
       }
     </script>
     <style>
@@ -61,6 +62,7 @@ $posts = get_group_posts($db, $group['id']);
     <div class='container'>
 
     <div class='row'>
+    <br><br>
     <div class='col-sm-3'>
     <label for='name'>Select the group</label>
     <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
