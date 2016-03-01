@@ -78,7 +78,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     <title>
       Members Editing
     </title>
-    <script src="jquery-1.12.0.min.js" type="text/javascript"></script>
+    <script src="jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
     function reload(id){
             $.ajax({
