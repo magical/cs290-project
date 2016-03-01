@@ -60,7 +60,7 @@ function random_time() {
   return sprintf("%01d%02d00", $d, $t);
 }
 
-header("content-type: text/plain");
+header("Content-Type: text/plain");
 
 mt_srand(1); // determinism
 
