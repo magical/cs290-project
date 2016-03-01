@@ -16,11 +16,11 @@
 		$params = array();
 
 		if (!$all) {
-			if (isset($_GET['group'])) {
+			if (!empty($_GET['group'])) {
 				$where = "$where AND LOWER(name) = LOWER(:name)";
 				$params[":name"] = $_GET['group'];
 			}
-			if (isset($_GET['course'])) {
+			if (!empty($_GET['course'])) {
 				$where = "$where AND course_id = :course_id";
 				$params[":course_id"] = $_GET['course'];
 			}
