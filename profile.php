@@ -3,16 +3,16 @@ require_once 'includes/all.php';
 
 
 if (!is_logged_in()) {
-	header("Location: signin.php");
-	exit(0);
+   header("Location: signin.php");
+   exit(0);
 }
 
 
 if (!isset($_GET['id'])) {
   // um
   header('Status: 404');
-  die('404 not found'); 
-} 
+  die('404 not found');
+}
 
 $db = connect_db();
 $user = get_user($db, $_GET['id']);
@@ -49,24 +49,21 @@ $courses = get_user_courses($db, $user['id']);
       <dt>Phone:
       <dd><?= htmlspecialchars($user['phone']) ?>
     </dl>
-	 <form action='entry.php'>
-	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT PROFILE'> </form>
-  
-	 <h2>Times</h2>
-	 
-	 <dl class="dl-horizontal">
-	 	<dt>Time 1:</dt>
-		<dd><?= htmlspecialchars($user['time1']) ?></dd>
-		
-		<dt>Time 2:</dt>
-		<dd><?= htmlspecialchars($user['time2']) ?></dd>
-	 </dl>
-	 
-	 <form action='dataentry.php'>
-	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT TIMES'> </form>
+    <a href="entry.php" class="btn btn-primary">EDIT PROFILE</a>
 
-  
-  
+    <h2>Times</h2>
+
+    <dl class="dl-horizontal">
+      <dt>Time 1:</dt>
+      <dd><?= htmlspecialchars($user['time1']) ?></dd>
+
+      <dt>Time 2:</dt>
+      <dd><?= htmlspecialchars($user['time2']) ?></dd>
+    </dl>
+
+    <a href="dataentry.php" class="btn btn-primary">EDIT TIMES</a>
+
+
     <h2>Classes</h2>
 
     <ul>
@@ -76,25 +73,8 @@ $courses = get_user_courses($db, $user['id']);
                                  $course['title']) ?>
       <?php } ?>
     </ul>
-	 <form action='dataentry.php'>
-	 <input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='EDIT CLASSES'> </form>
+    <a href="dataentry.php" class="btn btn-primary">EDIT CLASSES</a>
 
     <?php include 'includes/_footer.php';?>
   </body>
 </html>
-
-<!---}
-else {
-	?>
-	<script language="javascript">
-	alert("Please Log In")
-	</script>;
-	
-	<!DOCTYPE html> 
-	<html>
-		<body>
-			<a href="index.php"> Click Here To Log In </a>
-		</body>	
-	</html>
-	<?php
-?> ---!>
