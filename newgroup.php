@@ -2,6 +2,11 @@
 
 require_once 'includes/all.php';
 
+if (!is_logged_in()) {
+  header("Location: signin.php");
+  exit(0);
+}
+
 $db = connect_db();
 $user_courses = get_user_courses($db, get_logged_in_user_id());
 
