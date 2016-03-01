@@ -9,7 +9,7 @@
 <html>
   <head>
     <title>
-      Data Entry
+      Course Edit
     </title>
     <style>
     div.dropdown{
@@ -227,14 +227,13 @@
 
 	$user_id=get_logged_in_user_id();
 	$sid=$_REQUEST["sta"];//standing id
-	$couid=$_REQUEST['cdept'];//course id
 	$day1=$_REQUEST['week1'];//day
 	$time1=$_REQUEST['selt1'];//time
 	$day2=$_REQUEST["week2"];
 	$time2=$_REQUEST['selt2'];
 	$t1="$day1 at $time1:00";
 	$t2="$day2 at $time2:00";
-	if($sid!='' && $couid!='' && $t1 != '' && $t2 !=''){
+	if($sid!='' && $t1 != '' && $t2 !=''){
 				$stmt = $db->prepare("
 					UPDATE users SET
 						standing_id = :standing_id,
@@ -254,14 +253,7 @@
 		echo 'alert("Please Select Standing")';
 		echo '</script>';
 		header("Location: course_edit.php");
-		}
- elseif($couid===''){
- 		echo '<script language="javascript">';
-		echo 'alert("Please Select Course")';
-		echo '</script>';
-		header("Location: course_edit.php");
- }
- elseif($day1==='' || $day2 === ''){
+}elseif($day1==='' || $day2 === ''){
  		echo '<script language="javascript">';
 		echo 'alert("Please Select Day")';
 		echo '</script>';
@@ -285,10 +277,16 @@ $stmt->execute();
 $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST)) {
-  echo 'trolololol';
   $stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
   $stmt->bindValue(":user_id", get_logged_in_user_id());
   $stmt->bindValue(":course_id", $_POST['course_id']);
+  $stmt->execute();
+  //header("Location: course_edit.php");
+  //exit(0);
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('remove_id', $_POST)) {
+  $stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
+  $stmt->bindValue(":user_id", get_logged_in_user_id());
+  $stmt->bindValue(":course_id", $_POST['remove_id']);
   $stmt->execute();
   //header("Location: course_edit.php");
   //exit(0);
@@ -328,6 +326,18 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
       <button class='btn btn-primary'>Add</button>
 	
     </form>
+	 <form action="" method="POST">
+		<select name="remove_id">
+			<?php
+          foreach ($user_courses as $course) {
+            echo '<option value="'.htmlspecialchars($course['id']).'">';
+				echo htmlspecialchars($course['department']. ' ' . $course['number'] . ' ' . $course['title']);
+            echo "</option>\n";
+			}
+        ?>
+		</select>
+		<button class='btn btn-primary'>Remove</button>
+	</form>
 
 
     

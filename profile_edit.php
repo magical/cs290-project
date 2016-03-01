@@ -162,25 +162,6 @@
 	</form>
 
 	<?php
-		if (array_key_exists("name", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["name"]);
-		if (array_key_exists("phone", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["phone"]);
-		if (array_key_exists("standingselect", $_REQUEST))
-			echo htmlspecialchars($_REQUEST["standingselect"]);
-		if (array_key_exists("collegeselect", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["collegeselect"]);
-		if (array_key_exists("t1d", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t1d"]);
-		if (array_key_exists("t2d", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t2d"]);
-		if (array_key_exists("t1t", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t1t"]);
-		if (array_key_exists("t2t", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["t2t"]);
-		if (array_key_exists("campus", $_REQUEST))
-			echo ' '.htmlspecialchars($_REQUEST["campus"]);
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			/*if ($_REQUEST["standingselect"] === "") {
 					echo "<p> ERROR: Please choose class standing </p>";

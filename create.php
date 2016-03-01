@@ -18,10 +18,11 @@ $db->exec('DROP TABLE IF EXISTS courses');
 $db->exec('DROP TABLE IF EXISTS users');
 $db->exec('DROP TABLE IF EXISTS pic');
 
+$db->exec('DROP TABLE IF EXISTS buildings');
 $db->exec('DROP TABLE IF EXISTS campuses');
 $db->exec('DROP TABLE IF EXISTS colleges');
 $db->exec('DROP TABLE IF EXISTS standings');
-$db->exec('DROP TABLE IF EXISTS buildings');
+
 
 // Create tables
 
