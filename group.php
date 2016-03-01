@@ -21,7 +21,7 @@ if (!$group) {
 
 $course = get_course($db, $group['course_id']);
 $users = get_group_members($db, $group['id']);
-$posts = get_group_posts($db, $group['id']);
+//	$posts = get_group_posts($db, $group['id']);
 
 ?>
 <!DOCTYPE html>
@@ -63,8 +63,9 @@ $posts = get_group_posts($db, $group['id']);
     </ul>
 	<form action= "calendar.php" method="get"> 
 		<h3> Create a Group Meeting </h3>	
+		<input type="hidden" name="group_id" value="<?htmlspecialchars($group['id']) ?>">
 		<div class="form-group">
-			<input value="Create Group" type="submit" name="">
+			<button class="btn btn-primary">Create Group Meeting </button>
 		</div>
 	</form>
 	
