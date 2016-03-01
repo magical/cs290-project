@@ -26,12 +26,11 @@
         <nav>
           <ul class="nav nav-justified">
             <li><a href="index.php">Home</a></li>
-            <li><a href="entry.php">Data Entry</a></li>
-            <li><a href="dataentry.php">Data Entry 2</a></li>
             <?php
               if (is_logged_in()) {
-                echo '<li><a href="addclass.php">Add Courses</a></li>';
                 echo '<li><a href="profile.php?id='.get_logged_in_user_id().'">Your Profile</a></li>';
+                echo '<li><a href="profile_edit.php">Edit Profile</a></li>';
+                echo '<li><a href="course_edit.php">Your Courses</a></li>';
               }
             ?>
             <li><a href="group.php?id=1">Group</a></li>

@@ -15,25 +15,18 @@
 		$where = "1";
 		$params = array();
 
-		if (!$all) {
-			if (!empty($_GET['group'])) {
-				$where = "$where AND LOWER(name) = LOWER(:name)";
-				$params[":name"] = $_GET['group'];
-			}
-			if (!empty($_GET['course'])) {
-				$where = "$where AND course_id = :course_id";
-				$params[":course_id"] = $_GET['course'];
-			}
+		if (isset($_GET['name'])) {
+			$where = "$where AND LOWER(users.name) = LOWER(:name)";
+			$params[":name"] = $_GET['name'];
 		}
 
-		$where = "($where) AND NOT is_private";
-
 		// Get results
-		$stmnt = $db->prepare("SELECT groups.*, courses.title as title
-								FROM groups
-								JOIN courses ON courses.id=groups.course_id
+		$stmnt = $db->prepare("SELECT users.*, standings.name AS standing, campuses.name AS campus
+								FROM users
+								LEFT JOIN standings ON standings.id=users.standing_id
+								LEFT JOIN campuses ON campuses.id=users.campus_id
 								WHERE $where
-								ORDER BY name
+								ORDER BY users.name
 								LIMIT 10 OFFSET :offset") or die($db);
 
 		foreach ($params as $key => $value) {
@@ -44,7 +37,7 @@
 		$search = $stmnt->fetchAll();
 
 		// Get result count
-		$stmnt = $db->prepare("SELECT count(*) FROM groups WHERE $where");
+		$stmnt = $db->prepare("SELECT count(*) FROM users WHERE $where");
 		foreach ($params as $key => $value) {
 			$stmnt->bindValue($key, $value);
 		}
@@ -54,17 +47,10 @@
 		$buttonNumber = ceil($resultCount / 10.0);
 
 		$searchparams = '';
-		if (isset($_GET['all'])) {
-			$searchparams .= '&all=1';
-		} else {
-			if (isset($_GET['group']) && $_GET['group']) {
-				$searchparams .= '&group=' . urlencode($_GET['group']);
-			}
-			if (isset($_GET['course']) && $_GET['course']) {
-				$searchparams .= '&course=' . urlencode($_GET['course']);
-			}
+		if (isset($_GET['name'])) {
+			$searchparams .= '&name=' . urlencode($_GET['name']);
 		}
-		$searchurl = 'search.php?'.trim($searchparams, '&');
+		$searchurl = 'usersearch.php?'.trim($searchparams, '&');
 	}catch(PDOException $e) {
 		echo 'Connection Failed: ' . $e->getMessage();
 	}
@@ -87,14 +73,18 @@
 		<?php
 			// Search results
 			if(!count($search)) {
-				echo 'No groups found' . '<br>';
+				echo 'No users found' . '<br>';
 			}else {
 				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10), ':<br>';
 				foreach($search as $key) {
-					$url = 'group.php?id=' . urlencode($key['id']);
-					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
-					echo "Course: " . htmlspecialchars($key['title']). "<br>";
-					echo htmlspecialchars($key['blurb']);
+					echo '<div class="panel panel-default">';
+ 					echo '<div class="panel-body">';
+					$url = 'profile.php?id=' . urlencode($key['id']);
+						echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
+						echo "Campus: " . htmlspecialchars($key['campus']). "<br>";
+						echo "Year: " . htmlspecialchars($key['standing']). "<br>";
+					echo '</div>';
+					echo '</div>';
 				}
 			}
 		?>

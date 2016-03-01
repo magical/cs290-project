@@ -18,9 +18,11 @@ $db->exec('DROP TABLE IF EXISTS courses');
 $db->exec('DROP TABLE IF EXISTS users');
 $db->exec('DROP TABLE IF EXISTS pic');
 
+$db->exec('DROP TABLE IF EXISTS buildings');
 $db->exec('DROP TABLE IF EXISTS campuses');
 $db->exec('DROP TABLE IF EXISTS colleges');
 $db->exec('DROP TABLE IF EXISTS standings');
+
 
 // Create tables
 
@@ -152,6 +154,17 @@ CREATE TABLE group_posts (
     FOREIGN KEY (group_id) REFERENCES groups (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
+) ENGINE=InnoDB, CHARACTER SET=UTF8');
+
+$db->exec('
+CREATE TABLE buildings (
+    building_id INTEGER AUTO_INCREMENT,
+    building_abbr VARCHAR(255) NOT NULL,
+    cam_id INTEGER NOT NULL,
+
+
+    PRIMARY KEY (building_id),
+    FOREIGN KEY (cam_id) REFERENCES campuses (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
 // Insert values
@@ -298,6 +311,73 @@ $stmt->execute();
 
 $stmt->bindValue("group_id", 2);
 $stmt->bindValue("user_id", 2);
+$stmt->execute();
+
+$stmt = $db->prepare("INSERT INTO buildings (building_id, building_abbr, cam_id) VALUES (:building_id, :building_abbr, :cam_id)");
+
+$stmt->bindValue("building_id", 1);
+$stmt->bindValue("building_abbr", "LINC");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 2);
+$stmt->bindValue("building_abbr", "KEC");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 3);
+$stmt->bindValue("building_abbr", "VLib");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 4);
+$stmt->bindValue("building_abbr", "MU");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 5);
+$stmt->bindValue("building_abbr", "ALS");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 6);
+$stmt->bindValue("building_abbr", "ILLC");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 7);
+$stmt->bindValue("building_abbr", "Kidd");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 8);
+$stmt->bindValue("building_abbr", "Wngr");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 9);
+$stmt->bindValue("building_abbr", "Bexl");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 10);
+$stmt->bindValue("building_abbr", "StAg");
+$stmt->bindValue("cam_id", 1);
+$stmt->execute();
+
+
+$stmt->bindValue("building_id", 11);
+$stmt->bindValue("building_abbr", "Snel");
+$stmt->bindValue("cam_id", 1);
 $stmt->execute();
 
 // Close database connection

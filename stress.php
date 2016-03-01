@@ -5,6 +5,12 @@ $NUMBER_OF_USERS = 2000;
 // How many classes to give each user
 $NUMBER_OF_CLASSES = 4;
 
+// Number of groups to create
+$NUMBER_OF_GROUPS = 1000;
+// Number of members to add to each group
+$NUMBER_OF_MEMBERS_MIN = 2;
+$NUMBER_OF_MEMBERS_MAX = 6;
+
 
 // Load first and last names from files
 $firstnames = array();
@@ -60,13 +66,19 @@ function random_time() {
   return sprintf("%01d%02d00", $d, $t);
 }
 
-header("content-type: text/plain");
+function random_place() {
+  return "Earth"; // sue me
+}
+
+header("Content-Type: text/plain");
 
 mt_srand(1); // determinism
 
 require_once "config.php";
 require_once "includes/functions.php";
 $db = connect_db();
+
+
 
 // Get largest id of some tables to assist random generation
 $q = $db->query("SELECT max(id) FROM campuses"); $max_campus_id = $q->fetch()[0];
@@ -77,6 +89,7 @@ $q = $db->query("SELECT max(id) FROM courses"); $max_course_id  = $q->fetch()[0]
 // Remove old random rows
 $db->query("DELETE FROM user_courses WHERE user_id > 8");
 $db->query("DELETE FROM group_members WHERE user_id > 8");
+$db->query("DELETE FROM groups WHERE id > 3");
 $db->query("DELETE FROM users WHERE id > 8");
 
 // Create N random users
@@ -133,6 +146,50 @@ foreach ($userids as $userid) {
   $q->bindValue(":time2", $time2);
   $q->bindValue(":user_id", $userid);
   $q->execute();
+}
+
+$groupquery = $db->prepare("INSERT INTO groups (course_id, name, time, place) VALUES (:course_id, :name, :time, :place)");
+$memberquery = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
+$classquery = $db->prepare("INSERT INTO user_courses (course_id, user_id) VALUES (:course_id, :user_id)");
+
+function is_taking($user_id, $course_id) {
+  global $db;
+  $q = $db->prepare("SELECT EXISTS (SELECT 1 FROM user_courses WHERE course_id = :course_id AND user_id = :user_id)");
+  $q->bindValue(":course_id", $course_id);
+  $q->bindValue(":user_id", $user_id);
+  $q->execute();
+  return !!$q->fetch()[0] ;
+}
+
+for ($j = 0; $j < $NUMBER_OF_GROUPS; $j++) {
+  // Pick a random course
+  $course_id = mt_rand(1, $max_course_id);
+  $course = get_course($db, $course_id);
+
+  $name = "Random ${course['title']} group";
+  $time = random_time();
+  $place = random_place();
+
+  $groupquery->bindValue(":course_id", $course_id);
+  $groupquery->bindValue(":name", $name);
+  $groupquery->bindValue(":time", $time);
+  $groupquery->bindValue(":place", $place);
+  $groupquery->execute();
+  $group_id = $db->lastInsertId();
+
+  // Add members
+  $nmembers = mt_rand($NUMBER_OF_MEMBERS_MIN, $NUMBER_OF_MEMBERS_MAX);
+  $useridids = random_select($nmembers, 0, count($userids)-1);
+  foreach ($useridids as $i) {
+    if (!is_taking($userids[$i], $course_id)) {
+      $classquery->bindValue(":course_id", $course_id);
+      $classquery->bindValue(":user_id", $userids[$i]);
+      $classquery->execute();
+    }
+    $memberquery->bindValue(":group_id", $group_id);
+    $memberquery->bindValue(":user_id", $userids[$i]);
+    $memberquery->execute();
+  }
 }
 
 echo "Done";

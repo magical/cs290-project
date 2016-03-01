@@ -1,5 +1,6 @@
 <?php
 require_once 'includes/all.php';
+
  
 if(!is_logged_in()) {
 	header("Location: signin.php");
@@ -11,6 +12,10 @@ if (!isset($_GET['id'])) {
   header('Status: 404');
   die('404 not found');
 }
+
+$uid=get_logged_in_user_id();
+$groid="SELECT group_id FROM group_members WHERE user_id=$uid";
+
 
 $db = connect_db();
 $group = get_group($db, $_GET['id']);
@@ -29,6 +34,22 @@ $users = get_group_members($db, $group['id']);
   <head>
     <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
     <?php include 'includes/_head.html';?>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="jquery-1.12.1.min.js"></script>
+    <script>
+      function reload(id){
+        $.ajax({
+          type: "POST",
+          url: "group.php",
+          data: 'id='+id,
+          success: function(content){
+            $("body").html(content);
+          }
+        })
+        self.location="group.php?id="+id;
+      }
+    </script>
     <style>
       article {
         background: #dadada;
@@ -42,11 +63,49 @@ $users = get_group_members($db, $group['id']);
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <h1>Study Group</h1>
+    <div class='container'>
+
+    <div class='row'>
+    <br><br>
+    <div class='col-sm-3'>
+    <label for='name'>Select the group</label>
+    <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
+    <option class='cgop' value=''>Select Group</option>;
+    <?php 
+    foreach($db->query($groid) as $groupid){
+      $gid=$groupid['group_id'];
+      $gname="SELECT name FROM groups WHERE id=$gid";
+      foreach($db->query($gname) as $groupname){
+        $groname=$groupname['name'];
+        echo "<option value='$gid'>$groname</option>";
+      }
+    } ?>
+    </select>
+    </div>
+    </div>
+ 
+
+    <dl class="dl-horizontal">
+    <div class="container">
+    <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
+    <a href="group_edit.php?id=1" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+    </a>
+    </div>
+    </div>
 
     <dl class="dl-horizontal">
       <dt>Name
       <dd><?= htmlspecialchars($group['name']) ?>
+
+      <dt>Group Message
+      <dd><?= htmlspecialchars($group['blurb']) ?>
+
+      <dt>Meeting Place
+      <dd><?= htmlspecialchars($group['place']) ?>
+
+      <dt>Meeting Time
+      <dd><?= htmlspecialchars($group['time']) ?>
 
       <dt>Course
       <dd><?= htmlspecialchars($course['department']) ?>
@@ -54,8 +113,13 @@ $users = get_group_members($db, $group['id']);
           <?= htmlspecialchars($course['title']) ?>
     </dl>
 
+    <div class="container">
     <h2>Members</h2>
-
+    <a href="members_edit.php?id=1" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+    </a>
+    </div>
+    <br>
     <ul>
       <?php foreach ($users as $user) { ?>
         <li><?= htmlspecialchars($user['name']) ?></li>

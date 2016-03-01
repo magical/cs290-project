@@ -9,9 +9,9 @@ if(isset($_POST["filesub"])){
 	$tmp=$_FILES["fileupload"]["tmp_name"];
 	$size=$_FILES["fileupload"]["size"];
 
-	$filetype=pathinfo($pic, PATHINFO_EXTENSION);
+	$filetype=strtolower(pathinfo($pic, PATHINFO_EXTENSION));
 
-	if($filetype=="jpg" || $filetype=="gif" || $filetype=="jpeg" || $filetype=="png" && $size<=1048576){
+	if(($filetype=="jpg" || $filetype=="gif" || $filetype=="jpeg" || $filetype=="png" )&& $size<=1048576){
 		$filedata=file_get_contents($tmp);
 
 		$stmt=$db->prepare("INSERT INTO pic (filename,filedata, filesize) VALUES (?,?,?)");
@@ -21,10 +21,10 @@ if(isset($_POST["filesub"])){
 		$stmt->execute();
 
 
-		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='profile.php'</script>";	
+		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='profile_edit.php'</script>";	
 	}else{
-		//header("Location: dataentry.php");	
-		echo "<script type='text/javascript'>alert('Failed to upload'); window.location.href='entry.php'</script>";	
+		//header("Location: course_edit.php");	
+		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype	'); window.location.href='profile_edit.php'</script>";	
 	}
 }
 
