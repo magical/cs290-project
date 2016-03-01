@@ -105,10 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       $group_id = $db->lastInsertId();
 
-      // Add members
-      // TODO(ae): send invites instead
       $stmt = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
+      // Add current user to the group
       $stmt->bindValue(":group_id", $group_id, PDO::PARAM_INT);
+      $stmt->bindValue(":user_id", get_logged_in_user_id(), PDO::PARAM_INT);
+      $stmt->execute();
+
+      // Add any other members
+      // TODO(ae): send invites instead
       foreach ($form['members'] as $user_id) {
         $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->execute();
