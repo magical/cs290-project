@@ -21,7 +21,7 @@ $_SESSION['selgid']=$selectedgid;
     <title>
       Group Editing
     </title>
-    <script src="jquery-1.12.0.min.js" type="text/javascript"></script>
+    <script src="jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
     	function getbudg(val){
     		$.ajax({
