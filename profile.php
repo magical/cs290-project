@@ -49,7 +49,7 @@ $courses = get_user_courses($db, $user['id']);
       <dt>Phone:
       <dd><?= htmlspecialchars($user['phone']) ?>
     </dl>
-    <a href="entry.php" class="btn btn-primary">EDIT PROFILE</a>
+    <a href="profile_edit.php" class="btn btn-primary">EDIT PROFILE</a>
 
     <h2>Times</h2>
 
@@ -61,7 +61,7 @@ $courses = get_user_courses($db, $user['id']);
       <dd><?= htmlspecialchars($user['time2']) ?></dd>
     </dl>
 
-    <a href="dataentry.php" class="btn btn-primary">EDIT TIMES</a>
+    <a href="course_edit.php" class="btn btn-primary">EDIT TIMES</a>
 
 
     <h2>Classes</h2>
@@ -73,7 +73,7 @@ $courses = get_user_courses($db, $user['id']);
                                  $course['title']) ?>
       <?php } ?>
     </ul>
-    <a href="dataentry.php" class="btn btn-primary">EDIT CLASSES</a>
+    <a href="course_edit.php" class="btn btn-primary">EDIT CLASSES</a>
 
     <?php include 'includes/_footer.php';?>
   </body>

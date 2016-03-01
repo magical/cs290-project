@@ -21,10 +21,10 @@ if(isset($_POST["filesub"])){
 		$stmt->execute();
 
 
-		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='entry.php'</script>";	
+		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='profile_edit.php'</script>";	
 	}else{
-		//header("Location: dataentry.php");	
-		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype	'); window.location.href='entry.php'</script>";	
+		//header("Location: course_edit.php");	
+		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype	'); window.location.href='profile_edit.php'</script>";	
 	}
 }
 

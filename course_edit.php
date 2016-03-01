@@ -253,25 +253,25 @@
 		echo '<script language="javascript">';
 		echo 'alert("Please Select Standing")';
 		echo '</script>';
-		header("Location: dataentry.php");
+		header("Location: course_edit.php");
 		}
  elseif($couid===''){
  		echo '<script language="javascript">';
 		echo 'alert("Please Select Course")';
 		echo '</script>';
-		header("Location: dataentry.php");
+		header("Location: course_edit.php");
  }
  elseif($day1==='' || $day2 === ''){
  		echo '<script language="javascript">';
 		echo 'alert("Please Select Day")';
 		echo '</script>';
-		header("Location: dataentry.php");
+		header("Location: course_edit.php");
  }
  elseif($time1 ==='' || $time2 === ''){
  		echo '<script language="javascript">';
 		echo 'alert("Please Select Time")';
 		echo '</script>';
-		header("Location: dataentry.php");
+		header("Location: course_edit.php");
  }
  
 	
@@ -290,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST
   $stmt->bindValue(":user_id", get_logged_in_user_id());
   $stmt->bindValue(":course_id", $_POST['course_id']);
   $stmt->execute();
-  //header("Location: dataentry.php");
+  //header("Location: course_edit.php");
   //exit(0);
 }
 
