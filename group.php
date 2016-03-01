@@ -122,30 +122,32 @@ $posts = get_group_posts($db, $group['id']);
       <?php } ?>
     </ul>
 
-    <h2>Discussion</h2>
+    <?php if (is_member($db, get_logged_in_user_id(), $group['id'])) { ?>
+      <h2>Discussion</h2>
 
-    <?php
-      foreach ($posts as $post) {
-        $date = new DateTime($post['created_at']);
-        echo '<article id="post-'.$post['id'].'">';
-        echo '<b>'.htmlspecialchars($post['user_name']).
-          ' on '.htmlspecialchars($date->format("M j")).
-          ' at '.htmlspecialchars($date->format("H:i")).
-          '</b>';
-        echo '<p>'.htmlspecialchars($post['body']).'</p>';
-        echo '</article>';
-      }
-    ?>
+      <?php
+        foreach ($posts as $post) {
+          $date = new DateTime($post['created_at']);
+          echo '<article id="post-'.$post['id'].'">';
+          echo '<b>'.htmlspecialchars($post['user_name']).
+            ' on '.htmlspecialchars($date->format("M j")).
+            ' at '.htmlspecialchars($date->format("H:i")).
+            '</b>';
+          echo '<p>'.htmlspecialchars($post['body']).'</p>';
+          echo '</article>';
+        }
+      ?>
 
-    <form action="post.php" method="POST">
-      <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
-      <div class="form-group">
-        <textarea name="body" class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary">Post</button>
-      </div>
-    </form>
+      <form action="post.php" method="POST">
+        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
+        <div class="form-group">
+          <textarea name="body" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Post</button>
+        </div>
+      </form>
+    <?php } ?>
 
     <?php include 'includes/_footer.php';?>
   </body>

@@ -102,6 +102,15 @@ function get_course($db, $id) {
   return $row;
 }
 
+// Reports whether a user is a member of a group.
+function is_member($db, $user_id, $group_id) {
+  $stmt = $db->prepare('SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id = :user_id AND group_id = :group_id)');
+  $stmt->bindValue(":user_id", $user_id);
+  $stmt->bindValue(":group_id", $group_id);
+  $stmt->execute();
+  return !!$stmt->fetch()[0];
+}
+
 // Returns the full URL of the current page (without query parameters)
 function current_url() {
   $url = 'http';
