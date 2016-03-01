@@ -5,62 +5,70 @@ if (!is_logged_in()) {
   exit(0);
 }
 
-if (!is_logged_in()) {
-  header("Location: signin.php");
-  exit(0);
-}
-
 $db=connect_db();
 
 $group = get_group($db, $_GET['id']);
 $selectedgid=$group['id'];
+
+// TODO: Check if the user is in the group they are editing
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
     $addmem=$_POST['addmemb'];
     $removemem=$_POST['removemem'];
 
     if(!empty($addmem) && filter_var($addmem, FILTER_VALIDATE_EMAIL)){
-        $newid="SELECT id FROM users WHERE email='$addmem'";
-        foreach($db->query($newid) as $nid){
-            $nmem=$nid['id'];
-            $gro="SELECT * FROM group_members WHERE user_id=$nmem AND group_id=$selectedgid";
-            $res=$db->query($gro);
-            $gres=$res->fetchColumn();
-            if(!$gres>0){//check if user has already in a group
-            $stmt=$db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
-            $stmt->bindValue(":group_id", $selectedgid);
-            $stmt->bindValue(":user_id", $nmem);
-            $stmt->execute();
+        $q = $db->prepare("SELECT id FROM users WHERE email = :email");
+        $q->bindValue(":email", $addmem);
+        $q->execute();
 
-            header("Location: group.php?id=$selectedgid");
-        }
-        else{
-            echo "<script type='text/javascript'>alert('User already exist in this group!')</script>";
-        }
+        foreach($q as $nid){
+            //check if user is already in the group
+            $nmem=$nid['id'];
+            $q2 = $db->prepare("SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id=:user_id AND group_id=:group_id)");
+            $q2->bindValue(":user_id", $nmem);
+            $q2->bindValue(":group_id", $selectedgid);
+            $q2->execute();
+            $res=$q2->fetch()[0];
+            if(!$res){
+                $stmt=$db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
+                $stmt->bindValue(":group_id", $selectedgid);
+                $stmt->bindValue(":user_id", $nmem);
+                $stmt->execute();
+                header("Location: group.php?id=".urlencode($selectedgid));
+            }
+            else{
+                echo "<script type='text/javascript'>alert('User already exist in this group!')</script>";
+            }
         }
     }
 
     if(!empty($removemem) && filter_var($removemem, FILTER_VALIDATE_EMAIL)){
-        $removeid="SELECT id FROM users WHERE email='$removemem'";
-        foreach($db->query($removeid) as $remid){
+        $q = $db->prepare("SELECT id FROM users WHERE email = :email");
+        $q->bindValue(":email", $addmem);
+        $q->execute();
+        foreach($q as $remid){
+            //check if user is actually in the group
             $reid=$remid['id'];
-            $ggid="SELECT * FROM group_members WHERE user_id=$reid AND group_id=$selectedgid";
-            $res=$db->query($ggid);
-            $gres=$res->fetchColumn();
-            if($gres!=0){
+            $q2 = $db->prepare("SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id=:user_id AND group_id=:group_id)");
+            $q2->bindValue(":group_id", $selectedgid);
+            $q2->bindValue(":user_id", $reid);
+            $q2->execute();
+            $res = $q2->fetch()[0];
+            if($res){
+                $stmt=$db->prepare("DELETE FROM group_members WHERE user_id=:user_id AND group_id=:group_id");
+                $stmt->bindValue(":group_id", $selectedgid);
+                $stmt->bindValue(":user_id", $reid);
+                $stmt->execute();
 
-            $stmt=$db->prepare("DELETE FROM group_members WHERE user_id=$reid AND group_id=$selectedgid");
-            $stmt->execute();
-
-            header("Location: group.php?id=$selectedgid");
-        }
-        else{
-            echo "<script type='text/javascript'>alert('No such a group member!')</script>";
-        }
+                header("Location: group.php?id=".urlencode($selectedgid));
+            }
+            else{
+                echo "<script type='text/javascript'>alert('No such a group member!')</script>";
+            }
         }
 
     }
-    }
+}
 
 ?>
 
@@ -93,15 +101,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $db=connect_db();
 
     $uid=get_logged_in_user_id();
-    $url="members_edit.php?id=$selectedgid";
-
-    $uid=get_logged_in_user_id();
     $groid="SELECT group_id FROM group_members WHERE user_id=$uid";
     ?>
 
     <div class='container'>
 
-	<form action="<?php echo $url ?>" class='form-horizontal' role='form' method='post' name='mementry'>
+    <form action="" class='form-horizontal' role='form' method='post' name='mementry'>
 
     <div class='row'>
     <br><br>
