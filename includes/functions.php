@@ -57,6 +57,18 @@ function get_user_courses($db, $user_id) {
   return $rows;
 }
 
+function get_user_groups($db, $user_id) {
+  $stmt = $db->prepare('
+    SELECT groups.*
+    FROM groups
+    JOIN group_members ON group_members.group_id = groups.id
+    WHERE user_id = :user_id');
+  $stmt->bindValue(":user_id", $user_id);
+  $stmt->execute();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $rows;
+}
+
 // Gets a group from the database by id.
 function get_group($db, $id) {
   $stmt = $db->prepare('SELECT * FROM groups WHERE id = :id');

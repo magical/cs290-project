@@ -13,11 +13,11 @@ if (!isset($_GET['id'])) {
   die('404 not found');
 }
 
-$uid=get_logged_in_user_id();
-$groid="SELECT group_id FROM group_members WHERE user_id=$uid";
-
-
 $db = connect_db();
+
+$user_id = get_logged_in_user_id();
+$user_groups = get_user_groups($db, $user_id);
+
 $group = get_group($db, $_GET['id']);
 if (!$group) {
   header('Status: 404');
@@ -26,7 +26,10 @@ if (!$group) {
 
 $course = get_course($db, $group['course_id']);
 $users = get_group_members($db, $group['id']);
-//	$posts = get_group_posts($db, $group['id']);
+$is_member = is_member($db, $user_id, $group['id']);
+if ($is_member) {
+  $posts = get_group_posts($db, $group['id']);
+}
 
 ?>
 <!DOCTYPE html>
@@ -70,13 +73,8 @@ $users = get_group_members($db, $group['id']);
         <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
         <option class='cgop' value=''>Select Group</option>;
         <?php
-          foreach($db->query($groid) as $groupid){
-            $gid=$groupid['group_id'];
-            $gname="SELECT name FROM groups WHERE id=$gid";
-            foreach($db->query($gname) as $groupname){
-              $groname=$groupname['name'];
-              echo "<option value='$gid'>$groname</option>";
-            }
+          foreach($user_groups as $g){
+            echo '<option value="'.htmlspecialchars($g['id']).'">'.htmlspecialchars($g['name'])."</option>\n";
           }
         ?>
         </select>
@@ -130,8 +128,7 @@ $users = get_group_members($db, $group['id']);
 	</form>
 	
 
-
-    <?php if (is_member($db, get_logged_in_user_id(), $group['id'])) { ?>
+    <?php if ($is_member) { ?>
       <h2>Discussion</h2>
 
       <?php
