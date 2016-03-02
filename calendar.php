@@ -1,6 +1,6 @@
 <?php require_once 'includes/all.php'; ?>
 <?php 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/google-api-php-client/src/Google/autoload.php';
 
 define('APPLICATION_NAME', 'Google Calendar API PHP Quickstart');
 define('CREDENTIALS_PATH', '~/.credentials/calendar-php-quickstart.json');
