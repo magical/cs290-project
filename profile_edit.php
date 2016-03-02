@@ -189,8 +189,9 @@
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
 				// TODO(ae): don't let non-logged-in users view this page - I just made it so that it wouldn't submit non-logged in user info (jm)
 				$user_id = get_logged_in_user_id();
-				$name = htmlspecialchars($_REQUEST["name"]);
-				$phone = htmlspecialchars($_REQUEST["phone"]);
+				$name = $_REQUEST["name"];
+				$phone = $_REQUEST["phone"];
+
 				// TODO(ae): validate standingselect range
 				//$standing_id = $_REQUEST['standingselect'];
 				$campus_id = $_REQUEST['campus'];
