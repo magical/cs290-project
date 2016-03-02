@@ -1,7 +1,7 @@
 <?php
 require_once 'includes/all.php';
 
- 
+
 if(!is_logged_in()) {
 	header("Location: signin.php");
 	exit(0);
@@ -63,36 +63,31 @@ $users = get_group_members($db, $group['id']);
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <div class='container'>
-
-    <div class='row'>
     <br><br>
-    <div class='col-sm-3'>
-    <label for='name'>Select the group</label>
-    <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
-    <option class='cgop' value=''>Select Group</option>;
-    <?php 
-    foreach($db->query($groid) as $groupid){
-      $gid=$groupid['group_id'];
-      $gname="SELECT name FROM groups WHERE id=$gid";
-      foreach($db->query($gname) as $groupname){
-        $groname=$groupname['name'];
-        echo "<option value='$gid'>$groname</option>";
-      }
-    } ?>
-    </select>
+    <div class='row'>
+      <div class='col-sm-3'>
+        <label for='name'>Select the group</label>
+        <select name='cgrp' id='greload' onChange="reload(this.value);" class='form-control'>
+        <option class='cgop' value=''>Select Group</option>;
+        <?php
+          foreach($db->query($groid) as $groupid){
+            $gid=$groupid['group_id'];
+            $gname="SELECT name FROM groups WHERE id=$gid";
+            foreach($db->query($gname) as $groupname){
+              $groname=$groupname['name'];
+              echo "<option value='$gid'>$groname</option>";
+            }
+          }
+        ?>
+        </select>
+      </div>
     </div>
-    </div>
- 
 
-    <dl class="dl-horizontal">
-    <div class="container">
     <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
+
     <a href="group_edit.php?id=1" class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-cog"></span> Edit
+      <span class="glyphicon glyphicon-cog"></span> Edit
     </a>
-    </div>
-    </div>
 
     <dl class="dl-horizontal">
       <dt>Name
@@ -113,13 +108,14 @@ $users = get_group_members($db, $group['id']);
           <?= htmlspecialchars($course['title']) ?>
     </dl>
 
-    <div class="container">
     <h2>Members</h2>
-    <a href="members_edit.php?id=1" class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-cog"></span> Edit
-    </a>
+
+    <div>
+      <a href="members_edit.php?id=1" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-cog"></span> Edit
+      </a>
     </div>
-    <br>
+
     <ul>
       <?php foreach ($users as $user) { ?>
         <li><?= htmlspecialchars($user['name']) ?></li>
@@ -135,30 +131,32 @@ $users = get_group_members($db, $group['id']);
 	
 
 
-    <h2>Discussion</h2>
+    <?php if (is_member($db, get_logged_in_user_id(), $group['id'])) { ?>
+      <h2>Discussion</h2>
 
-    <?php
-      foreach ($posts as $post) {
-        $date = new DateTime($post['created_at']);
-        echo '<article id="post-'.$post['id'].'">';
-        echo '<b>'.htmlspecialchars($post['user_name']).
-          ' on '.htmlspecialchars($date->format("M j")).
-          ' at '.htmlspecialchars($date->format("H:i")).
-          '</b>';
-        echo '<p>'.htmlspecialchars($post['body']).'</p>';
-        echo '</article>';
-      }
-    ?>
+      <?php
+        foreach ($posts as $post) {
+          $date = new DateTime($post['created_at']);
+          echo '<article id="post-'.$post['id'].'">';
+          echo '<b>'.htmlspecialchars($post['user_name']).
+            ' on '.htmlspecialchars($date->format("M j")).
+            ' at '.htmlspecialchars($date->format("H:i")).
+            '</b>';
+          echo '<p>'.htmlspecialchars($post['body']).'</p>';
+          echo '</article>';
+        }
+      ?>
 
-    <form action="post.php" method="POST">
-      <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
-      <div class="form-group">
-        <textarea name="body" class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary">Post</button>
-      </div>
-    </form>
+      <form action="post.php" method="POST">
+        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
+        <div class="form-group">
+          <textarea name="body" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary">Post</button>
+        </div>
+      </form>
+    <?php } ?>
 
     <?php include 'includes/_footer.php';?>
   </body>
