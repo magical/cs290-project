@@ -110,7 +110,7 @@ if ($is_member) {
     <h2>Members</h2>
 
     <div>
-      <a href="members_edit.php?id=1" class="btn btn-default btn-sm">
+      <a href="members_edit.php" class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-cog"></span> Edit
       </a>
     </div>
