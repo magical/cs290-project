@@ -7,69 +7,6 @@ if (!is_logged_in()) {
 
 $db=connect_db();
 
-$group = get_group($db, $_GET['id']);
-$selectedgid=$group['id'];
-
-// TODO: Check if the user is in the group they are editing
-
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    $addmem=$_POST['addmemb'];
-    $removemem=$_POST['removemem'];
-
-    if(!empty($addmem) && filter_var($addmem, FILTER_VALIDATE_EMAIL)){
-        $q = $db->prepare("SELECT id FROM users WHERE email = :email");
-        $q->bindValue(":email", $addmem);
-        $q->execute();
-
-        foreach($q as $nid){
-            //check if user is already in the group
-            $nmem=$nid['id'];
-            $q2 = $db->prepare("SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id=:user_id AND group_id=:group_id)");
-            $q2->bindValue(":user_id", $nmem);
-            $q2->bindValue(":group_id", $selectedgid);
-            $q2->execute();
-            $res=$q2->fetch()[0];
-            if(!$res){
-                $stmt=$db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
-                $stmt->bindValue(":group_id", $selectedgid);
-                $stmt->bindValue(":user_id", $nmem);
-                $stmt->execute();
-                header("Location: group.php?id=".urlencode($selectedgid));
-            }
-            else{
-                echo "<script type='text/javascript'>alert('User already exist in this group!')</script>";
-            }
-        }
-    }
-
-    if(!empty($removemem) && filter_var($removemem, FILTER_VALIDATE_EMAIL)){
-        $q = $db->prepare("SELECT id FROM users WHERE email = :email");
-        $q->bindValue(":email", $addmem);
-        $q->execute();
-        foreach($q as $remid){
-            //check if user is actually in the group
-            $reid=$remid['id'];
-            $q2 = $db->prepare("SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id=:user_id AND group_id=:group_id)");
-            $q2->bindValue(":group_id", $selectedgid);
-            $q2->bindValue(":user_id", $reid);
-            $q2->execute();
-            $res = $q2->fetch()[0];
-            if($res){
-                $stmt=$db->prepare("DELETE FROM group_members WHERE user_id=:user_id AND group_id=:group_id");
-                $stmt->bindValue(":group_id", $selectedgid);
-                $stmt->bindValue(":user_id", $reid);
-                $stmt->execute();
-
-                header("Location: group.php?id=".urlencode($selectedgid));
-            }
-            else{
-                echo "<script type='text/javascript'>alert('No such a group member!')</script>";
-            }
-        }
-
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -97,16 +34,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
   <body>
     <?php include 'includes/_nav.php';?>
-    <?php
-    $db=connect_db();
-
-    $uid=get_logged_in_user_id();
-    $groid="SELECT group_id FROM group_members WHERE user_id=$uid";
-    ?>
 
     <div class='container'>
 
-    <form action="" class='form-horizontal' role='form' method='post' name='mementry'>
+    <form action="members_entry.php" class='form-horizontal' role='form' method='post' name='mementry'>
 
     <div class='row'>
     <br><br>
@@ -115,14 +46,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     <select name='sgrop' id='greload' onChange="reload(this.value);" class='form-control'>
     <option value=''>Select Group</option>;
     <?php 
-    foreach($db->query($groid) as $groupid){
-      $gid=$groupid['group_id'];
-      $gname="SELECT name FROM groups WHERE id=$gid";
-      foreach($db->query($gname) as $groupname){
-        $groname=$groupname['name'];
-        echo "<option value='$gid'>$groname</option>";
-      }
-    } ?>
+    $group = get_group($db, $_GET['id']);
+    $selectedgid=$group['id'];
+    $user_id = get_logged_in_user_id();
+    $user_groups = get_user_groups($db, $user_id);
+    $_SESSION['memgid']=$selectedgid;
+    foreach($user_groups as $g){
+        echo '<option value="'.htmlspecialchars($g['id']).'">'.htmlspecialchars($g['name'])."</option>\n";
+        }   
+    ?>
     </select>
     </div>
     </div>
@@ -140,7 +72,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 
     <div class ='col-sm-3'>
-    <label for='name'>Remove a current member(email):</label>
+    <label for='name'>Remove a current member or yourself(email):</label>
     <input type='text' class='form-control' name='removemem' id='removemem'>
     </div>
     </div>
