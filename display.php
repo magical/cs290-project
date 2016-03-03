@@ -53,7 +53,7 @@
       $stmt = $db->prepare("
           SELECT groups.id as id, groups.name, courses.id as course_id, courses.department, courses.number
           FROM groups
-          JOIN courses ON groups.course_id = courses.id");
+          JOIN courses ON groups.course_id = courses.id WHERE groups.is_private='0'");
       $stmt->execute();
       $stmt2 = $db->prepare("SELECT email FROM group_members JOIN users ON users.id = group_members.user_id WHERE group_id = :group_id");
       echo "<h1>Groups</h1>\n";
