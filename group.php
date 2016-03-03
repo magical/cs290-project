@@ -78,12 +78,13 @@ if ($is_member) {
           }
         ?>
         </select>
+        <br>
       </div>
     </div>
 
     <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
 
-    <a href="group_edit.php?id=1" class="btn btn-default btn-sm">
+    <a href="group_edit.php" class="btn btn-default btn-sm">
       <span class="glyphicon glyphicon-cog"></span> Edit
     </a>
 
