@@ -1,4 +1,13 @@
-<?php require_once 'includes/all.php'; ?>
+<?php require_once 'includes/all.php'; 
+
+
+if (!is_logged_in()) {
+   header("Location: signin.php");
+   exit(0);
+}
+	
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -19,16 +28,26 @@
 	<td> <h4> Phone Number (optional) </h4> </td>
 	</tr>
 	<tr> <td> 
-	<input type="text" name="name" class="form-control" style="width: 150px; caption-side: bottom">
-	</td>
-	<td>
-	<input type="text" name="phone" class="form-control" style="width: 150px; position: relative; caption-side: bottom;">
-	</td>
-	</tr>
-	</table>	
-	<p> </p>
-      <div class="row"> 
-<!--		  <div class="col-md-4">
+	<?php
+	
+	$db = connect_db();
+	$user = get_user($db, get_logged_in_user_id());
+	if (!$user) {
+	 	header('Status: 404');
+	 	die('no such user');
+	}
+	$usersname = $user['name'];
+	echo "<input type='text' name='name' class='form-control' style='width: 150px; caption-side: bottom' placeholder='$usersname'>";
+	echo "</td>";
+	echo "<td>";
+	$usersphone = $user['phone'];
+	echo "<input type='text' name='phone' class='form-control' style='width: 150px; position: relative; caption-side: bottom;' placeholder='$usersphone'>";
+	echo "</td>";
+	echo "</tr>";
+	echo "</table>	";
+	echo "<p> </p>";
+   echo "<div class='row'> ";
+	/*	  <div class="col-md-4">
 	<select name="standingselect" class="form-control">
 		<option value=""> Select Class Standing </option>
 		<option value="1"> First-Year </option>
@@ -38,35 +57,96 @@
 		<option value="5"> Fifth-Year or more </option>
 	</select>
 	
-	</div> -->
-	<div class="col-md-4">
-	<select name="collegeselect" class="form-control">
-		<!--Using first three letters to indicate college, first capt'd, for consistency -->
-		<option value=""> Select College </option>
-		<option value="Agr"> Agricultural Sciences </option>
-		<option value="Bus"> Business </option>
-		<option value="Ear"> Earth, Ocean, and Atmospheric Sciences </option>
-		<option value="Edu"> Education </option>
-		<option value="Eng"> Engineering </option>
-		<option value="For"> Forestry </option>
-		<option value="Lib"> Liberal Arts </option>
-		<option value="Pha"> Pharmacy </option>
-		<option value="Pub"> Public Health and Human Services </option>
-		<option value="Sci"> Science </option>
-		<option value="Vet"> Veterinary Medicine </option>
-	</select>
-	</div>
-	<div class="col-md-4">
-	<select name="campus" class="form-control">
-		<option value=""> Select Campus </option>
-		<option value="1"> Corvallis (Main)</option>
-		<option value="2"> Cascades </option>
-		<option value="3"> Online </option>
-	</select>
-	</div>
-       </div>
-     </div>
-   <!--<div class="container" style="width:100%">
+	</div> */
+	echo "<div class='col-md-4'>";
+	$i = $user['college_id'];
+	/*echo "<style>";
+	echo "option:nth-of-type($i) {";
+	echo "	selected: selected; } </style>"; */	
+	echo "<select name='collegeselect' class='form-control'>";
+		//<!--Using first three letters to indicate college, first capt'd, for consistency -->
+	echo "<option value='' disabled selected> Select College </option>";
+	echo "<option value='Agr' ";
+	if ($i == 1) {
+	echo "selected='selected'";
+	}
+	echo "> Agricultural Sciences </option>";
+	echo "<option value='Bus' ";
+	if ($i == 2) {
+	echo "selected='selected'";
+	}
+	echo "> Business </option>";
+	echo "<option value='Ear' ";
+	if ($i == 3) {
+	echo "selected='selected'";
+	}
+	echo "> Earth, Ocean, and Atmospheric Sciences </option>";
+	echo "<option value='Edu' ";
+	if ($i == 4) {
+	echo "selected='selected'";
+	}
+	echo "> Education </option>";
+	echo "<option value='Eng' ";
+	if ($i == 5) {
+	echo "selected='selected'";
+	}
+	echo "> Engineering </option>";
+	echo "<option value='For' ";
+	if ($i == 6) {
+	echo "selected='selected'";
+	}
+	echo "> Forestry </option>";
+	echo "<option value='Lib' ";
+	if ($i == 7) {
+	echo "selected='selected'";
+	}
+	echo "> Liberal Arts </option>";
+	echo "<option value='Pha' ";
+	if ($i == 8) {
+	echo "selected='selected'";
+	}
+	echo "> Pharmacy </option>";
+	echo "<option value='Pub' ";
+	if ($i == 9) {
+	echo "selected='selected'";
+	}
+	echo "> Public Health and Human Services </option>";
+	echo "<option value='Sci' ";
+	if ($i == 10) {
+	echo "selected='selected'";
+	}
+	echo "> Science </option>";
+	echo "<option value='Vet' ";
+	if ($i == 11) {
+	echo "selected='selected'";
+	}
+	echo "> Veterinary Medicine </option>";
+	echo "</select>";
+	echo "</div>";
+	$p = $user['campus_id'];
+	echo "<div class='col-md-4'>";
+	echo "<select name='campus' class='form-control'>";
+		echo "<option value=''> Select Campus </option>";
+		echo "<option value='1' ";
+	if ($p == 1) {
+	echo "selected='selected'";
+	}
+	echo "> Corvallis (Main)</option>";
+		echo "<option value='2' ";
+	if ($p == 2) {
+	echo "selected='selected'";
+	}
+	echo "> Cascades </option>";
+		echo "<option value='3' ";
+	if ($p == 3) {
+	echo "selected='selected'";
+	}
+	echo "> Online </option>";
+	echo "</select>";
+	echo "</div>";
+      echo " </div>";
+     echo "</div>";
+   /*<!--<div class="container" style="width:100%">
      <div class="row">
 	<div class="col-lg-12 form-inline">
 	    	<p>Enter your two best times in the format DAY, TI:ME XM (i.e: R, 05:00 PM) </p>
@@ -151,24 +231,20 @@
 		document.getElementById("t1t").size=7;
 		document.getElementById("t2d").size=7;
 		document.getElementById("t2t").size=7; 
-	</script> -->
-		<p></p>
-		<div class="container">
-		<input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='SUBMIT'> </div>
-		<!--<input type="submit" class="btn btn-primary" style="position:relative">-->
-	<!--</div>
+	</script> -->  */
+	echo "	<p></p>";
+	echo "	<div class='container'>";
+	echo "	<input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='SUBMIT'> </div>";
+	//echo "	<!--<input type="submit" class="btn btn-primary" style="position:relative">-->";
+	/*<!--</div>
      </div>
-   </div>-->
-	</form>
-
-	<?php
+   </div>-->*/
+	echo "</form>";
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			/*if ($_REQUEST["standingselect"] === "") {
 					echo "<p> ERROR: Please choose class standing </p>";
 			} */if ($_REQUEST["collegeselect"] === "") {
 					echo "<p> ERROR: Please choose college </p>";
-			} elseif ($_REQUEST["name"] === "") {
-					echo "<p> ERROR: Please input </p>";
 			} elseif($_REQUEST["campus"] === "") {
 					echo "<p> ERROR: Please choose campus </p>";
 			} /*elseif($_REQUEST["t1t"] === "") {
@@ -184,17 +260,28 @@
 				if (is_logged_in()) {
 				//$t1 = $_REQUEST["t1d"] . $_REQUEST["t1t"];
 				//$t2 = $_REQUEST["t2d"] . $_REQUEST["t2t"];
-				$db = connect_db();
+				//$db = connect_db();
+				
 
 				//RETRIEVE USERID FROM USERS SESSION - CODE HERE
 				// TODO(ae): don't let non-logged-in users view this page - I just made it so that it wouldn't submit non-logged in user info (jm)
 				$user_id = get_logged_in_user_id();
-				$name = $_REQUEST["name"];
-				$phone = $_REQUEST["phone"];
-
+				$user = get_user($db, $user_id);
+				$userold = get_user($db, $user_id);
+				if ($_REQUEST['name'] == '') {
+					$name = $user['name'];
+				} else {
+					$name = $_REQUEST["name"];
+				}
+				if ($_REQUEST['phone'] == '') {
+					$phone = $user["phone"];
+				} else {
+					$phone = $_REQUEST['phone'];
+				}
 				// TODO(ae): validate standingselect range
 				//$standing_id = $_REQUEST['standingselect'];
 				$campus_id = $_REQUEST['campus'];
+				$p = $campus_id;
 
 				// Look up the college
 				$stmt = $db->prepare("SELECT id FROM colleges WHERE abbreviation = ?");
@@ -204,7 +291,7 @@
 					die("invalid college");
 				}
 				$college_id = $row[0];
-
+				$i = $college_id;
 				$stmt = $db->prepare("
 					UPDATE users SET
 						name = :name,
@@ -222,6 +309,9 @@
 				$stmt->bindValue("user_id", $user_id);
 				$stmt->execute();
 				//echo 'success';
+				if(($userold['campus_id'] != $campus_id) || ($userold['college_id'] != $college_id) || ($userold['name'] != $name) || ($userold['phone'] != $phone)) {
+					echo "<script> location.reload() </script>";
+					}
 				}
 				else {
 					echo '<script language="javascript">';
