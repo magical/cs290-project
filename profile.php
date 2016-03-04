@@ -1,17 +1,15 @@
 <?php
 require_once 'includes/all.php';
 
-
 if (!is_logged_in()) {
    header("Location: signin.php");
    exit(0);
 }
 
-
 if (!isset($_GET['id'])) {
   // um
   header('Status: 404');
-  die('404 not found');
+  die('missing id');
 }
 
 $db = connect_db();
@@ -30,6 +28,9 @@ if ($user['college_id']) {
   $q->execute();
   $college = $q->fetch();
 }
+
+$is_myself = ($user['id'] == get_logged_in_user_id());
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,10 +63,13 @@ if ($user['college_id']) {
         echo '<dd>' . htmlspecialchars($college['name'])."\n";
       } ?>
     </dl>
-    <a href="profile_edit.php" class="btn btn-default">
-      <span class="glyphicon glyphicon-cog"></span>
-      Edit Profile
-    </a>
+
+    <?php if ($is_myself) { ?>
+      <a href="profile_edit.php" class="btn btn-default">
+        <span class="glyphicon glyphicon-cog"></span>
+        Edit Profile
+      </a>
+    <?php } ?>
 
     <h2>Times</h2>
 
@@ -77,10 +81,12 @@ if ($user['college_id']) {
       <dd><?= htmlspecialchars($user['time2']) ?></dd>
     </dl>
 
-    <a href="course_edit.php" class="btn btn-default">
-      <span class="glyphicon glyphicon-cog"></span>
-      Edit Times
-    </a>
+    <?php if ($is_myself) { ?>
+      <a href="course_edit.php" class="btn btn-default">
+        <span class="glyphicon glyphicon-cog"></span>
+        Edit Times
+      </a>
+    <?php } ?>
 
 
     <h2>Classes</h2>
@@ -93,10 +99,12 @@ if ($user['college_id']) {
       <?php } ?>
     </ul>
 
-    <a href="course_edit.php" class="btn btn-default">
-      <span class="glyphicon glyphicon-cog"></span>
-      Edit Classes
-    </a>
+    <?php if ($is_myself) { ?>
+      <a href="course_edit.php" class="btn btn-default">
+        <span class="glyphicon glyphicon-cog"></span>
+        Edit Classes
+      </a>
+    <?php } ?>
 
     <?php include 'includes/_footer.php';?>
   </body>
