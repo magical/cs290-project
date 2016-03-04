@@ -8,7 +8,7 @@ if(!empty($bid)){
 	$building="SELECT building_id,building_abbr FROM buildings WHERE cam_id=$bid ORDER BY building_abbr";
 	$b=$db->query($building);
 
-echo "<option value=''>Select Building</option>";
+echo "<option value=''>Select a Building</option>";
 foreach($b as $budquery){
 	$bud_id=$budquery[building_id];
 	$bud_abbr=$budquery[building_abbr];

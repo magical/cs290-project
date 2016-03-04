@@ -84,7 +84,7 @@ if ($is_member) {
 
     <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
 
-    <a href="group_edit.php" class="btn btn-default btn-sm">
+    <a href="group_edit.php?id=<?= htmlspecialchars(urlencode($group['id'])) ?>" class="btn btn-default btn-sm">
       <span class="glyphicon glyphicon-cog"></span> Edit
     </a>
 
