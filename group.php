@@ -84,9 +84,11 @@ if ($is_member) {
 
     <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
 
-    <a href="group_edit.php?id=<?= htmlspecialchars(urlencode($group['id'])) ?>" class="btn btn-default btn-sm">
-      <span class="glyphicon glyphicon-cog"></span> Edit
-    </a>
+    <?php if ($is_member) { ?>
+      <a href="group_edit.php?id=<?= htmlspecialchars(urlencode($group['id'])) ?>" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+      </a>
+    <?php } ?>
 
     <dl class="dl-horizontal">
       <dt>Name
@@ -109,11 +111,13 @@ if ($is_member) {
 
     <h2>Members</h2>
 
-    <div>
-      <a href="members_edit.php" class="btn btn-default btn-sm">
-          <span class="glyphicon glyphicon-cog"></span> Edit
-      </a>
-    </div>
+    <?php if ($is_member) { ?>
+      <div>
+        <a href="members_edit.php" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-cog"></span> Edit
+        </a>
+      </div>
+    <?php } ?>
 
     <ul>
       <?php foreach ($users as $user) { ?>

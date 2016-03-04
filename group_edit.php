@@ -12,18 +12,25 @@ if (empty($_GET['id'])) {
   exit(0);
 }
 
-// TODO(ae): only let group members edit the group
-
 $db = connect_db();
 $group = get_group($db, $_GET['id']);
+
+if ($group === null) {
+  header('Status: 404');
+  die('no such group');
+}
 
 $user_id = get_logged_in_user_id();
 $user_groups = get_user_groups($db, $user_id);
 
+// only let group members edit the group
+if (!is_member($db, $user_id, $group['id'])) {
+  header('Status: 403');
+  die('forbidden');
+}
+
 $error = array();
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
 	if (!empty($_POST['name']) && $_POST['name'] !== $group['name']) {
 		$stmt=$db->prepare("UPDATE groups SET name=:name WHERE id=:group_id");
 		$stmt->bindValue(":group_id", $group['id']);
