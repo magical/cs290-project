@@ -15,6 +15,8 @@ if (!$user) {
 }
 
 $errors = array();
+$name = $user['name'];
+$phone = $user['phone'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_REQUEST["collegeselect"] === "") {
       $errors['college'] = "Please choose college";
@@ -22,19 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $errors['campus'] = "Please choose campus";
     }
 
+    if ($_REQUEST['name'] !== '') {
+      $name = $_REQUEST["name"];
+    }
+    if ($_REQUEST['phone'] !== '') {
+      $phone = $_REQUEST['phone'];
+    }
+
+    if (!preg_match('/^[0-9\-\+() ]*$/', $phone)) {
+      $errors['phone'] = 'Please enter a valid phone number';
+    }
+
     if (!count($errors)) {
-      $name = $user['name'];
-      $phone = $user['phone'];
       $campus_id = $_REQUEST['campus'];
-
-      if ($_REQUEST['name'] !== '') {
-        $name = $_REQUEST["name"];
-      }
-      if ($_REQUEST['phone'] !== '') {
-        $phone = $_REQUEST['phone'];
-      }
-
-      // TODO(ae): validate phone number
 
       // Look up the college
       $stmt = $db->prepare("SELECT id FROM colleges WHERE id = ?");
@@ -98,11 +100,12 @@ function show_error($name) {
       <div class="row">
         <div class="form-group col-md-4">
           <label for="input-name">Name</label>
-          <input id="input-name" type='text' name='name' class='form-control' value="<?= htmlspecialchars($user['name']) ?>">
+          <input id="input-name" type='text' name='name' class='form-control' value="<?= htmlspecialchars($name) ?>">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-4 <?= has_error('phone') ?>">
           <label for="input-phone">Phone</label>
-          <input id="input-name" type='text' name='phone' class='form-control' value="<?= htmlspecialchars($user['phone']) ?>">
+          <input id="input-name" type='text' name='phone' class='form-control' value="<?= htmlspecialchars($phone) ?>">
+          <?php show_error('phone') ?>
         </div>
       </div>
 
