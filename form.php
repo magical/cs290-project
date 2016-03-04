@@ -36,7 +36,7 @@
 			</select>
 
 			<p class="help-block">
-				To search for groups for a course not listed above, <a>add yourself to the course</a> first.
+				To search for groups for a course not listed above, <a href="course_edit.php">add yourself to the course</a> first.
 		</div>
 	
 		<div class="form-group">
