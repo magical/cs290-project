@@ -178,7 +178,38 @@ function show_error($name) {
       </div>
 
     </form>
+<?php
+    echo "<div class='subbtn'>";
+    echo "<input type='submit' style='position:relative;' class='btn btn-primary' name='filesub' value='SUBMIT'>";
+    echo "</div>";
+    echo "</form>";	
+    echo "</div>";
+	 if (is_logged_in()){
+	 	$user = get_user($db, get_logged_in_user_id());
+		print_r ($user);
+		echo $user['pic_id'] ."torlrld";
+	 	$stmt = $db->prepare("SELECT filename FROM pic WHERE id = :pic_id");
+		$stmt->bindParam("pic_id", $user['pic_id']);
+		$stmt->execute();
+		$profpic = $stmt->fetch();
+		$userpic = $profpic[0];
+		echo $userpic ." ".  $user['pic_id'];
+  // $con =mysql_connect("localhost", "root" , "");
+  // $sdb= mysql_select_db("my_database",$con);
+  // $sql = "SELECT * FROM `news` WHERE 1";
+  // $mq = mysql_query($sql) or die ("not working query");
+  // $row = mysql_fetch_array($mq) or die("line 44 not working");
+  // $s=$row['photo'];
+  // echo $row['photo'];
 
+   echo '<img src="'.$userpic.'" alt="HTML5 Icon" style="width:128px;height:128px">';
+	/*	if ($userpic === false) {}
+		else {
+			//echo "<div> <img src='$userpic' class='img-rounded'/> </div>";
+			readfile($userpic);
+		} */
+	} 
+	?>
     <?php include 'includes/_footer.php';?>
   </body>
 </html>

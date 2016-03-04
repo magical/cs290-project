@@ -3,6 +3,7 @@ require_once 'includes/all.php';
 
 $db=connect_db();
 
+$user_id = get_logged_in_user_id();
 
 if(isset($_POST["filesub"])){
 	$pic=$_FILES["fileupload"]["name"];
@@ -19,12 +20,24 @@ if(isset($_POST["filesub"])){
 		$stmt->bindParam(2, $filedata, PDO::PARAM_LOB);
 		$stmt->bindParam(3, $size, PDO::PARAM_INT);
 		$stmt->execute();
+		
+		$stmt = $db->prepare("SELECT id FROM pic WHERE filename = :filename");
+		$stmt->bindParam('filename', $pic);
+		$stmt->execute();
+		$pic_id = $stmt->fetch();
+		
+		$stmt=$db->prepare("UPDATE users SET pic_id = :pic_id WHERE id = :user_id");
+		$stmt->bindParam("pic_id", $pic_id[0]);
+		$stmt->bindParam("user_id", $user_id);
+		$stmt->execute();
+			
+		
 
 
-		echo "<script type='text/javascript'>alert('Upload Successfully'); window.location.href='profile_edit.php'</script>";	
+		echo "<script type='text/javascript'>alert('Upload Successful'); window.location.href='profile_edit.php'</script>";	
 	}else{
 		//header("Location: course_edit.php");	
-		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype	'); window.location.href='profile_edit.php'</script>";	
+		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype'); window.location.href='profile_edit.php'</script>";	
 	}
 }
 
