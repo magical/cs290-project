@@ -110,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'includes/_nav.php';?>
 
     <br><br>
-    <div class='row'>
 
+    <div class='row'>
       <div class='col-sm-3'>
         <form>
           <label for='name'>Select the group</label>
@@ -125,79 +125,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </select>
         </form>
       </div>
-      </div>
-
-      <div class='jumbotron'>
-        <h2>Study Group Editing For Group: <?= htmlspecialchars($group['name'])?></h2>
-      </div>
-
-      <form action="" class='form-horizontal' role='form' method="POST">
-
-      <div class='row'>
-
-      <div class ='col-sm-3'>
-        <label for='input-name'>New Group Name:</label>
-        <input type='text' class='form-control' name='name' value="<?= htmlspecialchars($group['name']) ?>" id='input-name'>
-      </div>
-
-
-      <div class ='col-sm-3'>
-        <label for='input-blurb'>Group Description (optional):</label>
-        <input type='text' class='form-control' name='blurb' value="<?= htmlspecialchars($group['blurb']) ?>" id='input-blurb' placeholder="GROUP MESSAGE">
-      </div>
-
-      <div class='col-sm-3'>
-        <input id="input-private" type="checkbox" name="private"
-          <?php if ($group['is_private']) { echo 'checked'; } ?>
-        >
-        <label for="input-private">Private</label>
-        <p class="help-block">Check to hide this group from search results</p>
-        <br>
-      </div>
     </div>
 
-    <br><br>
+    <div class='jumbotron'>
+      <h2>Study Group Editing For Group: <?= htmlspecialchars($group['name'])?></h2>
+    </div>
 
-    <div class='row'>
-      <div class='col-sm-3'>
-      <label for='input-course'>Select new course (optional):</label>
-      <select name='course' id='input-course' class='form-control'>
-        <option class='ncor' value=''>Select Course</option>;
-        <?php
-          $q=$db->query("SELECT id, department,number FROM courses order by department AND number");
-          foreach($q as $course){
-            $selected = "";
-            if ($group['course_id'] === $course['id']) {
-              $selected = " selected";
-            }
-            echo '<option value="'.htmlspecialchars($course['id']).'"'.$selected.'>'.htmlspecialchars($course['department'] . ' ' . $course['number'])."</option>\n";
-          }
-        ?>
-        </select>
+    <form action="" class='form-horizontal' role='form' method="POST">
+      <div class='row'>
+
+        <div class ='col-sm-3'>
+          <label for='input-name'>New Group Name:</label>
+          <input type='text' class='form-control' name='name' value="<?= htmlspecialchars($group['name']) ?>" id='input-name'>
+        </div>
+
+
+        <div class ='col-sm-3'>
+          <label for='input-blurb'>Group Description (optional):</label>
+          <input type='text' class='form-control' name='blurb' value="<?= htmlspecialchars($group['blurb']) ?>" id='input-blurb' placeholder="GROUP MESSAGE">
+        </div>
+
+        <div class='col-sm-3'>
+          <input id="input-private" type="checkbox" name="private"
+            <?php if ($group['is_private']) { echo 'checked'; } ?>
+          >
+          <label for="input-private">Private</label>
+          <p class="help-block">Check to hide this group from search results</p>
+          <br>
+        </div>
       </div>
 
-      <div class='col-sm-3'>
-        <label for='input-campus'>Select a new campus (optional):</label>
-        <select name="campus" id="input-campus" class="form-control" onChange="get_buildings(this.value)">
-          <option value=''>Select a Campus</option>
-          <?php
-          $q=$db->query("SELECT id,name FROM campuses order by name");
-          foreach($q as $campus){
-            $selected = "";
-            if ($group['campus_id'] === $campus['id']) {
-              $selected = " selected";
-            }
-            echo '<option value="'.htmlspecialchars($campus['id']).'"'.$selected.'>'.htmlspecialchars($campus['name'])."</option>\n";
-          }?>
-        </select>
-      </div>
+      <br><br>
 
-      <div class='col-sm-3'>
-        <label for='input-building'>Select a new building (optional)</label>
-        <select name='building' id='input-building' class='form-control'>
-          <option value=''>Select a Building</option>
-        </select>
-      </div>
+      <div class='row'>
+        <div class='col-sm-3'>
+          <label for='input-course'>Select new course (optional):</label>
+          <select name='course' id='input-course' class='form-control'>
+            <option class='ncor' value=''>Select Course</option>;
+            <?php
+              $q=$db->query("SELECT id, department,number FROM courses order by department AND number");
+              foreach($q as $course){
+                $selected = "";
+                if ($group['course_id'] === $course['id']) {
+                  $selected = " selected";
+                }
+                echo '<option value="'.htmlspecialchars($course['id']).'"'.$selected.'>'.htmlspecialchars($course['department'] . ' ' . $course['number'])."</option>\n";
+              }
+            ?>
+          </select>
+        </div>
+
+        <div class='col-sm-3'>
+          <label for='input-campus'>Select a new campus (optional):</label>
+          <select name="campus" id="input-campus" class="form-control" onChange="get_buildings(this.value)">
+            <option value=''>Select a Campus</option>
+            <?php
+            $q=$db->query("SELECT id,name FROM campuses order by id");
+            foreach($q as $campus){
+              $selected = "";
+              if ($group['campus_id'] === $campus['id']) {
+                $selected = " selected";
+              }
+              echo '<option value="'.htmlspecialchars($campus['id']).'"'.$selected.'>'.htmlspecialchars($campus['name'])."</option>\n";
+            }?>
+          </select>
+        </div>
+
+        <div class='col-sm-3'>
+          <label for='input-building'>Select a new building (optional)</label>
+          <select name='building' id='input-building' class='form-control'>
+            <option value=''>Select a Building</option>
+          </select>
+        </div>
       </div>
 
       <br><br>
@@ -228,13 +227,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </div>
 
-
       <br><br>
 
-        <input type='submit' class='btn btn-default' value='SUBMIT'>
-      </form>
+      <input type='submit' class='btn btn-primary' value='SAVE'>
+      <a class="btn btn-link" href="group.php?id=<?= $group['id'] ?>">Cancel</a>
 
-    </div>
+    </form>
 
     <?php include 'includes/_footer.php';?>
   </body>
