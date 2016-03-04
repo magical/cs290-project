@@ -22,6 +22,14 @@ if (!$user) {
 }
 
 $courses = get_user_courses($db, $user['id']);
+
+$college = null;
+if ($user['college_id']) {
+  $q = $db->prepare("SELECT * FROM colleges WHERE id=?");
+  $q->bindValue(1, $user['college_id']);
+  $q->execute();
+  $college = $q->fetch();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,6 +56,11 @@ $courses = get_user_courses($db, $user['id']);
 
       <dt>Phone:
       <dd><?= htmlspecialchars($user['phone']) ?>
+
+      <?php if ($college) {
+        echo '<dt>College:';
+        echo '<dd>' . htmlspecialchars($college['name'])."\n";
+      } ?>
     </dl>
     <a href="profile_edit.php" class="btn btn-primary">EDIT PROFILE</a>
 
