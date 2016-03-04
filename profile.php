@@ -62,7 +62,10 @@ if ($user['college_id']) {
         echo '<dd>' . htmlspecialchars($college['name'])."\n";
       } ?>
     </dl>
-    <a href="profile_edit.php" class="btn btn-primary">EDIT PROFILE</a>
+    <a href="profile_edit.php" class="btn btn-default">
+      <span class="glyphicon glyphicon-cog"></span>
+      Edit Profile
+    </a>
 
     <h2>Times</h2>
 
@@ -74,7 +77,10 @@ if ($user['college_id']) {
       <dd><?= htmlspecialchars($user['time2']) ?></dd>
     </dl>
 
-    <a href="course_edit.php" class="btn btn-primary">EDIT TIMES</a>
+    <a href="course_edit.php" class="btn btn-default">
+      <span class="glyphicon glyphicon-cog"></span>
+      Edit Times
+    </a>
 
 
     <h2>Classes</h2>
@@ -86,7 +92,11 @@ if ($user['college_id']) {
                                  $course['title']) ?>
       <?php } ?>
     </ul>
-    <a href="course_edit.php" class="btn btn-primary">EDIT CLASSES</a>
+
+    <a href="course_edit.php" class="btn btn-default">
+      <span class="glyphicon glyphicon-cog"></span>
+      Edit Classes
+    </a>
 
     <?php include 'includes/_footer.php';?>
   </body>
