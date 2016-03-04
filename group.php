@@ -119,7 +119,11 @@ if ($is_member) {
 
     <ul>
       <?php foreach ($users as $user) { ?>
-        <li><?= htmlspecialchars($user['name']) ?></li>
+        <li>
+          <a href="profile.php?id=<?= $user['id'] ?>">
+            <?= htmlspecialchars($user['name']) ?>
+          </a>
+        </li>
       <?php } ?>
     </ul>
 	<form action= "calendar.php" method="get"> 
