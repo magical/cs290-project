@@ -3,8 +3,15 @@
         <div class="navbar-header">
           <a href="index.php">
             <img style="width: 100px; height: 50px" src="images/Logo.jpg"
-                 alt="Study Group Finder"/>
-          </a>
+                 alt="Study Group Finder"/>  </a>
+					  			
+			   <?php 
+					if (is_logged_in()) {
+						$id = get_logged_in_user_id();
+						echo "<a href='profile.php?id=$id'>";
+	 					echo "<img src='pic_display.php' height='50px' width='50px'";
+						echo "</a>";
+					} ?>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-form navbar-right">
