@@ -27,6 +27,10 @@
 			<label for="courseid">Course:</label>
 			<select id="courseid" name="course" class="form-control">
 					<?php
+						echo '<option value="">';
+							echo 'Search by Class (optional)';
+						echo '</option>';
+						
 						foreach ($user_courses as $course) {
 							echo '<option value="'.htmlspecialchars($course['id']).'">';
 							echo htmlspecialchars($course['department'].' '.$course['number'].' '.$course['title']);
