@@ -91,10 +91,14 @@
 			}else {
 				echo 'Showing results ', ($page-1)*10+1, '-', min($resultCount, $page*10), ':<br>';
 				foreach($search as $key) {
-					$url = 'group.php?id=' . urlencode($key['id']);
-					echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
-					echo "Course: " . htmlspecialchars($key['title']). "<br>";
-					echo htmlspecialchars($key['blurb']);
+					echo '<div class="panel panel-default">';
+ 					echo '<div class="panel-body">';
+						$url = 'group.php?id=' . urlencode($key['id']);
+						echo "<a href=\"$url\">" . htmlspecialchars($key['name']) . "</a> <br>";
+						echo "Course: " . htmlspecialchars($key['title']). "<br>";
+						echo htmlspecialchars($key['blurb']);
+					echo '</div>';
+					echo '</div>';
 				}
 			}
 		?>

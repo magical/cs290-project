@@ -1,36 +1,29 @@
 <?php
 require_once 'includes/all.php';
-
-
 if(!is_logged_in()) {
 	header("Location: signin.php");
 	exit(0);
 }
-
 if (!isset($_GET['id'])) {
   // um
   header('Status: 404');
   die('404 not found');
 }
-
 $db = connect_db();
-
 $user_id = get_logged_in_user_id();
 $user_groups = get_user_groups($db, $user_id);
-
+$user_email = get_user($db, $user_id)['email'];
 $group = get_group($db, $_GET['id']);
 if (!$group) {
   header('Status: 404');
   die('no such user');
 }
-
 $course = get_course($db, $group['course_id']);
 $users = get_group_members($db, $group['id']);
 $is_member = is_member($db, $user_id, $group['id']);
 if ($is_member) {
   $posts = get_group_posts($db, $group['id']);
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -133,6 +126,18 @@ if ($is_member) {
 			<button class="btn btn-primary">Create Group Meeting </button>
 		</div>
 	</form>
+	
+	<?php if (!$is_member) { ?>
+		<form action="members_entry.php" role='form' method='post' name='mementry'>
+			<?php $_SESSION['memgid']=$_GET['id']; ?>
+			<div>
+				<label for='name'>Join Group</label>
+				<input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">
+				<input type='hidden' class='form-control' name='removemem' id='removemem'>
+			</div>
+				<input type='submit' class='btn btn-primary' value='Join'>
+		</form>
+	<?php } ?>
 	
 
     <?php if ($is_member) { ?>
