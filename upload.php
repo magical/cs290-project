@@ -35,8 +35,7 @@ if(isset($_POST["filesub"])){
 
 
 		echo "<script type='text/javascript'>alert('Upload Successful'); window.location.href='profile_edit.php'</script>";	
-	}else{
-		//header("Location: course_edit.php");	
+	}else{	
 		echo "<script type='text/javascript'>alert('Failed to upload size is $size filetype is $filetype'); window.location.href='profile_edit.php'</script>";	
 	}
 }
