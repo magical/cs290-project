@@ -47,7 +47,10 @@ $is_myself = ($user['id'] == get_logged_in_user_id());
     <dl class="dl-horizontal">
       <dt>Name:
       <dd><?= htmlspecialchars($user['name']) ?>
+		<dt>Profile Picture:</dt>
+		<dd><img src='pic_display.php' width='250px' height='250px'/></dd>
     </dl>
+	 
 
     <h2>Contact</h2>
 
