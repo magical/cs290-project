@@ -93,6 +93,13 @@ function show_error($name) {
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
+	  <?php
+		if(isset($_SESSION["errors"])){
+			$passerror = $_SESSION["errors"]["oldpass"];
+			$_SESSION["errors"] = null;
+			echo '<div class="alert alert-warning">'.$passerror.'</div>';
+		}
+	  ?>
     <div class="jumbotron">
       <h1> Your Profile </h1>
       <p> Please fill out this information </p>
@@ -183,11 +190,13 @@ function show_error($name) {
     </form>
 	  
 	<p>
-	  <button data-toggle="collapse" data-target="#password">Change Password</button>
-	  <div id="password" class="collapse">
-		<form action="" name="passwordChange" role="form" method=post>
-		  <input type="text" placeholder="Old Password">
-	      <input type="text" placeholder="New Password">
+		<button data-toggle="collapse" data-target="#password">Change Password</button>
+	    <div id="password" class="collapse">
+
+		<form action="passchange.php" name="passwordChange" role="form" method=post>
+		  <input type="password" id="oldPassword" name="oldPassword" class="form-control" placeholder="Old Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
+          <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
+		  <button type="submit">Go</button>
 		</form>
       </div>
 	</p>
