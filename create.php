@@ -90,6 +90,7 @@ CREATE TABLE users (
     FOREIGN KEY (standing_id) REFERENCES standings (id),
     FOREIGN KEY (pic_id) REFERENCES pic (id),
     UNIQUE (email),
+    INDEX (name),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
 
