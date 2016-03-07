@@ -16,7 +16,7 @@ $user_email = get_user($db, $user_id)['email'];
 $group = get_group($db, $_GET['id']);
 if (!$group) {
   header('Status: 404');
-  die('no such user');
+  die('no such group');
 }
 $course = get_course($db, $group['course_id']);
 $users = get_group_members($db, $group['id']);
