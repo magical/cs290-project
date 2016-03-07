@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // validation
 
     // Check if the course id is numeric
-    if (is_numeric($_POST['course'])) {
+    if (isset($_POST['course']) && is_numeric($_POST['course'])) {
       $form['course'] = (int)$_POST['course'];
     } else {
       $errors['course'] = "please choose a course";
@@ -139,13 +139,16 @@ function has_error($key) {
   <head>
     <title>Create a study group</title>
     <?php include 'includes/_head.html' ?>
+    <link rel=stylesheet href="css/jquery-ui.css">
+    <script src="jquery-1.12.1.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
 
     <h1>Create a group</h1>
 
-    <form action="" method="POST">
+    <form action="" id="group-form" method="POST">
 
       <p>So you want to start a study group, huh? Great!
       Just follow these three easy steps.
@@ -204,7 +207,7 @@ function has_error($key) {
             echo '<input type="hidden" name="members[]" value="'.htmlspecialchars($id).'">'."\n";
           }
         ?>
-        <ul>
+        <ul id="members-list">
           <?php
             foreach ($form['members'] as $id) {
               $user = get_user($db, $id);
@@ -252,5 +255,58 @@ function has_error($key) {
     </form>
 
     <?php include 'includes/_footer.php' ?>
+
+    <script>
+      "use strict";
+      $("#user-input").autocomplete({
+        minLength: 2,
+        select: function(event, ui) {
+          $(this).data('item', ui.item);
+          this.value = ui.item.value.e;
+          event.preventDefault();
+        },
+        focus: function(event, ui) {
+          $(this).data('item', null);
+          event.preventDefault();
+        },
+        source: function(request, response) {
+          if ( this.xhr ) {
+              this.xhr.abort();
+          }
+          this.xhr = $.ajax({
+            url: "autosuggest_user.php",
+            data: {"q": request.term},
+            dataType: "json",
+            success: function( data ) {
+                var items = $.map(data, function(item) {
+                    return {label: item.n + " <"+item.e+">", value: item};
+                });
+                response( items );
+            },
+            error: function() {
+                response([]);
+            }
+          });
+        },
+      });
+      $("#group-form").submit(function() {
+        var that = this;
+        var ul = $("#members-list");
+        var input = $("#user-input");
+        var item = input.data('item');
+        if (item) {
+          console.log(item);
+          $('<li>')
+            .text(item.label)
+            .appendTo(ul);
+          $('<input type="hidden" name="members[]">')
+            .attr("value", item.value.id)
+            .appendTo(that);
+          input.data('item', null);
+          input.val("");
+          return false;
+        }
+      });
+    </script>
   </body>
 </html>
