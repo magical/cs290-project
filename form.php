@@ -22,6 +22,7 @@
 	?>
 
 	<h2> Basic Search Page </h2>
+	<div style="display:none" id="errors" class="alert alert-warning"></div>
 	<form name="form" role="form" action = "search.php" onSubmit="return validate()" method = "get">
 		<div class="form-group">
 			<label for="courseid">Course:</label>
@@ -72,7 +73,8 @@
 		function validate() {
 			if (form.course.value==""
 				&& form.group.value==""){
-				alert( "You need to complete at least one field to search" );
+				document.getElementById("errors").style.display = "block";
+				document.getElementById("errors").textContent = "Please fill one of the fields";
 				return false;
 			}
 		}
