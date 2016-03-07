@@ -13,7 +13,11 @@ function getClient() {
   $client->addScope(Google_Service_Calendar::CALENDAR_READONLY);
   $client->setRedirectUri(current_url());
   $client->setAccessType('offline');
-
+  if(isset($_SESSION["googleauth"])){
+	  $client->setAccessToken($_SESSION["googleauth"]);
+	  $_SESSION["googleauth"] = NULL;
+	  return $client;
+  }
   if (!isset($_GET['code'])) {
     // Request authorization from the user.
     $authUrl = $client->createAuthUrl();
@@ -25,8 +29,9 @@ function getClient() {
 
   // Exchange authorization code for an access token.
   $accessToken = $client->authenticate($authCode);
-
-  return $client;
+  $_SESSION["googleauth"] = $accessToken;
+  header("Location: calendar.php");
+  exit(0);
 }
 
 // Get the API client and construct the service object.
@@ -47,7 +52,7 @@ $results = $service->events->listEvents($calendarId, $optParams);
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Data Entry</title>
+    <title>Group Meeting</title>
     <?php include 'includes/_head.html';?>
   </head>
   <body>
@@ -56,7 +61,7 @@ $results = $service->events->listEvents($calendarId, $optParams);
 		if (count($results->getItems()) == 0) {
 		  print "No upcoming events found.\n";
 		} else {
-		  print "Upcoming events:\n";
+		  print "<h3>Upcoming events:</h3></br>";
 		  foreach ($results->getItems() as $event) {
 			$start = $event->start->dateTime;
 			if (empty($start)) {
