@@ -22,7 +22,7 @@
 	?>
 
 	<h2> Basic Search Page </h2>
-	<form role="form" action = "search.php" method = "get">
+	<form name="form" role="form" action = "search.php" onSubmit="return validate()" method = "get">
 		<div class="form-group">
 			<label for="courseid">Course:</label>
 			<select id="courseid" name="course" class="form-control">
@@ -45,17 +45,19 @@
 	
 		<div class="form-group">
 			<label for="group">Group Name:</label>
-			<input name="group" type="text" class="form-control" id="group" placeholder = "Group Name">
+			<p>
+				<input name="group" type="text" class="form-control" id="group" placeholder = "Group Name">
+			</p>
 		</div>
 		
-		<div class="form-group">
-       		<button class="btn btn-primary">Search</button>
-      	</div>
+		<p>
+			<input type="submit" value="Search" class="btn btn-primary">
+      	</p>
 	</form>
 	
 	<form action="search.php" method="get">
 		<h3>
-			Or alternatively show all groups: </br>		
+			Or alternatively show all groups: <br>		
 		</h3>
 		<div class="form-group">
 			<input type="hidden" name="all" value="1">
@@ -66,6 +68,14 @@
 	<?php 
 		include 'includes/_footer.php';
 	?>
-	
+	<script>
+		function validate() {
+			if (form.course.value==""
+				&& form.group.value==""){
+				alert( "You need to complete at least one field to search" );
+				return false;
+			}
+		}
+	</script>	
 </body>
 </html>
