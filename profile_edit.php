@@ -88,6 +88,8 @@ function show_error($name) {
   <head>
     <title>Data Entry</title>
     <?php include 'includes/_head.html' ?>
+	<script src="jquery-1.12.1.min.js"></script>
+	<script src="js/collapse.js"></script>
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
@@ -179,6 +181,16 @@ function show_error($name) {
       </div>
 
     </form>
+	  
+	<p>
+	  <button data-toggle="collapse" data-target="#password">Change Password</button>
+	  <div id="password" class="collapse">
+		<form action="" name="passwordChange" role="form" method=post>
+		  <input type="text" placeholder="Old Password">
+	      <input type="text" placeholder="New Password">
+		</form>
+      </div>
+	</p>
     <?php include 'includes/_footer.php';?>
   </body>
 </html>
