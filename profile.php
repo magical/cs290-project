@@ -30,6 +30,7 @@ if ($user['college_id']) {
 }
 
 $is_myself = ($user['id'] == get_logged_in_user_id());
+$id = $_GET['id'];
 
 ?>
 <!DOCTYPE html>
@@ -48,8 +49,11 @@ $is_myself = ($user['id'] == get_logged_in_user_id());
       <dt>Name:
       <dd><?= htmlspecialchars($user['name']) ?>
 		<dt>Profile Picture:</dt>
-		<dd><img src='pic_display.php' width='250px' height='250px'/></dd>
-    </dl>
+		<?php 
+		$id = $_GET['id'];
+		echo "<dd><img src='pic_display.php?id=$id' width='250px' height='250px'/></dd>";
+    	?>
+	 </dl>
 	 
 
     <h2>Contact</h2>
