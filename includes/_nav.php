@@ -42,7 +42,6 @@
             ?>
             <li><a href="group.php?id=1">Group</a></li>
             <li><a href="form.php">Find Groups</a></li>
-            <li><a href="display.php">Data Dump</a></li>
           </ul>
         </nav>
       </div>
