@@ -15,7 +15,7 @@ $db=connect_db();
     <title>
       Members Editing
     </title>
-    <script src="jquery-1.12.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
     function reload(id){
             $.ajax({

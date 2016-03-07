@@ -88,7 +88,7 @@ function show_error($name) {
   <head>
     <title>Data Entry</title>
     <?php include 'includes/_head.html' ?>
-	<script src="jquery-1.12.1.min.js"></script>
+	<script src="js/jquery-1.12.1.min.js"></script>
 	<script src="js/collapse.js"></script>
   </head>
   <body>

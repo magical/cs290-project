@@ -140,7 +140,7 @@ function has_error($key) {
     <title>Create a study group</title>
     <?php include 'includes/_head.html' ?>
     <link rel=stylesheet href="css/jquery-ui.css">
-    <script src="jquery-1.12.1.min.js"></script>
+    <script src="js/jquery-1.12.1.min.js"></script>
     <script src="js/jquery-ui.js"></script>
   </head>
   <body>

@@ -30,7 +30,7 @@ if ($is_member) {
   <head>
     <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
     <?php include 'includes/_head.html';?>
-    <script src="jquery-1.12.1.min.js"></script>
+    <script src="js/jquery-1.12.1.min.js"></script>
     <script>
       function reload(id){
         $.ajax({
