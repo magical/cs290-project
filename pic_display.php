@@ -1,18 +1,25 @@
-<?php  	
-	 require_once 'includes/all.php';
-	 	$db = connect_db();
-		if (array_key_exists('id', $_GET)) {
-			$user = get_user($db, $_GET['id']);
-		} elseif (is_logged_in()) {
-			$user= get_user($db, get_logged_in_user_id()); 
-		} else {
-			header('Location: signin.php');
-		}
-	 	$stmt = $db->prepare("SELECT filedata, filename FROM pic WHERE id = :pic_id");
-		$stmt->bindParam("pic_id", $user['pic_id']);
-		$stmt->execute();
-		$profpic = $stmt->fetch();
-		$type = 'image'.substr($profpic['filename'], -3);
-		header("Content-Type: $type");	
-		echo $profpic['filedata'];
-?>
+<?php
+// pic_display.php displays the picture for the given *user* id
+
+require_once 'includes/all.php';
+
+$db = connect_db();
+if (array_key_exists('id', $_GET)) {
+	$user_id = $_GET['id'];
+} else {
+	header('Status: 404');
+	die('no pic id');
+}
+$stmt = $db->prepare("
+  SELECT filedata, mimetype
+  FROM pic JOIN users ON users.pic_id = pic.id
+  WHERE users.id = :user_id");
+$stmt->bindParam("user_id", $user_id);
+$stmt->execute();
+$profpic = $stmt->fetch();
+if ($profpic === false) {
+	header('Status: 404');
+	die('no such pic');
+}
+header("Content-Type: ".$profpic['mimetype']);
+echo $profpic['filedata'];
