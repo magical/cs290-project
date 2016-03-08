@@ -177,7 +177,7 @@ function has_error($key) {
             Which class is this study group for?
             Please choose a class you are attending.
             If the class you want doesn't appear on this list,
-            go <a href="">add it to your list of classes</a>
+            go <a href="course_edit.php">add it to your list of classes</a>
       </div>
 
 
@@ -251,6 +251,7 @@ function has_error($key) {
 
       <div class="form-group">
         <button class="btn btn-primary">Create</button>
+        <a class="btn btn-link" href="index.php">Cancel</a>
       </div>
     </form>
 
