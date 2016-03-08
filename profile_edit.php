@@ -93,13 +93,20 @@ function show_error($name) {
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
-	  <?php
-		if(isset($_SESSION["errors"])){
-			$passerror = $_SESSION["errors"]["oldpass"];
-			$_SESSION["errors"] = null;
-			echo '<div class="alert alert-warning">'.$passerror.'</div>';
-		}
-	  ?>
+    <?php
+      if(isset($_SESSION["flash_success"])) {
+        foreach ($_SESSION['flash_success'] as $msg) {
+          echo '<div class="alert alert-success">'.htmlspecialchars($msg).'</div>';
+        }
+        unset($_SESSION["flash_success"]);
+      }
+      if(isset($_SESSION["flash_errors"])){
+        foreach ($_SESSION['flash_errors'] as $msg) {
+          echo '<div class="alert alert-warning">'.htmlspecialchars($msg).'</div>';
+        }
+        unset($_SESSION["flash_errors"]);
+      }
+    ?>
     <div class="jumbotron">
       <h1> Your Profile </h1>
       <p> Please fill out this information </p>
