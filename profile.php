@@ -48,13 +48,16 @@ $id = $_GET['id'];
     <dl class="dl-horizontal">
       <dt>Name:
       <dd><?= htmlspecialchars($user['name']) ?>
-		<dt>Profile Picture:</dt>
-		<?php 
-		$id = $_GET['id'];
-		echo "<dd><img src='pic_display.php?id=$id' width='250px' height='250px'/></dd>";
-    	?>
-	 </dl>
-	 
+
+      <dt>Profile Picture:</dt>
+      <?php
+        if ($user['pic_id']) {
+          echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px'/></dd>";
+        } elseif ($is_myself) {
+          echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
+        }
+      ?>
+    </dl>
 
     <h2>Contact</h2>
 

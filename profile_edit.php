@@ -173,7 +173,13 @@ function show_error($name) {
 
     <div class='jumbotron'>
       <h2>Your Profile Picture</h2>
-		<img src='pic_display.php' height='250px' width='250px'>
+      <?php
+        if ($user['pic_id']) {
+          echo '<img src="pic_display.php?id='.$user['id'].'" height="250px" width="250px">';
+        } else {
+          echo "You haven't uploaded a picture yet";
+        }
+      ?>
     </div>
 
     <form action='upload.php' name='flpd' role='form' method=post enctype=multipart/form-data>
@@ -188,7 +194,7 @@ function show_error($name) {
       </div>
 
     </form>
-	  
+
 	<p>
 		<button data-toggle="collapse" data-target="#password">Change Password</button>
 	    <div id="password" class="collapse">
