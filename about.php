@@ -2,12 +2,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cool Feature</title>
+    <title>About Us | Study Group Finder</title>
     <?php include 'includes/_head.html';?>
   </head>
 
   <body>
     <?php include 'includes/_nav.php';?>
+
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » About
+    </div>
+
 		<div class='jumbotron'>
 		<h1 align='center'> The Fellowship of the Wingding </h1>
 		<h3 align='center'> A Tale of Everyday Heroes </h3>

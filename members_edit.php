@@ -12,22 +12,12 @@ $db=connect_db();
 <!DOCTYPE html>
 <html>
   <head>
-    <title>
-      Members Editing
-    </title>
+    <title> Members Editing | Study Group Finder </title>
     <script src="js/jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
-    function reload(id){
-            $.ajax({
-                //type: "POST",
-                url: "members_edit.php",
-                //data:'id='+id,
-                success: function(content){
-                $("body").html(content);
-                }
-            });
-            self.location="members_edit.php?id="+id;
-        }
+      function reload(id){
+              self.location="members_edit.php?id="+id;
+      }
     </script>
     <?php include 'includes/_head.html';?>
   </head>
@@ -35,7 +25,11 @@ $db=connect_db();
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <div class='container'>
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="group.php?id=<?= $group['id'] ?>">Group: <?= htmlspecialchars($group['name']) ?></a>
+      » Edit Members
+    </div>
 
     <form action="members_entry.php" class='form-horizontal' role='form' method='post' name='mementry'>
 

@@ -137,7 +137,7 @@ function has_error($key) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Create a study group</title>
+    <title>Create a study group | Study Group Finder</title>
     <?php include 'includes/_head.html' ?>
     <link rel=stylesheet href="css/jquery-ui.css">
     <script src="js/jquery-1.12.1.min.js"></script>
@@ -145,6 +145,11 @@ function has_error($key) {
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
+
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a> »
+      Create a Group
+    </div>
 
     <h1>Create a group</h1>
 

@@ -8,9 +8,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>
-      Course Edit
-    </title>
+    <title> Course Edit | Study Group Finder </title>
     <style>
     div.dropdown{
         width:300px;
@@ -39,9 +37,15 @@
     <?php include 'includes/_head.html';?>
   </head>
 
-
   <body>
     <?php include 'includes/_nav.php';?>
+
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="profile.php?id=<?= get_logged_in_user_id() ?>">Your Profile</a>
+      » Edit Times and Courses
+    </div>
+
     <?php
 
     $db=connect_db();

@@ -63,7 +63,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Results</title>
+	<title>Search Results | Study Group Finder</title>
 	<?php
 		include 'includes/_head.html';
 	?>

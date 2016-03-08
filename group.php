@@ -28,7 +28,7 @@ if ($is_member) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
+    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?> | Study Group Finder</title>
     <?php include 'includes/_head.html';?>
     <script src="js/jquery-1.12.1.min.js"></script>
     <script>
@@ -57,7 +57,11 @@ if ($is_member) {
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <br><br>
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="group.php?id=<?=$group['id']?>">Group: <?= htmlspecialchars($group['name']) ?></a>
+    </div>
+
     <div class='row'>
       <div class='col-sm-3'>
         <label for='name'>Select the group</label>
@@ -135,7 +139,7 @@ if ($is_member) {
 				<input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">
 				<input type='hidden' class='form-control' name='removemem' id='removemem'>
 			</div>
-				<input type='submit' class='btn btn-primary' value='Join'>
+			<input type='submit' class='btn btn-primary' value='Join'>
 		</form>
 	<?php } ?>
 	

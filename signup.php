@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!doctype html>
 <html>
   <head>
-    <title>Sign Up</title>
+    <title>Sign Up | Study Group Finder</title>
     <link rel="icon"
           type="image/png"
           href="images/favicon.png">

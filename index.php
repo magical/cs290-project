@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CS 290</title>
+    <title>Study Group Finder</title>
     <?php include 'includes/_head.html';?>
     <style>
       .step {
