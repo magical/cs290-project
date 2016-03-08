@@ -30,19 +30,17 @@
 
     <div class="container">
 
-      <div class="masthead">
-        <nav>
-          <ul class="nav nav-justified">
-            <li><a href="index.php">Home</a></li>
-            <?php
-              if (is_logged_in()) {
-                echo '<li><a href="profile.php?id='.get_logged_in_user_id().'">Your Profile</a></li>';
-                echo '<li><a href="profile_edit.php">Edit Profile</a></li>';
-                echo '<li><a href="course_edit.php">Your Courses</a></li>';
-              }
-            ?>
-            <li><a href="group.php?id=1">Group</a></li>
-            <li><a href="form.php">Find Groups</a></li>
-          </ul>
-        </nav>
-      </div>
+      <?php if (is_logged_in()) { ?>
+        <div class="masthead">
+          <nav>
+            <ul class="nav nav-justified">
+              <li><a href="index.php">Home</a></li>
+              <li><a href="profile.php?id=<?= get_logged_in_user_id() ?>">Your Profile</a></li>
+              <li><a href="profile_edit.php">Edit Profile</a></li>
+              <li><a href="course_edit.php">Your Courses</a></li>
+              <li><a href="newgroup.php">Create a Group</a></li>
+              <li><a href="form.php">Find Groups</a></li>
+            </ul>
+          </nav>
+        </div>
+      <?php } ?>
