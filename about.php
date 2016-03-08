@@ -20,7 +20,7 @@
 		<p> 
 		Our tale begins one fateful day in a classroom in the LInC, a vast building with severable unexplored regions. One day a giant monster named Scaffidi's Project appeared and started threatening the class, brandishing a flaming sword. 
 		In order to slay this monster, a group of heroes banded together to create a tool that would allow other groups of heroes to band together. A group of many talents, one determined they should be the <em> Fellowship of the Wingding</em>.
-		The Fellowship, after several sleepness nights, somber meetings and trainging sessions confronted the monster, slaying it in an epic, prolonged 10 week battle. All that is left of the monster are the scars the the Fellowship will wear forever,
+		The Fellowship, after several sleepness nights, somber meetings and trainging sessions confronted the monster, slaying it in an epic, prolonged 10 week battle. All that is left of the monster are the scars the Fellowship will wear forever,
 		and the tool that the Fellowship created to slay this foul creature. To this day, their legacy carries on in every group of heroes that bands together to defeat the monsters we now call classes. 
 		</p>
 		<p>
