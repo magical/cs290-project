@@ -104,7 +104,9 @@ if ($is_member) {
 
     <?php if ($is_member) { ?>
       <div>
-        <a href="members_edit.php" class="btn btn-default btn-sm">
+       <?php $gid = $_GET['id'];
+		 echo "<a href='members_edit.php?id=$gid' class='btn btn-default btn-sm'>";
+		 ?>
             <span class="glyphicon glyphicon-cog"></span> Edit
         </a>
       </div>
@@ -128,7 +130,7 @@ if ($is_member) {
 	</form>
 	
 	<?php if (!$is_member) { ?>
-		<form action="members_entry.php" role='form' method='post' name='mementry'>
+		<form action="members_entry.php" role='form' method='POST' name='mementry'>
 			<?php $_SESSION['memgid']=$_GET['id']; ?>
 			<div>
 				<label for='name'>Join Group</label>
