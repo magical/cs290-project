@@ -4,11 +4,37 @@
   <head>
     <title>CS 290</title>
     <?php include 'includes/_head.html';?>
+    <style>
+      .step {
+        background-color: #eee;
+        font-size: 2em;
+        margin: .5em;
+        border-radius: 1em;
+      }
+      .step a {
+        display: block;
+        padding: .5em;
+        text-decoration: none;
+        color: black;
+      }
+      .step:hover .text {
+        text-decoration: underline;
+      }
+      .step .number {
+        background: white;
+        border-radius: 1em;
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+        text-align: center;
+      }
+    </style>
   </head>
 
   <body>
     <?php include 'includes/_nav.php';?>
 
+    <?php if (!is_logged_in()) { ?>
       <div class="jumbotron">
         <h1>Looking for a study group?</h1>
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
@@ -43,6 +69,37 @@
         </div>
       </div>
 
-      <?php include 'includes/_footer.php';?>
+    <?php } else { ?>
+
+      <div class="step">
+        <a href="profile_edit.php">
+          <span class="number">1</span>
+          <span class="text">
+            Fill out your profile →
+          </span>
+        </a>
+      </div>
+
+      <div class="step">
+        <a href="course_edit.php">
+          <span class="number">2</span>
+          <span class="text">
+            Add your classes →
+          </span>
+        </a>
+      </div>
+
+      <div class="step">
+        <a href="form.php">
+          <span class="number">3</span>
+          <span class="text">
+            Find study groups or students →
+          </span>
+        </a>
+      </div>
+
+
+    <?php } ?>
+    <?php include 'includes/_footer.php';?>
   </body>
 </html>
