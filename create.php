@@ -58,6 +58,7 @@ CREATE TABLE pic (
     filename VARCHAR(255),
     filedata MEDIUMBLOB,
     filesize INTEGER,
+    mimetype VARCHAR(20),
 
     PRIMARY KEY (id)
 ) ENGINE=InnoDB, CHARACTER SET=UTF8');
