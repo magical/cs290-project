@@ -18,7 +18,14 @@ if ($size > $maxsize) {
 	$errors[] = "Upload failed: file size $size exceeds maximum size of $maxsize";
 }
 
-$info = getimagesize($tmp);
+
+if (count($errors)) {
+	$_SESSION['flash_errors'] = $errors;
+	header("Location: profile_edit.php");
+	exit(0);
+}
+
+$info = @getimagesize($tmp);
 if ($info === false) {
 	$errors[] = "Upload failed: not an image";
 } else {
