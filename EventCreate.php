@@ -4,8 +4,11 @@ if(!is_logged_in()) {
 	header("Location: signin.php");
 	exit(0);
 }
- 
 $db = connect_db();
+if(!is_member($db, get_logged_in_user_id(), $_REQUEST['group_id'])){
+	header("Status: 403 Forbidden");
+	exit("403 Forbidden");
+}
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$_SESSION['event'] = array();
   if(isset($_POST['STime'])){
@@ -35,6 +38,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
   if (isset($_POST['Attending'])){
 	for($i = 0; $i < count($_POST['Attending']); $i++) {
+	  if(get_group_id($db,$_POST['group_id']))
 	  $_SESSION['event']['GrMem'][$i] = array('email' => $_POST['Attending'][$i]);
 	}
 	  $_SESSION['event']['GrMem'][$i] = array('email' => get_user($db, get_logged_in_user_id())['email']);
@@ -81,11 +85,9 @@ if(isset($_GET['group_id'])){
 				<?php
 					foreach($Members as $attendees) {
 						if($attendees['email'] != get_user($db, get_logged_in_user_id())['email'])
-						echo '<input id="Atendees" type="checkbox" name="Attending[]" value="'.$attendees['email'].'">'.$attendees['name'].'</option><br>';
-						
+						echo '<input id="Atendees" type="checkbox" name="Attending[]" value="'.htmlspecialchars($attendees['email']).'">'.htmlspecialchars($attendees['name']).'</option><br>';
 					}
 				?>
-			<input type='hidden' value='get_user($db, get_logged_in_user_id())' name='Email'>
 			<?php echo "<input type='hidden' value='".urlencode($_GET['group_id'])."' name='group_id'>";?>
 			<input type='submit' value='Create' class='btn btn-default'>
 		</fieldset>
