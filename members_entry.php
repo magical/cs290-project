@@ -8,6 +8,8 @@ $selectedgid=$_SESSION['memgid'];
 if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
     $addmem=$_POST['addmemb'];
     $removemem=$_POST['removemem'];
+	 if (!empty($addmem) && !empty($removemem)){ 
+	 }
 	 if(!empty($addmem) && !filter_var($addmem, FILTER_VALIDATE_EMAIL)) {
 	 	//echo "<script type'text/javascript'>alert('Invalid add member email')</script>";
 		$_SESSION['flash_errors'] = 'Invalid add member email';
@@ -128,8 +130,10 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 }else{
 	//echo "<script type='text/javascript'>alert('Please select a group first')</script>";
 	//echo "<script>setTimeout(\"location.href='members_edit.php';\", 1000);</script>";
+	if (!isset($_SESSION['flash_success'])) {
 	$_SESSION['flash_errors'] = 'No group selected';
 	header("Location: members_edit?id=$selectedgid");
+	}
 }
 
 $db=null;
