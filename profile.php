@@ -36,33 +36,28 @@ $id = $_GET['id'];
 <!DOCTYPE html>
 <html>
   <head>
-    <title><?= htmlspecialchars($user['name']) ?> | Study Group Finder</title>
+    <title><?= htmlspecialchars($user['name']) ?></title>
     <?php include 'includes/_head.html';?>
   </head>
 
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <div class="breadcrumbs">
-      <a href="index.php">Home</a>
-      <?php
-        if ($is_myself) {
-          echo '» Your Profile';
-        } else {
-          echo '» User Profile: '.htmlspecialchars($user['name']);
-        }
-      ?>
-    </div>
+    <h1>User profile</h1>
 
-    <h1><?= htmlspecialchars($user['name']) ?></h1>
+    <dl class="dl-horizontal">
+      <dt>Name:
+      <dd><?= htmlspecialchars($user['name']) ?>
 
+      <dt>Profile Picture:</dt>
       <?php
         if ($user['pic_id']) {
-          echo "<img src='pic_display.php?id=${user['id']}' width='250px' height='250px'>";
+          echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px' class='img-circle'/></dd>";
         } elseif ($is_myself) {
-          echo '<a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
+          echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
         }
       ?>
+    </dl>
 
     <h2>Contact</h2>
 

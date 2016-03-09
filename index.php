@@ -6,7 +6,7 @@
     <?php include 'includes/_head.html';?>
     <style>
       .step {
-        background-color: #eee;
+        background-color: #62A4EC;
         font-size: 2em;
         margin: .5em;
         border-radius: 1em;
@@ -15,10 +15,11 @@
         display: block;
         padding: .5em;
         text-decoration: none;
-        color: black;
+        color: white;
       }
       .step:hover .text {
         text-decoration: underline;
+		  color: white;
       }
       .step .number {
         background: white;
@@ -27,6 +28,7 @@
         width: 1.5em;
         height: 1.5em;
         text-align: center;
+		  color: black;
       }
     </style>
   </head>
@@ -80,7 +82,7 @@
         </a>
       </div>
 
-      <div class="step">
+      <div class="step" style="color:#0000FF">
         <a href="course_edit.php">
           <span class="number">2</span>
           <span class="text">
@@ -94,6 +96,15 @@
           <span class="number">3</span>
           <span class="text">
             Find study groups or students →
+          </span>
+        </a>
+      </div>
+		
+		<div class="step">
+        <a href="group.php">
+          <span class="number">4</span>
+          <span class="text">
+            Manage your groups →
           </span>
         </a>
       </div>

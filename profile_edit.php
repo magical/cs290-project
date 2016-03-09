@@ -189,7 +189,7 @@ function show_error($name) {
       <h2>Your Profile Picture</h2>
       <?php
         if ($user['pic_id']) {
-          echo '<img src="pic_display.php?id='.$user['id'].'" height="250px" width="250px">';
+          echo '<img src="pic_display.php?id='.$user['id'].'" height="250px" width="250px" class="img-rounded">';
         } else {
           echo "You haven't uploaded a picture yet";
         }
