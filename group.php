@@ -63,6 +63,7 @@ if ($is_member) {
     <?php include 'includes/_nav.php';?>
 	<?php if(isset($_SESSION['event'])){
 	        echo'<div class="alert alert-success">'.$_SESSION['event'].'</div>';
+			$_SESSION['event'] = NULL;
           }
 	  ?>
     <div class='row'>
