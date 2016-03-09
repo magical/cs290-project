@@ -1,7 +1,6 @@
 <?php 
-require_once 'includes/all.php';
 require_once __DIR__ . '/google-api-php-client/src/Google/autoload.php';
-
+require_once 'includes/all.php';
 /**
  * Returns an authorized API client.
  * @return Google_Client the authorized client object
@@ -10,7 +9,7 @@ function getClient() {
   $client = new Google_Client();
   $client->setApplicationName("Study Group Finder");
   $client->setAuthConfigFile(__DIR__ . '/client_secret.json');
-  $client->addScope(Google_Service_Calendar::CALENDAR_READONLY);
+  $client->addScope(Google_Service_Calendar::CALENDAR);
   $client->setRedirectUri(current_url());
   $client->setAccessType('offline');
   if(isset($_SESSION["googleauth"])){
@@ -37,40 +36,26 @@ function getClient() {
 // Get the API client and construct the service object.
 $client = getClient();
 $service = new Google_Service_Calendar($client);
+$event = new Google_Service_Calendar_Event();
+ 
+ $event->setSummary($_SESSION['event']['Summary']);
+ $event->setDescription($_SESSION['event']['Description']);
+ $event->setLocation($_SESSION['event']['Location']);
+ $start = new Google_Service_Calendar_EventDateTime();
+ $start->setDateTime('2015-04-16T10:00:00.000-07:00');
+ $event->setStart($start);
+ $end = new Google_Service_Calendar_EventDateTime();
+ $end->setDateTime('2015-04-16T10:25:00.000-07:00');
+ $event->setEnd($end);
+ $event->attendees = $_SESSION['event']['GrMem'];
 
-// Print the next 10 events on the user's calendar.
 $calendarId = 'primary';
-$optParams = array(
-  'maxResults' => 10,
-  'orderBy' => 'startTime',
-  'singleEvents' => TRUE,
-  'timeMin' => date('c'),
-);
-$results = $service->events->listEvents($calendarId, $optParams);
+$event = $service->events->insert($calendarId, $event);
 
+
+$groupID = $_SESSION["event"]["gID"];
+$_SESSION["event"] = 'Event created: '.'<a href = "'.$event->htmlLink.'">'.$_SESSION["event"]["Summary"].'</a>';
+
+header("Location: group.php?id=".urlencode($groupID));
 ?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Group Meeting</title>
-    <?php include 'includes/_head.html';?>
-  </head>
-  <body>
-      <?php include 'includes/_nav.php';?>
-	  <?php
-		if (count($results->getItems()) == 0) {
-		  print "No upcoming events found.\n";
-		} else {
-		  print "<h3>Upcoming events:</h3></br>";
-		  foreach ($results->getItems() as $event) {
-			$start = $event->start->dateTime;
-			if (empty($start)) {
-			  $start = $event->start->date;
-			}
-			printf("%s (%s)\n", htmlspecialchars($event->getSummary()), $start);
-		  }
-		}
-	  ?>
-	  <?php include 'includes/_footer.php';?>
-  </body>
-</html>
+
