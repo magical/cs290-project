@@ -16,7 +16,7 @@ if (!isset($_GET['id'])) {
 	$group = get_group($db, $user_groups[0]['id']);
 } else {
 	$group = get_group($db, $_GET['id']);
-} 
+}
 $user_email = get_user($db, $user_id)['email'];
 
 if (!$group) {
@@ -128,30 +128,30 @@ if ($is_member) {
         </li>
       <?php } ?>
     </ul>
-	<form action= "EventCreate.php" method="GET"> 
-		<h3> Create a Group Meeting </h3>	
-		<?php
-		echo '<input type="hidden" name="group_id" value="'.urlencode($group['id']).'">';
-		?>
-		<div class="form-group">
-			<button class="btn btn-primary">Create Group Meeting </button>
-		</div>
-	</form>
-	
-	<?php if (!$is_member) { ?>
-		<form action="members_entry.php" role='form' method='POST' name='mementry'>
-			<input type="hidden" name="group_id" value="<?= $group['id'] ?>">
-			<div>
-				<label for='name'>Join Group</label>
-				<input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">
-				<input type='hidden' class='form-control' name='removemem' id='removemem'>
-			</div>
-				<input type='submit' class='btn btn-primary' value='Join'>
-		</form>
-	<?php } ?>
-	
+
+    <?php if (!$is_member) { ?>
+        <form action="members_entry.php" role='form' method='POST' name='mementry'>
+            <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
+            <div>
+                <label for='name'>Join Group</label>
+                <input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">
+                <input type='hidden' class='form-control' name='removemem' id='removemem'>
+            </div>
+                <input type='submit' class='btn btn-primary' value='Join'>
+        </form>
+    <?php } ?>
 
     <?php if ($is_member) { ?>
+      <form action= "EventCreate.php" method="GET">
+          <h3> Create a Group Meeting </h3>
+          <?php
+            echo '<input type="hidden" name="group_id" value="'.urlencode($group['id']).'">';
+          ?>
+          <div class="form-group">
+              <button class="btn btn-primary">Create Group Meeting </button>
+          </div>
+      </form>
+
       <h2>Discussion</h2>
 
       <?php
