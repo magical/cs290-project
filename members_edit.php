@@ -46,12 +46,15 @@ $db=connect_db();
         //}
         unset($_SESSION["flash_success"]);
       }
-      if(isset($_SESSION["flash_errors"])) {
+      elseif(isset($_SESSION["flash_errors"])) {
        // foreach ($_SESSION['flash_errors'] as $msg) {
           echo '<div class="alert alert-warning">'.htmlspecialchars($_SESSION['flash_errors']).'</div>';
         //}
         unset($_SESSION["flash_errors"]);
       }
+		if(isset($_SESSION["flash_errors"])) {
+        unset($_SESSION["flash_errors"]);
+		  }
     ?>
     <div class='container'>
 

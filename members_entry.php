@@ -23,26 +23,30 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 	 	  $_SESSION['flash_errors'] = 'No emails entered';
 		  header("Location: members_edit?id=$selectedgid"); 
 	 }else{
-	 	  if (empty($addmem)) {
+	 	  if (!empty($addmem)) {
         $j = $db->prepare("SELECT id FROM users WHERE email = :email");
         $j->bindValue(":email", $addmem);
         $j->execute();
 		  $k = $j->fetch();
-		  if (empty($k)) {
-		  	   $_SESSION['flash-errors'] = 'No such user exists';
+		  if (empty($k['id'])) {
+		  	   $_SESSION['flash_errors'] = 'No such user exists';
 				header("Location: members_edit.php?id=$selectedgid");
 		  }
 		  }
-		  elseif (empty($removemem)) {
+		  if (!empty($removemem)) {
 		  $j = $db->prepare("SELECT id FROM users WHERE email = :email");
         $j->bindValue(":email", $removemem);
         $j->execute();
 		  $k = $j->fetch();
+		  if (empty($k['id'])) {
+		  	   $_SESSION['flash_errors'] = 'No such user exists';
+				header("Location: members_edit.php?id=$selectedgid");
 		  }
-		  else {
-		  	$_SESSION['flash_session'] = 'here';
-			header("Location: members_edit?id=$selectedgid");
 		  }
+		  //else {
+		  	//$_SESSION['flash_session'] = 'here';
+			//header("Location: members_edit?id=$selectedgid?test=yes");
+		 // }
 		  if (!empty($k)) {
     	    if(!empty($addmem) && filter_var($addmem, FILTER_VALIDATE_EMAIL)){
 			 //echo "IN";
@@ -72,6 +76,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
                 $stmt->execute();
 					 $_SESSION['flash_success'] = $addmem . ' successfully added';
                 header("Location: members_edit.php?id=".urlencode($selectedgid));
+					 exit(0);
             }
             else{
                 //echo "<script type='text/javascript'>alert('User already exist in this group!')</script>";
@@ -117,8 +122,8 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 			//echo "<script type='text/javascript'>alert('No emails entered!')</script>";
 			$_SESSION['flash_errors'] = 'No such user exists';
 			header("Location: members_edit?id=$selectedgid");
-			}
 		}
+	}
 		//echo "THE BIG MISS";
 }else{
 	//echo "<script type='text/javascript'>alert('Please select a group first')</script>";
