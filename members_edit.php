@@ -11,27 +11,34 @@ if (!isset($_GET['id'])) {
 }
 
 $db=connect_db();
-$user_groups = get_user_groups($db, get_logged_in_user_id());
-$group = get_group($db, $_GET['id']);
 
 ?>
 
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Members Editing | Study Group Finder </title>
+    <title>
+      Members Editing
+    </title>
     <script src="js/jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
-      function reload(id){
-              self.location="members_edit.php?id="+id;
-      }
+    function reload(id){
+            $.ajax({
+                //type: "POST",
+                url: "members_edit.php",
+                //data:'id='+id,
+                success: function(content){
+                $("body").html(content);
+                }
+            });
+            self.location="members_edit.php?id="+id;
+        }
     </script>
     <?php include 'includes/_head.html';?>
   </head>
 
   <body>
     <?php include 'includes/_nav.php';?>
-
     <?php
       if(isset($_SESSION["flash_success"])) {
         //foreach ($_SESSION['flash_success'] as $msg) {
@@ -46,22 +53,19 @@ $group = get_group($db, $_GET['id']);
         unset($_SESSION["flash_errors"]);
       }
     ?>
-
-    <div class="breadcrumbs">
-      <a href="index.php">Home</a>
-      » <a href="group.php?id=<?= $group['id'] ?>">Group: <?= htmlspecialchars($group['name']) ?></a>
-      » Edit Members
-    </div>
-
     <div class='container'>
 
     <form action="members_entry.php" class='form-horizontal' role='form' method='post' name='mementry'>
 
     <div class='row'>
+    <br><br>
     <div class='col-sm-3'>
     <?php
+	 $user_groups = get_user_groups($db, get_logged_in_user_id());
+	 $group = get_group($db, $_GET['id']);	
     //$selectedgid=$group['id'];
 	 $selectedgid=$_GET['id'];
+	 $_SESSION['memgid'] = $selectedgid;
 	 echo "<label for='name'>Select the group</label>";
     echo "<select name='sgrop' id='greload' onChange='reload(this.value);' class='form-control'>";
     echo "<option value=''>Select Group</option>";

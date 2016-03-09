@@ -38,6 +38,7 @@
               <li><a href="profile.php?id=<?= get_logged_in_user_id() ?>">Your Profile</a></li>
               <li><a href="profile_edit.php">Edit Profile</a></li>
               <li><a href="course_edit.php">Your Courses</a></li>
+				  <li><a href="group.php">Your Groups</a></li>
               <li><a href="newgroup.php">Create a Group</a></li>
               <li><a href="form.php">Find Groups</a></li>
             </ul>

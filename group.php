@@ -4,16 +4,21 @@ if(!is_logged_in()) {
 	header("Location: signin.php");
 	exit(0);
 }
-if (!isset($_GET['id'])) {
-  // um
-  header('Status: 404');
-  die('404 not found');
-}
+
 $db = connect_db();
 $user_id = get_logged_in_user_id();
 $user_groups = get_user_groups($db, $user_id);
+if (empty($user_groups)) {
+	header("Location: form.php");
+	exit(0);
+}
+if (!isset($_GET['id'])) {
+	$group = get_group($db, $user_groups[0]['id']);
+} else {
+	$group = get_group($db, $_GET['id']);
+} 
 $user_email = get_user($db, $user_id)['email'];
-$group = get_group($db, $_GET['id']);
+
 if (!$group) {
   header('Status: 404');
   die('no such group');
@@ -28,7 +33,7 @@ if ($is_member) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?> | Study Group Finder</title>
+    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
     <?php include 'includes/_head.html';?>
     <script src="js/jquery-1.12.1.min.js"></script>
     <script>
@@ -57,11 +62,7 @@ if ($is_member) {
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <div class="breadcrumbs">
-      <a href="index.php">Home</a>
-      » <a href="group.php?id=<?=$group['id']?>">Group: <?= htmlspecialchars($group['name']) ?></a>
-    </div>
-
+    <br><br>
     <div class='row'>
       <div class='col-sm-3'>
         <label for='name'>Select the group</label>
@@ -108,7 +109,7 @@ if ($is_member) {
 
     <?php if ($is_member) { ?>
       <div>
-       <?php $gid = $_GET['id'];
+       <?php $gid = $group['id'];
 		 echo "<a href='members_edit.php?id=$gid' class='btn btn-default btn-sm'>";
 		 ?>
             <span class="glyphicon glyphicon-cog"></span> Edit
@@ -135,13 +136,13 @@ if ($is_member) {
 	
 	<?php if (!$is_member) { ?>
 		<form action="members_entry.php" role='form' method='POST' name='mementry'>
-			<?php $_SESSION['memgid']=$_GET['id']; ?>
+			<?php $_SESSION['memgid']=$group['id']; ?>
 			<div>
 				<label for='name'>Join Group</label>
 				<input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">
 				<input type='hidden' class='form-control' name='removemem' id='removemem'>
 			</div>
-			<input type='submit' class='btn btn-primary' value='Join'>
+				<input type='submit' class='btn btn-primary' value='Join'>
 		</form>
 	<?php } ?>
 	
