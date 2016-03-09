@@ -41,6 +41,7 @@
         <h1>Looking for a study group?</h1>
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
         <p><a class="btn btn-primary btn-lg" href="signup.php" role="button">Sign up to get started</a></p>
+		  <iframe width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
       </div>
 
       <div class="container" style="width: 100%;">
@@ -108,7 +109,7 @@
           </span>
         </a>
       </div>
-
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
 
     <?php } ?>
     <?php include 'includes/_footer.php';?>
