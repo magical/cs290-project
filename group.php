@@ -61,8 +61,11 @@ if ($is_member) {
 
   <body>
     <?php include 'includes/_nav.php';?>
-
-    <br><br>
+	<?php if(isset($_SESSION['event'])){
+	        echo'<div class="alert alert-success">'.$_SESSION['event'].'</div>';
+			$_SESSION['event'] = NULL;
+          }
+	  ?>
     <div class='row'>
       <div class='col-sm-3'>
         <label for='name'>Select the group</label>
@@ -126,9 +129,11 @@ if ($is_member) {
         </li>
       <?php } ?>
     </ul>
-	<form action= "calendar.php" method="get"> 
+	<form action= "EventCreate.php" method="GET"> 
 		<h3> Create a Group Meeting </h3>	
-		<input type="hidden" name="group_id" value="<?htmlspecialchars($group['id']) ?>">
+		<?php
+		echo '<input type="hidden" name="group_id" value="'.urlencode($group['id']).'">';
+		?>
 		<div class="form-group">
 			<button class="btn btn-primary">Create Group Meeting </button>
 		</div>
