@@ -86,10 +86,10 @@ function show_error($name) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Data Entry</title>
+    <title>Profile Edit | Study Group Finder</title>
     <?php include 'includes/_head.html' ?>
-	<script src="js/jquery-1.12.1.min.js"></script>
-	<script src="js/collapse.js"></script>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <script src="js/collapse.js"></script>
   </head>
   <body>
     <?php include 'includes/_nav.php' ?>
@@ -107,6 +107,13 @@ function show_error($name) {
         unset($_SESSION["flash_errors"]);
       }
     ?>
+
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="profile.php?id=<?= $user['id'] ?>">Your Profile</a>
+      » Edit
+    </div>
+
     <div class="jumbotron">
       <h1> Your Profile </h1>
       <p> Please fill out this information </p>

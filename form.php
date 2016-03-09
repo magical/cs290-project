@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Search Groups </title>
+	<title> Search Groups | Study Group Finder </title>
 	<?php 
 		include 'includes/_head.html';
 		$db = connect_db();
@@ -21,7 +21,12 @@
 		include 'includes/_nav.php';
 	?>
 
-	<h2> Basic Search Page </h2>
+  <div class="breadcrumbs">
+    <a href="index.php">Home</a>
+    » Search
+  </div>
+
+	<h2> Group Search </h2>
 	<div style="display:none" id="errors" class="alert alert-warning"></div>
 	<form name="form" role="form" action = "search.php" onSubmit="return validate()" method = "get">
 		<div class="form-group">

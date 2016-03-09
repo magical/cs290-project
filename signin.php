@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCtYpE htmL>
 <html>
   <head>
-    <title>Sign In</title>
+    <title>Sign In | Study Group Finder</title>
     <link rel="icon"
           type="image/png"
           href="images/favicon.png">

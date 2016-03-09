@@ -77,7 +77,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Results</title>
+	<title>Search Results | Study Group Finder</title>
 	<?php
 		include 'includes/_head.html';
 	?>
@@ -85,6 +85,12 @@
 
 <body>
 	<?php include 'includes/_nav.php' ?>
+
+  <div class="breadcrumbs">
+    <a href="index.php">Home</a>
+    » <a href="form.php">Search</a>
+    » Results
+  </div>
 
 	<h2>Search Results</h2>
 	<div>

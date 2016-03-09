@@ -65,6 +65,7 @@ $db=connect_db();
 	 $group = get_group($db, $_GET['id']);	
     //$selectedgid=$group['id'];
 	 $selectedgid=$_GET['id'];
+	 $_SESSION['memgid'] = $selectedgid;
 	 echo "<label for='name'>Select the group</label>";
     echo "<select name='sgrop' id='greload' onChange='reload(this.value);' class='form-control'>";
     echo "<option value=''>Select Group</option>";

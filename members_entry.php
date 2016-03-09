@@ -11,23 +11,27 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 	 if(!empty($addmem) && !filter_var($addmem, FILTER_VALIDATE_EMAIL)) {
 	 	//echo "<script type'text/javascript'>alert('Invalid add member email')</script>";
 		$_SESSION['flash_errors'] = 'Invalid add member email';
-		header("Location: members_edit?id=$selectedgid.php");
+		header("Location: members_edit?id=$selectedgid");
 		//echo "<script>setTimeout(\"location.href='members_edit.php?\", 1000);</script>";
 	 }
 	 elseif(!empty($removemem) && !filter_var($removemem, FILTER_VALIDATE_EMAIL)) {
 	 	//echo "<script type'text/javascript'>alert('Invalid remove member email')</script>";
 		$_SESSION['flash_errors'] = 'Invalid remove member email';
-		header("Location: members_edit?id=$selectedgid.php");
+		header("Location: members_edit?id=$selectedgid");
 		//echo "<script>setTimeout(\"location.href='members_edit.php?\", 1000);</script>";
 	 } elseif (empty($removemem) && empty($addmem)) {
 	 	  $_SESSION['flash_errors'] = 'No emails entered';
-		  header("Location: members_edit?id=$selectedgid.php"); 
+		  header("Location: members_edit?id=$selectedgid"); 
 	 }else{
 	 	  if (empty($addmem)) {
         $j = $db->prepare("SELECT id FROM users WHERE email = :email");
         $j->bindValue(":email", $addmem);
         $j->execute();
 		  $k = $j->fetch();
+		  if (empty($k)) {
+		  	   $_SESSION['flash-errors'] = 'No such user exists';
+				header("Location: members_edit.php?id=$selectedgid");
+		  }
 		  }
 		  elseif (empty($removemem)) {
 		  $j = $db->prepare("SELECT id FROM users WHERE email = :email");
@@ -37,19 +41,25 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 		  }
 		  else {
 		  	$_SESSION['flash_session'] = 'here';
-			header("Location: members_edit?id=$selectedgid.php");
+			header("Location: members_edit?id=$selectedgid");
 		  }
-		  if (!$k) {
+		  if (!empty($k)) {
     	    if(!empty($addmem) && filter_var($addmem, FILTER_VALIDATE_EMAIL)){
 			 //echo "IN";
     	     $q = $db->prepare("SELECT id FROM users WHERE email = :email");
            $q->bindValue(":email", $addmem);
            $q->execute();
 			  $jq=$q->fetch();
+
            //foreach($q as $nid){
 			  	//echo "nmem";
             //check if user is already in the group
             $nmem=$jq['id'];
+			   /*if (!$jq) {
+			  		$_SESSION['flash-errors'] = 'No such user exists';
+					header("Location: members_edit.php?id=$selectedgid");
+			   }*/
+				//echo $nmem;
             $q2 = $db->prepare("SELECT EXISTS (SELECT 1 FROM group_members WHERE user_id=:user_id AND group_id=:group_id)");
             $q2->bindValue(":user_id", $nmem);
             $q2->bindValue(":group_id", $selectedgid);
@@ -67,7 +77,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
                 //echo "<script type='text/javascript'>alert('User already exist in this group!')</script>";
                 //echo "<script>setTimeout(\"location.href='members_edit.php?id='.urlencode($selectedgid);\", 1000);</script>";
 					 $_SESSION['flash_errors'] = 'User already exists in group';
-					 header("Location: members_edit?id=$selectedgid.php");
+					 header("Location: members_edit?id=$selectedgid");  
             }
            //}
           }
@@ -98,15 +108,15 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
                 //echo "<script type='text/javascript'>alert('No such a group member!')</script>";
                 //echo "<script>setTimeout(\"location.href='members_edit.php?'\", 1000);</script>";
 					 $_SESSION['flash_errors'] = 'No such group member';
-					 header("Location: members_edit?id=$selectedgid.php");
+					 header("Location: members_edit?id=$selectedgid");
             }
            //}
           }
 			 //echo "WOLOLO";
 	      } else {
 			//echo "<script type='text/javascript'>alert('No emails entered!')</script>";
-			$_SESSION['flash_errors'] = 'No email entered';
-			header("Location: members_edit?id=$selectedgid.php");
+			$_SESSION['flash_errors'] = 'No such user exists';
+			header("Location: members_edit?id=$selectedgid");
 			}
 		}
 		//echo "THE BIG MISS";
@@ -114,7 +124,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && !empty($selectedgid)){
 	//echo "<script type='text/javascript'>alert('Please select a group first')</script>";
 	//echo "<script>setTimeout(\"location.href='members_edit.php';\", 1000);</script>";
 	$_SESSION['flash_errors'] = 'No group selected';
-	header("Location: members_edit?id=$selectedgid.php");
+	header("Location: members_edit?id=$selectedgid");
 }
 
 $db=null;

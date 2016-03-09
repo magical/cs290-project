@@ -89,9 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>
-      Group Editing
-    </title>
+    <title> Group Edit | Study Group Finder </title>
     <script src="js/jquery-1.12.1.min.js" type="text/javascript"></script>
     <script>
         function get_buildings(val) {
@@ -116,7 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <br><br>
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="group.php?id=<?=$group['id']?>">Group: <?= htmlspecialchars($group['name']) ?></a>
+      » Edit
+    </div>
 
     <div class='row'>
       <div class='col-sm-3'>
