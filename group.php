@@ -33,19 +33,11 @@ if ($is_member) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?></title>
+    <title>Study Group for <?= htmlspecialchars($course['department'].' '.$course['number']) ?> | Study Group Finder</title>
     <?php include 'includes/_head.html';?>
     <script src="js/jquery-1.12.1.min.js"></script>
     <script>
       function reload(id){
-        $.ajax({
-          type: "POST",
-          url: "group.php",
-          data: 'id='+id,
-          success: function(content){
-            $("body").html(content);
-          }
-        })
         self.location="group.php?id="+id;
       }
     </script>
@@ -61,11 +53,18 @@ if ($is_member) {
 
   <body>
     <?php include 'includes/_nav.php';?>
-	<?php if(isset($_SESSION['event'])){
-	        echo'<div class="alert alert-success">'.$_SESSION['event'].'</div>';
-			$_SESSION['event'] = NULL;
-          }
-	  ?>
+    <?php
+      if(isset($_SESSION['event'])) {
+        echo '<div class="alert alert-success">'.$_SESSION['event'].'</div>';
+        $_SESSION['event'] = NULL;
+      }
+    ?>
+
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
+      » <a href="group.php?id=<?=$group['id']?>">Group: <?= htmlspecialchars($group['name']) ?></a>
+    </div>
+
     <div class='row'>
       <div class='col-sm-3'>
         <label for='name'>Select the group</label>
@@ -141,7 +140,7 @@ if ($is_member) {
 	
 	<?php if (!$is_member) { ?>
 		<form action="members_entry.php" role='form' method='POST' name='mementry'>
-			<?php $_SESSION['memgid']=$group['id']; ?>
+			<input type="hidden" name="group_id" value="<?= $group['id'] ?>">
 			<div>
 				<label for='name'>Join Group</label>
 				<input type='hidden' class='form-control' name='addmemb' id='addmemb' value="<?php echo $user_email; ?>">

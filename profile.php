@@ -43,21 +43,26 @@ $id = $_GET['id'];
   <body>
     <?php include 'includes/_nav.php';?>
 
-    <h1>User profile</h1>
-
-    <dl class="dl-horizontal">
-      <dt>Name:
-      <dd><?= htmlspecialchars($user['name']) ?>
-
-      <dt>Profile Picture:</dt>
+    <div class="breadcrumbs">
+      <a href="index.php">Home</a>
       <?php
-        if ($user['pic_id']) {
-          echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px' class='img-circle'/></dd>";
-        } elseif ($is_myself) {
-          echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
+        if ($is_myself) {
+          echo '» Your Profile';
+        } else {
+          echo '» User Profile: '.htmlspecialchars($user['name']);
         }
       ?>
-    </dl>
+    </div>
+
+    <h1><?= htmlspecialchars($user['name']) ?></h1>
+
+    <?php
+      if ($user['pic_id']) {
+        echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px' class='img-circle'/></dd>";
+      } elseif ($is_myself) {
+        echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
+      }
+    ?>
 
     <h2>Contact</h2>
 
