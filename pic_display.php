@@ -18,8 +18,10 @@ $stmt->bindParam("user_id", $user_id);
 $stmt->execute();
 $profpic = $stmt->fetch();
 if ($profpic === false) {
-	header('Status: 404');
-	die('no such pic');
-}
+	$prof = file_get_contents('images/defpic.png');
+	header("Content-Type: PNG");
+	echo $prof;
+} else {
 header("Content-Type: ".$profpic['mimetype']);
 echo $profpic['filedata'];
+}
