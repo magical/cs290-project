@@ -88,10 +88,10 @@ $q = $db->query("SELECT max(id) FROM standings"); $max_standing_id  = $q->fetch(
 $q = $db->query("SELECT max(id) FROM courses"); $max_course_id  = $q->fetch()[0];
 
 // Remove old random rows
-$db->query("DELETE FROM user_courses WHERE user_id > 8");
-$db->query("DELETE FROM group_members WHERE user_id > 8");
+$db->query("DELETE FROM user_courses WHERE user_id > 6");
+$db->query("DELETE FROM group_members WHERE user_id > 6");
 $db->query("DELETE FROM groups WHERE id > 3");
-$db->query("DELETE FROM users WHERE id > 8");
+$db->query("DELETE FROM users WHERE id > 6");
 
 // Create N random users
 $userids = array();
