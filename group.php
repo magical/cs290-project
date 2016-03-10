@@ -51,6 +51,7 @@ $_SESSION['memgid'] = $group['id'];
         border-radius: .5em;
         margin: 1em 0;
       }
+      #spinner { display: none; }
     </style>
   </head>
 
@@ -166,28 +167,74 @@ $_SESSION['memgid'] = $group['id'];
 
       <h2>Discussion</h2>
 
-      <?php
-        foreach ($posts as $post) {
-          $date = new DateTime($post['created_at']);
-          echo '<article id="post-'.$post['id'].'">';
-          echo '<b>'.htmlspecialchars($post['user_name']).
-            ' on '.htmlspecialchars($date->format("M j")).
-            ' at '.htmlspecialchars($date->format("H:i")).
-            '</b>';
-          echo '<p>'.htmlspecialchars($post['body']).'</p>';
-          echo '</article>';
-        }
-      ?>
-
-      <form action="post.php" method="POST">
+      <form action="post.php" method="POST" id="discussion-form">
+        <div id="discussion-errors">
+        </div>
         <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
         <div class="form-group">
           <textarea name="body" class="form-control"></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary">Post</button>
+          <span id="spinner" class="btn"><img src="images/spinner.gif"></span>
         </div>
       </form>
+
+      <div id="discussions">
+        <?php
+          foreach ($posts as $post) {
+            $date = new DateTime($post['created_at']);
+            echo '<article id="post-'.$post['id'].'">';
+            echo '<b>'.htmlspecialchars($post['user_name']).
+              ' on '.htmlspecialchars($date->format("M j")).
+              ' at '.htmlspecialchars($date->format("H:i")).
+              '</b>';
+            echo '<p>'.htmlspecialchars($post['body']).'</p>';
+            echo '</article>';
+          }
+        ?>
+      </div>
+
+    <script>
+      $("#discussion-form").submit(function(event) {
+        var that = this;
+        var body = this.elements.body.value;
+        event.preventDefault();
+        if (!body) {
+          return;
+        }
+        $.ajax({
+          url: "post_ajax.php",
+          method: "POST",
+          data: {
+            "group_id": <?= json_encode($group['id']) ?>,
+            "body": body,
+          },
+          dataType: "json",
+          success: function(data) {
+            that.elements.body.value = "";
+            $("#spinner").hide();
+            if (data.error) {
+              $('<div class="alert alert-warning"></div>')
+                .text(data.error)
+                .appendTo( $("#discussion-errors").empty() );
+            } else {
+              var hi = $("<div>").html(data.post).first();
+              console.log(hi);
+              $("#discussions").prepend( hi);
+            }
+          },
+          error: function(xhr, status) {
+              $("#spinner").hide();
+              $('<div class="alert alert-warning"></div>')
+                .text(status)
+                .appendTo( $("#discussion-errors").empty() );
+          },
+        });
+        $("#spinner").show();
+      });
+    </script>
+
     <?php } ?>
 
     <?php include 'includes/_footer.php';?>
