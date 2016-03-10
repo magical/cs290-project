@@ -19,9 +19,13 @@
 		$where = "1";
 		$params = array();
 
-		if (isset($_GET['name'])) {
+		if (!empty($_GET['name'])) {
 			$where = "$where AND LOWER(users.name) = LOWER(:name)";
 			$params[":name"] = $_GET['name'];
+		}
+		if (isset($_GET['course'])) {
+			$where = "$where AND EXISTS (SELECT 1 FROM user_courses WHERE course_id = :course_id AND user_id = users.id)";
+			$params[":course_id"] = $_GET['course'];
 		}
 
 		// Get results
