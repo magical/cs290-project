@@ -60,7 +60,6 @@ if (isset($_GET['group_id'])) {
 	$event['Location'] = $group['place'];
 }
 
-if (isset($_POST['Name'])) { $Name = $_POST['Name']; }
 if (isset($_POST['Day'])) { $Day = $_POST['Day']; }
 if (isset($_POST['STime'])) { $STime = $_POST['STime']; }
 if (isset($_POST['ETime'])) { $ETime = $_POST['ETime']; }
@@ -69,7 +68,6 @@ if (isset($_POST['Description'])) { $event['Description'] = $_POST['Description'
 if (isset($_POST['Location'])) { $event['Location'] = $_POST['Location']; }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && !$errors) {
-	$event['Name'] = $Name;
 
 	$date = new DateTime("$Day $STime");
 	$edate = clone $date;
