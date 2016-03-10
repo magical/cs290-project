@@ -61,6 +61,12 @@ $_SESSION['memgid'] = $group['id'];
         echo '<div class="alert alert-success">'.$_SESSION['event'].'</div>';
         $_SESSION['event'] = NULL;
       }
+	  if(isset($_SESSION['flash_success'])) {
+		  foreach($_SESSION['flash_success'] as $output){
+			  echo '<div class="alert alert-success">'.htmlspecialchars($output).'</div>';
+		  }
+		  $_SESSION['flash_success'] = NULL;
+	  }
     ?>
 
     <div class="breadcrumbs">

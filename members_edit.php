@@ -17,6 +17,7 @@ if(!is_member($db, get_logged_in_user_id(), $_REQUEST['id'])){
 }
 $user_groups = get_user_groups($db, get_logged_in_user_id());
 $group = get_group($db, $_GET['id']);
+$members = get_group_members($db, $_GET['id']);
 
 ?>
 
@@ -37,7 +38,9 @@ $group = get_group($db, $_GET['id']);
     <?php include 'includes/_nav.php';?>
     <?php
       if(isset($_SESSION["flash_success"])) {
-        echo '<div class="alert alert-success">'.htmlspecialchars($_SESSION['flash_success']).'</div>';
+        foreach($_SESSION["flash_success"] as $alert) {
+          echo '<div class="alert alert-success">'.htmlspecialchars($alert).'</div>';
+        }
         unset($_SESSION["flash_success"]);
       }
       if(isset($_SESSION["flash_errors"])) {
@@ -95,7 +98,11 @@ $group = get_group($db, $_GET['id']);
 
     <div class ='col-md-4'>
     <label for='name'>Remove a current member or yourself(email):</label>
-    <input type='text' class='form-control' name='removemem' id='removemem'>
+      <?php
+					foreach($members as $user) {
+						echo '<br>'.'<input type="checkbox" name="removemem[]" value="'.htmlspecialchars($user['email']).'">'.htmlspecialchars($user['name']);
+					}
+			?>
     </div>
     </div>
     <br><br>
