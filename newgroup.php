@@ -61,6 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
+    // Fill in a useful default name
+    if ($form['name'] === '' && !isset($errors['course'])) {
+      $course = get_course($db, $form['course']);
+      $form['name'] = "${course['department']} ${course['number']} study group";
+    }
+
     // Check that the day and time are valid
     if (isset($_POST['day']) && $_POST['day'] !== "" || isset($_POST['time']) && $_POST['time'] !== "") {
       if (empty($_POST['day']) || !is_valid_day($_POST['day'])) {
@@ -208,8 +214,11 @@ function has_error($key) {
 
       <div class="form-group <?= has_error('name') ?>">
         <label for="name-input">Name</label>
-        <input name=name id="name-input" class="form-control">
-        <p class="help-block">Give your study group a name to distinguish it from other groups.
+        <input name=name id="name-input" class="form-control"
+          value="<?= htmlspecialchars($form['name']) ?>">
+        <p class="help-block">
+          Give your study group a name to distinguish it from other groups.
+          If you leave this blank, a default name will be filled in.
       </div>
 
       <div class="row form-group <?= has_error('day').' '.has_error('time') ?>">
@@ -252,7 +261,8 @@ function has_error($key) {
       <div class="row form-group <?php has_error('place') ?>">
         <div class="col-md-6">
           <label for="place-input">Place (optional)</label>
-          <input name=place class="form-control">
+          <input name=place class="form-control"
+            value="<?= htmlspecialchars($form['place']) ?>">
 
           <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
           <?php
