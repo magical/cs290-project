@@ -89,13 +89,14 @@ $members = get_group_members($db, $_GET['id']);
     <div class='row'>
 
     <div class ='col-md-6'>
-    <h4>Add a new member(email):</h4>
-    <input type='text' class='form-control' name='addmemb' id='addmemb'>
+      <h4>Add a new member:</h4>
+      <input type='text' class='form-control' name='addmemb' id='addmemb'>
+      <p class="help-block">Enter a user's <strong>email address</strong> to add them to the group.
     </div>
 
 
     <div class ='col-md-6'>
-      <h4>Remove a current member or yourself(email):</h4>
+      <h4>Remove a current member or yourself:</h4>
 	  <ul class="list-group">
       <?php
 					foreach($members as $user) {
