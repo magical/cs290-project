@@ -6,7 +6,21 @@
     <?php include 'includes/_head.html';?>
     <style>
       .step {
-        background-color: #62A4EC;
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-weight: normal;
+        line-height: 1.42857143;
+        white-space: nowrap;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+
         font-size: 2em;
         margin: .5em;
         border-radius: 1em;
@@ -17,9 +31,24 @@
         text-decoration: none;
         color: white;
       }
+      .step:hover {
+        color: #fff;
+        background-color: #286090;
+        border-color: #204d74;
+      }
+      .step.focus {
+        color: #fff;
+        background-color: #286090;
+        border-color: #122b40;
+      }
+      .btn-primary:active {
+        color: #fff;
+        background-color: #286090;
+        border-color: #204d74;
+      }
       .step:hover .text {
         text-decoration: underline;
-		  color: white;
+          color: white;
       }
       .step .number {
         background: white;
@@ -28,7 +57,7 @@
         width: 1.5em;
         height: 1.5em;
         text-align: center;
-		  color: black;
+          color: black;
       }
     </style>
   </head>
@@ -39,15 +68,15 @@
     <?php if (!is_logged_in()) { ?>
       <div class="jumbotron">
         <h1>Looking for a study group?</h1>
-		  <div class='row'>
-		  <div class="col-md-6 col-md-push-6">
-		  <iframe width="100%" height="260px" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
-		  </div>
-		  <div class="col-md-6 col-md-pull-6">
+          <div class='row'>
+          <div class="col-md-6 col-md-push-6">
+          <iframe width="100%" height="260px" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
+          </div>
+          <div class="col-md-6 col-md-pull-6">
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
         <p><a class="btn btn-primary btn-lg" href="signup.php" role="button">Sign up to get started</a></p>
-		  </div>
-		  </div>
+          </div>
+          </div>
       </div>
 
       <div class="container" style="width: 100%;">
@@ -89,7 +118,7 @@
         </a>
       </div>
 
-      <div class="step" style="color:#0000FF">
+      <div class="step">
         <a href="course_edit.php">
           <span class="number">2</span>
           <span class="text">
@@ -106,8 +135,8 @@
           </span>
         </a>
       </div>
-		
-		<div class="step">
+
+        <div class="step">
         <a href="group.php">
           <span class="number">4</span>
           <span class="text">
@@ -115,9 +144,9 @@
           </span>
         </a>
       </div>
-		<div align='center'>
-		<iframe align='middle' width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
-		</div>
+        <div align='center'>
+        <iframe align='middle' width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
+        </div>
 
     <?php } ?>
     <?php include 'includes/_footer.php';?>
