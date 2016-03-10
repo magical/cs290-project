@@ -2,7 +2,7 @@
 
 // create.php - (re)creates the database and populates with test data
 
-//die("disabled");
+die("disabled");
 
 require_once "includes/all.php";
 
