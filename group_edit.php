@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$stmt->execute();
 	}
 
-	if (!empty($_POST['day']) && !empty($_POST['time']) && is_valid_day($_POST['day']) && is_valid_time($_POST['time'])) {
+	if (isset($_POST['day']) && isset($_POST['time']) && is_valid_day($_POST['day']) && is_valid_time($_POST['time'])) {
 		$stmt=$db->prepare("UPDATE groups SET day=:day, time=:time WHERE id=:group_id");
 		$stmt->bindValue(":group_id", $group['id']);
 		$stmt->bindValue(":day", $_POST['day']);
