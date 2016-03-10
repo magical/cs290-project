@@ -301,7 +301,7 @@ function has_error($key) {
           <input type="text" id="user-input" class="form-control"
             name="add_user" value="<?=htmlspecialchars($form['add_user'])?>">
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="submit">Add</button>
+            <button class="btn btn-primary" type="submit" id="add-button">Add</button>
           </span>
         </div>
 
@@ -361,6 +361,11 @@ function has_error($key) {
             }
           });
         },
+      });
+      $("#add-button").click(function(event) {
+        if ($("#user-input").val() === "") {
+          event.preventDefault();
+        }
       });
       $("#group-form").submit(function() {
         var that = this;
