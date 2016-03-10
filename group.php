@@ -99,7 +99,7 @@ if ($is_member) {
       <dd><?= htmlspecialchars($group['place']) ?>
 
       <dt>Meeting Time
-      <dd><?= htmlspecialchars($group['time']) ?>
+      <dd><?= htmlspecialchars(format_time($group['day'], $group['time'])) ?>
 
       <dt>Course
       <dd><?= htmlspecialchars($course['department']) ?>

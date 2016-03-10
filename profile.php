@@ -90,10 +90,10 @@ $id = $_GET['id'];
 
     <dl class="dl-horizontal">
       <dt>Time 1:</dt>
-      <dd><?= htmlspecialchars($user['time1']) ?></dd>
+      <dd><?= htmlspecialchars(format_time($user['day1'], $user['time1'])) ?></dd>
 
       <dt>Time 2:</dt>
-      <dd><?= htmlspecialchars($user['time2']) ?></dd>
+      <dd><?= htmlspecialchars(format_time($user['day2'], $user['time2'])) ?></dd>
     </dl>
 
     <?php if ($is_myself) { ?>

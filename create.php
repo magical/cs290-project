@@ -83,8 +83,11 @@ CREATE TABLE users (
     pic_id INTEGER,
 
     -- Study times
-    time1 VARCHAR(100),
-    time2 VARCHAR(100),
+    day1 VARCHAR(10), -- Monday - Sunday
+    time1 INTEGER, -- 0-23
+
+    day2 VARCHAR(10),
+    time2 INTEGER,
 
     FOREIGN KEY (campus_id) REFERENCES campuses (id),
     FOREIGN KEY (college_id) REFERENCES colleges (id),
@@ -124,7 +127,8 @@ CREATE TABLE groups (
     is_private BOOLEAN DEFAULT FALSE,
     
     name VARCHAR(255) NOT NULL,
-    time VARCHAR(255),
+    day VARCHAR(10), -- Monday - Sunday
+    time INTEGER, -- 0-23
     place VARCHAR(255),
     blurb TEXT,
 

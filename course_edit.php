@@ -1,39 +1,80 @@
-<?php require_once 'includes/all.php'; ?>
-<?php 
-	if(!is_logged_in()) {
-		header("Location: signin.php");
-		exit(0);
+<?php
+require_once 'includes/all.php';
+
+if(!is_logged_in()) {
+    header("Location: signin.php");
+    exit(0);
+}
+
+$db = connect_db();
+
+$q="SELECT * FROM colleges order by name";
+$p="SELECT id, department,number FROM courses order by department";
+$s="SELECT id,name FROM standings order by id";
+
+$stmt = $db->query('SELECT * FROM courses');
+$courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// TODO: errors
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('times', $_POST)) {
+	$user = get_user($db, get_logged_in_user_id());
+	$user_courses = get_user_courses($db, get_logged_in_user_id());
+	$user_id=get_logged_in_user_id();
+
+	if(isset($_POST['standing_id']) && is_valid_id($db, 'standings', $_POST['standing_id'])) {
+		// check valid standing id
+		$sid = $_POST['standing_id'];
+		$stmt = $db->prepare("
+			UPDATE users
+			SET standing_id = :standing_id
+			WHERE id=:user_id");
+		$stmt->bindValue("standing_id", $sid);
+		$stmt->bindValue("user_id", $user['id']);
+		$stmt->execute();
 	}
+
+	if (is_valid_day($_POST['week1']) && is_valid_time($_POST['selt1'])) {
+		$stmt = $db->prepare("
+			UPDATE users
+			SET day1 = :day1, time1 = :time1
+			WHERE id=:user_id");
+		$stmt->bindValue("day1", $_POST['week1']);
+		$stmt->bindValue("time1", $_POST['selt1']);
+		$stmt->bindValue("user_id", $user['id']);
+		$stmt->execute();
+	}
+
+	if (is_valid_day($_POST['week2']) && is_valid_time($_POST['selt2'])) {
+		$stmt = $db->prepare("
+			UPDATE users
+			SET day2 = :day2, time2 = :time2
+			WHERE id=:user_id");
+		$stmt->bindValue("day2", $_POST['week2']);
+		$stmt->bindValue("time2", $_POST['selt2']);
+		$stmt->bindValue("user_id", $user['id']);
+		$stmt->execute();
+	}
+} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST)) {
+	$stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
+	$stmt->bindValue(":user_id", get_logged_in_user_id());
+	$stmt->bindValue(":course_id", $_POST['course_id']);
+	$stmt->execute();
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('remove_id', $_POST)) {
+	$stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
+	$stmt->bindValue(":user_id", get_logged_in_user_id());
+	$stmt->bindValue(":course_id", $_POST['remove_id']);
+	$stmt->execute();
+}
+
+$user = get_user($db, get_logged_in_user_id());
+$user_courses = get_user_courses($db, get_logged_in_user_id());
+
 ?>
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Course Edit | Study Group Finder </title>
-    <style>
-    div.dropdown{
-        width:300px;
-    }
-    .fupld{
-        position: relative;
-        overflow: hidden;
-    }
-    .fupld input.fupl{
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 0;
-        margin: 0;
-        font-size: 20px;
-        cursor: pointer;
-        opacity: 0;
-        filter:alpha(opacity=0);
-    }
-    </style>
-    <script>
-    function f(v){
-        document.getElementById("upld").value=v.substring(12);
-    }
-    </script>
+    <title>Course Edit | Study Group Finder</title>
     <?php include 'includes/_head.html';?>
   </head>
 
@@ -46,260 +87,85 @@
       » Edit Times and Courses
     </div>
 
-    <?php
+    <div class='jumbotron'>
+      <h2>Study Profile</h2>
+    </div>
 
-    $db=connect_db();
+    <form action='' class='form-horizontal' role='form' method='post' name='dentry'>
 
-    $q="SELECT * FROM colleges order by name";
-    $p="SELECT id, department,number FROM courses order by department";
-    $s="SELECT id,name FROM standings order by id";
+      <div class='form-group row'>
+        <div class='col-md-6'>
+          <label for="sta">Select Your Standing:</label>
+          <select name='standing_id' id='sta' class='form-control'>
+            <option value=''>Select Standing</option>
+            <?php
+              foreach ($db->query($s) as $squery) {
+                $sid=$squery['id'];
+                $sname=htmlspecialchars($squery['name']);
+                if ($user['standing_id'] === $sid) {
+                  echo  "<option value='$sid' selected>$sname</option>";
+                } else {
+                  echo  "<option value='$sid'>$sname</option>";
+                }
+              }
+            ?>
+          </select>
+        </div>
+      </div>
 
-    /*echo "<div class='container'>";
+      <?php for ($j = 1; $j <= 2; $j++) { ?>
+        <div class="form-group row">
+          <div class="col-md-3">
+            <label for="week<?=$j?>">Day</label>
+            <select name='week<?=$j?>' id='week<?=$j?>' class='form-control'>
+              <option class='ww' value=''>Select Day</option>
+              <?php
+                foreach ($week_names as $value) {
+                  if ($user['day'.$j] === $value) {
+                    echo '<option selected>'.$value.'</option>';
+                  } else {
+                    echo '<option>'.$value.'</option>';
+                  }
+                }
+              ?>
+            </select>
+          </div>
 
-    echo "<form action='upload.php' name='flpd' class='form-horizontal' role='form' method=post enctype=multipart/form-data>";
-    
-    echo "<div class='jumbotron'>";
-    echo "<h2>Upload a Picture</h2>";
-    echo "</div>";
+          <div class="col-md-3">
+            <label for="selt<?=$j?>">Time</label>
+            <select name='selt<?=$j?>' id='selt<?=$j?>' class='form-control'>
+              <option value=''>Select Time</option>
+              <?php
+                for($i=0;$i<24;$i++){
+                  $time = ($i+8)%24;
+                  if ($user['time'.$j] === $time) {
+                    echo "<option value='$time' selected>";
+                  } else {
+                    echo "<option value='$time'>";
+                  }
+                  echo htmlspecialchars($time_names[$time]) . '</option>';
+                }
+              ?>
+            </select>
+          </div>
+        </div>
+      <?php } ?>
 
-    echo "<br>";
+      <div class="row">
+        <div class="col-md-12">
+          <p>Enter up to two times when you would be available to meet for a study group. These will be displayed to people who view your profile, to help people find groups of people who can meet at the same time.
+        </div>
+      </div>
 
-    echo "<div class=col-xs-2>";
-    echo "<input id='upld' class='form-control' name='finp' placeholder='Choose File' disabled='disabled'>";
-    echo "</div>";
+      <div class="row form-group">
+        <div class="col-md-12">
+          <input type='submit' class='btn btn-primary' value='SUBMIT'>
+          <input type='hidden' name='times' value='times'>
+        </div>
+      </div>
 
-    echo "<div class='fupld btn btn-primary'>";
-    echo "<span>UPLOAD</span>";
-    echo "<input type='file' name='fileupload'  onchange=\"f(this.value)\" class='fupl' id='fileup'>";
-    echo "</div>";
+    </form>
 
-    echo "<br><br>";
-    echo "<br><br>";
-
-    echo "<div class='subbtn'>";
-    echo "<input type='submit' style='position:relative;' class='btn btn-info' name='filesub' value='SUBMIT'>";
-    echo "</div>";
-    echo "</form>";
-    echo "</div>";
-	*/
-
-    echo "<div class='container'>";
-
-   /* echo "<form action='' class='form-horizontal' role='form' method='post' name='dentry'>";
-
-    echo "<div class='jumbotron'>";
-    echo "<h2>Personal Profile</h2>";
-    echo "</div>";
-
-    echo "<div class='form-group'>";
-
-    echo "<div class ='col-xs-2'>";
-    echo "<label for='name'>First Name:</label>";
-    echo "<input type='text' class='form-control' name='fnm' id='fnm'>";
-    echo "</div>";
-
-    echo "<div class ='col-xs-2'>";
-    echo "<label for='name'>Last Name:</label>";
-    echo "<input type='text' class='form-control' name='lnm' id='lnm'>";
-    echo "</div>";
-
-    echo "<div class ='col-xs-2'>";
-    echo "<label for='phone'>Phone Number:</label>";
-    echo "<input type='text' class='form-control' name='phn' id='phn'>";
-    echo "</div>";
-    echo "</div>";
-
-    echo "<div class='row'>";
-    echo "<BR><BR>";
-    echo "<div class='col-sm-3'>";
-    echo "<h5>Please select Your College:</h5>";
-    echo "<select name='colnm' id='col' class='form-control'>";
-    echo "<option class='colleg' value=''>Select College</option>";
-    foreach ($db->query($q) as $colquery) {
-      $colname=$colquery[name];
-      $colid=$colquery[id];
-      echo  "<option value='$colid'>$colname</option>";
-    }
-    echo "</select>";
-    echo "</div>";
-	 echo "<input type='submit' class='btn btn-info' value='SUBMIT'></form>"; */
-	 
-	 echo "<div class='jumbotron'>";
-    echo "<h2>Study Profile</h2>";
-    echo "</div>";
-
-	echo "<form action='' class='form-horizontal' role='form' method='post' name='dentry'>";
-	 echo "<table width='100%' border='0px'>";
-	 echo "<tr> <td>";
-    //echo "<div class='col-sm-3'>";
-    echo "<h5>Select Your Standing:</h5>";
-	 echo "</td> <td>";
-	 //echo "<h5>Please Select Course:</h5>";
-	 echo "</td> </tr>";
-	 echo "<tr> <td>";
-	 echo "<select name='sta' id='sta' class='form-control'>";
-    echo "<option class='sopt' value=''>Select Standing</option>";
-    foreach ($db->query($s) as $squery) {
-      $sname=$squery[name];
-      $sid=$squery[id];
-      echo  "<option value='$sid'>$sname</option>";
-    }
-    echo "</select>";
-	 echo "</td>";
-    //echo "</div>";
-    //echo "</div>";
-
-   // echo "<div class='dropdown'>";
-   // echo "<br><br>";
-	 echo "<td>";
-   /* echo "<select name='cdept' id='cdept' class='form-control'>";
-    echo "<option class='cdt' value=''>Select Course</option>";
-    foreach($db->query($p) as $couquery){
-      $coud=$couquery[department];
-      $counum=$couquery[number];
-      $cid=$couquery[id];
-      echo "<option value='$cid'>$coud $counum</option>";
- 
-    }
-    echo "</select>";*/
-    //echo "</div>";    
-	 echo "</td>";
-	 echo "</tr> <tr> <td>";
-	 
-    //echo "<div class='row'>";
-    //echo "<br><br>";
-    //echo "<div class='dropdown'>";
-    echo "<h5>Please Select the Day:</h5>";
-    echo "</td> <td>";
-	 echo "<h5>Please Select the Time:</h5>";	 
-	 echo "</td> </tr>";
-	 echo "<tr> <td>";
-	 echo "<select name='week1' id='week1' class='form-control'>";
-    echo "<option class='ww' value=''>Select Day</option>";
-    $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday'); 
-    foreach ($week as $value) {
-      echo '<option>'.$value.'</option>';
-    }
-    echo "</select>";
-    //echo "</div>";
-	 echo "</td> <td>";
-    //echo "<div class='dropdown'>";
-    echo "<select name='selt1' id='selt1' class='form-control'>";
-    echo "<option value=''>Select Time</option>";
-    for($i=1;$i<=24;$i++){
-      echo "<option value='$i'>$i:00</option>";
-    }
-    echo "</select>";
-    //echo "</div>";
-
-    //echo "</div>";
-	 echo "</td></tr>";
-	 echo "<tr> <td>";
-	 echo "<select name='week2' id='week2' class='form-control'>";
-    echo "<option class='ww' value=''>Select Day</option>";
-    $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
-    foreach ($week as $value) {
-      echo '<option>'.$value.'</option>';
-    }
-    echo "</select>";
-    //echo "</div>";
-	 echo "</td> <td>";
-    //echo "<div class='dropdown'>";
-    echo "<select name='selt2' id='selt2' class='form-control'>";
-    echo "<option value=''>Select Time</option>";
-    for($i=1;$i<=24;$i++){
-      echo "<option value='$i'>$i:00</option>";
-    }
-    echo "</select>";
-    //echo "</div>";
-
-    //echo "</div>";
-	 echo "</td></tr></table>";
-
-    echo "<br><br>";
-
-
-    echo "<input type='submit' class='btn btn-primary' value='SUBMIT'>";
-	 echo "<input type='hidden' name='times' value='times'> </form>";
-
-    echo "</div>";
-	
-
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('times', $_POST)) {
-
-	$db = connect_db();
-
-	$user_id=get_logged_in_user_id();
-	$sid=$_REQUEST["sta"];//standing id
-	$day1=$_REQUEST['week1'];//day
-	$time1=$_REQUEST['selt1'];//time
-	$day2=$_REQUEST["week2"];
-	$time2=$_REQUEST['selt2'];
-	$t1="$day1 at $time1:00";
-	$t2="$day2 at $time2:00";
-	if($sid!='' && $t1 != '' && $t2 !=''){
-				$stmt = $db->prepare("
-					UPDATE users SET
-						standing_id = :standing_id,
-						time1 = :time1,
-						time2 = :time2
-					WHERE id=:user_id");
-				$stmt->bindValue("standing_id", $sid);
-				$stmt->bindValue("time1", $t1);
-				$stmt->bindValue("time2", $t2);
-				$stmt->bindValue("user_id", $user_id);
-				$stmt->execute();
-	$stmt->execute();
-
-	
-}elseif($sid==='') {
-		echo '<script language="javascript">';
-		echo 'alert("Please Select Standing")';
-		echo '</script>';
-		header("Location: course_edit.php");
-}elseif($day1==='' || $day2 === ''){
- 		echo '<script language="javascript">';
-		echo 'alert("Please Select Day")';
-		echo '</script>';
-		header("Location: course_edit.php");
- }
- elseif($time1 ==='' || $time2 === ''){
- 		echo '<script language="javascript">';
-		echo 'alert("Please Select Time")';
-		echo '</script>';
-		header("Location: course_edit.php");
- }
- 
-	
-$db = null;
-}
-
-
-$db = connect_db();
-$stmt = $db->prepare('SELECT * FROM courses');
-$stmt->execute();
-$courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST)) {
-  $stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
-  $stmt->bindValue(":user_id", get_logged_in_user_id());
-  $stmt->bindValue(":course_id", $_POST['course_id']);
-  $stmt->execute();
-  //header("Location: course_edit.php");
-  //exit(0);
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('remove_id', $_POST)) {
-  $stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
-  $stmt->bindValue(":user_id", get_logged_in_user_id());
-  $stmt->bindValue(":course_id", $_POST['remove_id']);
-  $stmt->execute();
-  //header("Location: course_edit.php");
-  //exit(0);
-}
-
-$user_courses = get_user_courses($db, get_logged_in_user_id()); 
-
-
-?>
 
     <h2>Your Courses</h2>
 
@@ -328,23 +194,21 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
         ?>
       </select>
       <button class='btn btn-primary'>Add</button>
-	
     </form>
-	 <form action="" method="POST">
-		<select name="remove_id">
-			<?php
+
+    <form action="" method="POST">
+      <select name="remove_id">
+        <?php
           foreach ($user_courses as $course) {
             echo '<option value="'.htmlspecialchars($course['id']).'">';
-				echo htmlspecialchars($course['department']. ' ' . $course['number'] . ' ' . $course['title']);
+            echo htmlspecialchars($course['department']. ' ' . $course['number'] . ' ' . $course['title']);
             echo "</option>\n";
-			}
+          }
         ?>
-		</select>
-		<button class='btn btn-primary'>Remove</button>
-	</form>
+      </select>
+      <button class='btn btn-primary'>Remove</button>
+    </form>
 
-
-    
     <?php include 'includes/_footer.php';?>
   </body>
 </html>

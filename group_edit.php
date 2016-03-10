@@ -65,11 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$stmt->execute();
 	}
 
-	if (!empty($_POST['day']) && !empty($_POST['time'])) {
-		$time = $_POST['day'] . " " . $_POST['time'] . ":00";
-		$stmt=$db->prepare("UPDATE groups SET time=:time WHERE id=:group_id");
+	if (!empty($_POST['day']) && !empty($_POST['time']) && is_valid_day($_POST['day']) && is_valid_time($_POST['time'])) {
+		$stmt=$db->prepare("UPDATE groups SET day=:day, time=:time WHERE id=:group_id");
 		$stmt->bindValue(":group_id", $group['id']);
-		$stmt->bindValue(":time", $time);
+		$stmt->bindValue(":day", $_POST['day']);
+		$stmt->bindValue(":time", $_POST['time']);
 		$stmt->execute();
 	}
 
@@ -192,9 +192,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $q=$db->query("SELECT id,name FROM campuses order by id");
             foreach($q as $campus){
               $selected = "";
-              if ($group['campus_id'] === $campus['id']) {
-                $selected = " selected";
-              }
               echo '<option value="'.htmlspecialchars($campus['id']).'"'.$selected.'>'.htmlspecialchars($campus['name'])."</option>\n";
             }?>
           </select>
@@ -217,10 +214,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <label for='input-day'>Select Day:</label>
           <select id="input-day" name='day' class='form-control'>
             <option value=''>Select Day</option>
-            <?php $week=array('Monday','Tuesday','Wednesday','Thursday','Friday', 'Saturday', 'Sunday');
-            foreach ($week as $value) {
-              echo '<option value="'.$value.'">'.$value.'</option>';
-            }?>
+            <?php
+              foreach ($week_names as $value) {
+                if ($group['day'] === $value) {
+                  echo '<option value="'.$value.'" selected>'.$value.'</option>';
+                } else {
+                  echo '<option value="'.$value.'">'.$value.'</option>';
+                }
+              }
+            ?>
           </select>
         </div>
 
@@ -229,9 +231,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <select id="input-time" name='time' class='form-control'>
             <option value=''>Select Time</option>
             <?php
-            for($i=1;$i<=24;$i++){
-              echo "<option value='$i'>$i:00</option>";
-            }?>
+              for($i=0;$i<24;$i++){
+                $time = ($i+8)%24;
+                if ($group['time'] === $time) {
+                  echo "<option value='$time' selected>";
+                } else {
+                  echo "<option value='$time'>";
+                }
+                echo htmlspecialchars($time_names[$time]) . '</option>';
+              }
+            ?>
           </select>
         </div>
       </div>

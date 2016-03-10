@@ -138,3 +138,13 @@ function current_url() {
 
   return $url;
 }
+
+function is_valid_id($db, $table, $id) {
+  if (!is_numeric($id)) {
+    return false;
+  }
+  $stmt = $db->prepare("SELECT EXISTS (SELECT 1 FROM $table WHERE id = :id)");
+  $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+  $stmt->execute();
+  return !!$stmt->fetch()[0];
+}

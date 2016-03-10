@@ -56,14 +56,14 @@ function random_select($k, $min, $max) {
   return $values;
 }
 
-// Returns a random day and time between 8am and midnight.
+// Returns a random weekday.
+function random_day() {
+  return $week_names[mt_rand(0, 6)];
+}
+
+// Returns a time between 8am and midnight.
 function random_time() {
-  // Bizarre time format: dtttt
-  // where d    is a digit for the day: 1 being Monday and 7 being Sunday
-  //       tttt is the 4-digit 24-hour time
-  $d = mt_rand(1, 7);
-  $t = mt_rand(8, 23);
-  return sprintf("%01d%02d00", $d, $t);
+  return mt_rand(8, 23);
 }
 
 function random_place() {
@@ -135,20 +135,25 @@ foreach ($userids as $userid) {
 }
 
 // Pick two random times between 8am and 12pm (any day)
-$q = $db->prepare("UPDATE users SET time1 = :time1, time2 = :time2 WHERE id = :user_id");
+$q = $db->prepare("UPDATE users SET day1 = :day1, time1 = :time1, day2 = :day2, time2 = :time2 WHERE id = :user_id");
 foreach ($userids as $userid) {
+  $day1 = random_day()
   $time1 = random_time();
+  $day2 = random_day();
   $time2 = random_time();
-  while ($time2 === $time1) {
+  while ($time2 === $time1 && $day2 === $day1) {
+    $day2 = random_day();
     $time2 = random_time();
   }
+  $q->bindValue(":day1", $day1);
   $q->bindValue(":time1", $time1);
+  $q->bindValue(":day2", $day2);
   $q->bindValue(":time2", $time2);
   $q->bindValue(":user_id", $userid);
   $q->execute();
 }
 
-$groupquery = $db->prepare("INSERT INTO groups (course_id, name, time, place) VALUES (:course_id, :name, :time, :place)");
+$groupquery = $db->prepare("INSERT INTO groups (course_id, name, day, time, place) VALUES (:course_id, :name, :day, :time, :place)");
 $memberquery = $db->prepare("INSERT INTO group_members (group_id, user_id) VALUES (:group_id, :user_id)");
 $classquery = $db->prepare("INSERT INTO user_courses (course_id, user_id) VALUES (:course_id, :user_id)");
 
@@ -167,11 +172,13 @@ for ($j = 0; $j < $NUMBER_OF_GROUPS; $j++) {
   $course = get_course($db, $course_id);
 
   $name = "Random ${course['title']} group";
+  $day = random_day();
   $time = random_time();
   $place = random_place();
 
   $groupquery->bindValue(":course_id", $course_id);
   $groupquery->bindValue(":name", $name);
+  $groupquery->bindValue(":day", $day);
   $groupquery->bindValue(":time", $time);
   $groupquery->bindValue(":place", $place);
   $groupquery->execute();

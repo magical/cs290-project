@@ -16,10 +16,11 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
 $form = array();
 $form['course'] = 0;
 $form['name'] = '';
+$form['day'] = '';
 $form['time'] = '';
 $form['place'] = '';
 $form['members'] = array();
-$form['add_user_query'] = '';
+$form['add_user'] = '';
 
 $errors = array();
 
@@ -30,9 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $form['name'] = $_POST['name'];
+    $form['day'] = $_POST['day'];
     $form['time'] = $_POST['time'];
     $form['place'] = $_POST['place'];
-    $form['add_user_query'] = $_POST['add_user_query'];
+    $form['add_user'] = $_POST['add_user'];
 
     // validation
 
@@ -59,6 +61,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
+    // Check that the day and time are valid
+    if (isset($_POST['day']) && $_POST['day'] !== "" || isset($_POST['time']) && $_POST['time'] !== "") {
+      if (empty($_POST['day']) || !is_valid_day($_POST['day'])) {
+        $errors['day'] = "please choose a valid day";
+      } else {
+        $form['day'] = $_POST['day'];
+      }
+      if (!isset($_POST['time']) || $_POST['time'] === "" || !is_valid_time($_POST['time'])) {
+        $errors['time'] = 'please choose a valid time';
+      } else {
+        $form['time'] = $_POST['time'];
+      }
+    }
+
     // Check if all the user ids are numeric
     if (isset($_POST['members']) && is_array($_POST['members'])) {
       foreach ($_POST['members'] as $member_id) {
@@ -70,10 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
 
-    // If the user clicked the 'add user' button,
-    // try to find the user and add their id to the member list.
-    if ($action === 'add_user') {
-      $query = $_POST['add_user_query'];
+    // If the user filled in the add user box,
+    // assume they want to add a user instead of submitting the form.
+    // Try to find the user and add their id to the member list.
+    if (isset($_POST['add_user']) && $_POST['add_user'] !== "") {
+      $query = $_POST['add_user'];
       if (!$query) {
         $errors['add_user'] = 'please specify which user to add';
       } else {
@@ -88,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $errors['add_user'] = 'ambiguous query';
         } else {
           $form['members'][] = $rows[0]['id'];
-          $form['add_user_query'] = '';
+          $form['add_user'] = '';
         }
       }
     }
@@ -96,9 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // create the group
     // TODO(ae): transation
     if ($action !== 'add_user' && !count($errors)) {
-      $stmt = $db->prepare("INSERT INTO groups (course_id, name, time, place) VALUES (:course_id, :name, :time, :place)");
+      $stmt = $db->prepare("INSERT INTO groups (course_id, name, day, time, place) VALUES (:course_id, :name, :day, :time, :place)");
       $stmt->bindValue(":course_id", $form['course']);
       $stmt->bindValue(":name", $form['name']);
+      $stmt->bindValue(":day", $form['day']);
       $stmt->bindValue(":time", $form['time']);
       $stmt->bindValue(":place", $form['place']);
       $stmt->execute();
@@ -194,14 +212,55 @@ function has_error($key) {
         <p class="help-block">Give your study group a name to distinguish it from other groups.
       </div>
 
-      <div class="form-group <?= has_error('name') ?> <?= has_error('place') ?>">
-        <label for="time-input">Time (optional)</label>
-        <input name=time class="form-control">
+      <div class="row form-group <?= has_error('day').' '.has_error('time') ?>">
+        <div class='col-md-3'>
+          <label for='input-day'>Day</label>
+          <select id="input-day" name='day' class='form-control'>
+            <option value=''></option>
+            <?php
+              foreach ($week_names as $value) {
+                echo '<option value="'.$value.'">'.$value.'</option>';
+              }
+            ?>
+          </select>
+          <?php
+            if (has_error('day')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['day']);
+            }
+          ?>
+        </div>
 
-        <label for="place-input">Place (optional)</label>
-        <input name=place class="form-control">
+        <div class='col-md-3'>
+          <label for='input-time'> and Time (optional):</label>
+          <select id="input-time" name='time' class='form-control'>
+            <option value=''></option>
+            <?php
+              for($i=0;$i<24;$i++){
+                $time = ($i+8)%24;
+                echo "<option value='$time'>" . htmlspecialchars($time_names[$time]) . '</option>';
+              }
+            ?>
+          </select>
+          <?php
+            if (has_error('time')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['time']);
+            }
+          ?>
+        </div>
+      </div>
 
-        <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
+      <div class="row form-group <?php has_error('place') ?>">
+        <div class="col-md-6">
+          <label for="place-input">Place (optional)</label>
+          <input name=place class="form-control">
+
+          <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
+          <?php
+            if (has_error('place')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['place']);
+            }
+          ?>
+        </div>
       </div>
 
       <h2>Add people</h2>
@@ -223,24 +282,22 @@ function has_error($key) {
 
         <?php
           if (has_error('members')) {
-            echo '<p class="help-block">';
-            echo htmlspecialchars($errors['add_user']);
+            echo '<p class="help-block">'. htmlspecialchars($errors['members']);
           }
         ?>
 
         <label for="user-input">Add a user</label>
         <div class="input-group">
           <input type="text" id="user-input" class="form-control"
-            name="add_user_query" value="<?=htmlspecialchars($form['add_user_query'])?>">
+            name="add_user" value="<?=htmlspecialchars($form['add_user'])?>">
           <span class="input-group-btn">
-            <button class="btn btn-primary" name="action" value="add_user">Add</button>
+            <button class="btn btn-primary" type="submit">Add</button>
           </span>
         </div>
 
         <?php
           if (has_error('add_user')) {
-            echo '<p class="help-block">';
-            echo htmlspecialchars($errors['add_user']);
+            echo '<p class="help-block">' . htmlspecialchars($errors['add_user']);
           }
         ?>
 
@@ -255,7 +312,7 @@ function has_error($key) {
       </div>
 
       <div class="form-group">
-        <button class="btn btn-primary">Create</button>
+        <button class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-link" href="index.php">Cancel</a>
       </div>
     </form>

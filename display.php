@@ -36,8 +36,8 @@
           echo '<td>'.htmlspecialchars($row['campus_id']).'</td>';
           echo '<td>'.htmlspecialchars($row['college_id']).'</td>';
           echo '<td>'.htmlspecialchars($row['standing_id']).'</td>';
-          echo '<td>'.htmlspecialchars($row['time1']).'</td>';
-          echo '<td>'.htmlspecialchars($row['time2']).'</td>';
+          echo '<td>'.htmlspecialchars(format_time($row['day1'], $row['time1'])).'</td>';
+          echo '<td>'.htmlspecialchars(format_time($row['day2'], $row['time2'])).'</td>';
           echo '<td>';
           $stmt2->bindValue('user_id', $row['id']);
           $stmt2->execute();

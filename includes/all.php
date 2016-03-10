@@ -18,6 +18,7 @@ session_save_path($root . "/sessions");
 // include library files
 require_once $root.'/config.php';
 require_once $root.'/includes/functions.php';
+require_once $root.'/includes/times.php';
 
 // start the session
 session_start();
