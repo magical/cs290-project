@@ -59,8 +59,8 @@
               <footer>Barack Obama</footer>
             </blockquote>
             <blockquote>
-              <p>With Study Group Finder I was able to succeed where I would have otherwise failed.</p>
-              <footer>Chris Scaffidi</footer>
+              <p>This project deserves 110%.</p>
+              <footer>Jun He</footer>
             </blockquote>
           </div>
           <div class="col-md-6 col-md-pull-6">
