@@ -70,7 +70,7 @@
         <h1>Looking for a study group?</h1>
           <div class='row'>
           <div class="col-md-6 col-md-push-6">
-          <iframe width="100%" height="260px" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
+          <iframe width="100%" height="260px" src="https://www.youtube.com/embed/GerJvNpU3E4" frameborder="0" autoplay='1' allowfullscreen></iframe>
           </div>
           <div class="col-md-6 col-md-pull-6">
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
@@ -145,7 +145,7 @@
         </a>
       </div>
         <div align='center'>
-        <iframe align='middle' width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
+        <iframe align='middle' width="560" height="315" src="https://www.youtube.com/embed/GerJvNpU3E4" frameborder="0" allowfullscreen></iframe>
         </div>
 
     <?php } ?>

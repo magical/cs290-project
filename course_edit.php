@@ -56,10 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('times', $_POST)) {
         $stmt->execute();
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST)) {
-    $stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
-    $stmt->bindValue(":user_id", get_logged_in_user_id());
-    $stmt->bindValue(":course_id", $_POST['course_id']);
-    $stmt->execute();
+	 $checkif = get_user_courses($db, get_logged_in_user_id());
+	 $boo = 1;
+	 foreach ($checkif as $crs) {
+	 	if ($_POST['course_id'] == $crs['id']) {
+			$boo = 0;
+		}
+	 }
+	 if ($boo == 1) {
+    	$stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
+    	$stmt->bindValue(":user_id", get_logged_in_user_id());
+    	$stmt->bindValue(":course_id", $_POST['course_id']);
+    	$stmt->execute();
+	 }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('remove_id', $_POST)) {
     $stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
     $stmt->bindValue(":user_id", get_logged_in_user_id());
