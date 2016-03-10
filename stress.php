@@ -58,6 +58,7 @@ function random_select($k, $min, $max) {
 
 // Returns a random weekday.
 function random_day() {
+  global $week_names;
   return $week_names[mt_rand(0, 6)];
 }
 
