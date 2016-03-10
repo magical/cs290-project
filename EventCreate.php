@@ -134,12 +134,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !$errors) {
 			</div>
 			<div class="col-md-2">
 				<label for="StartingTime">Starting Time</label>
-				<input class="form-control" id="StartingTime" type='time' name='STime' placeholer="HH:MM"
+				<input class="form-control" id="StartingTime" type='time' name='STime' placeholder="HH:MM"
 					value="<?= htmlspecialchars($STime) ?>">
 			</div>
 			<div class="col-md-2">
 				<label for="EndingTime">Ending Time</label>
-				<input class="form-control" id="StartingTime" type='time' name='ETime' placeholer="HH:MM"
+				<input class="form-control" id="StartingTime" type='time' name='ETime' placeholder="HH:MM"
 					value="<?= htmlspecialchars($ETime) ?>">
 			</div>
 		</div>

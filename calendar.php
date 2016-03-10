@@ -17,7 +17,6 @@ function getClient() {
   $client->setAuthConfigFile(__DIR__ . '/client_secret.json');
   $client->addScope(Google_Service_Calendar::CALENDAR);
   $client->setRedirectUri(current_url());
-  $client->setAccessType('offline');
   if(isset($_SESSION["googleauth"])){
 	  $client->setAccessToken($_SESSION["googleauth"]);
 	  $_SESSION["googleauth"] = NULL;
