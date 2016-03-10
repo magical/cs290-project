@@ -195,7 +195,8 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
       </select>
       <button class='btn btn-primary'>Add</button>
     </form>
-
+   
+    <?php if ($user_courses) { ?>
     <form action="" method="POST">
       <select name="remove_id">
         <?php
@@ -208,6 +209,7 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
       </select>
       <button class='btn btn-primary'>Remove</button>
     </form>
+    <?php } ?>
 
     <?php include 'includes/_footer.php';?>
   </body>

@@ -11,6 +11,10 @@ if (!isset($_GET['id'])) {
 }
 
 $db=connect_db();
+if(!is_member($db, get_logged_in_user_id(), $_REQUEST['id'])){
+	header("Status: 403 Forbidden");
+	exit("403 Forbidden");
+}
 $user_groups = get_user_groups($db, get_logged_in_user_id());
 $group = get_group($db, $_GET['id']);
 
