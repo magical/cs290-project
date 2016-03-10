@@ -21,6 +21,7 @@ $form['time'] = '';
 $form['place'] = '';
 $form['members'] = array();
 $form['add_user'] = '';
+$form['campus'] = 0;
 
 $errors = array();
 
@@ -35,6 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form['time'] = $_POST['time'];
     $form['place'] = $_POST['place'];
     $form['add_user'] = $_POST['add_user'];
+	 
+	 //Get Campus Name
+	 if (!empty($_POST['campus'])){
+		$q = $db->prepare("SELECT name FROM campuses WHERE id = :id");
+		$q->bindValue(":id", $_POST['campus']);
+		$q->execute();
+		$campus = $q->fetch();
+		$form['campus'] = $campus['name'];
+	} 
 
     // validation
 
@@ -80,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $form['time'] = $_POST['time'];
       }
     }
-
+	
     // Check if all the user ids are numeric
     if (isset($_POST['members']) && is_array($_POST['members'])) {
       foreach ($_POST['members'] as $member_id) {
@@ -91,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       }
     }
-
+	
     // If the user filled in the add user box,
     // assume they want to add a user instead of submitting the form.
     // Try to find the user and add their id to the member list.
@@ -119,12 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // create the group
     // TODO(ae): transation
     if ($action !== 'add_user' && !count($errors)) {
-      $stmt = $db->prepare("INSERT INTO groups (course_id, name, day, time, place) VALUES (:course_id, :name, :day, :time, :place)");
+      $stmt = $db->prepare("INSERT INTO groups (course_id, name, day, time, place, campus) VALUES (:course_id, :name, :day, :time, :place, :campus)");
       $stmt->bindValue(":course_id", $form['course']);
       $stmt->bindValue(":name", $form['name']);
       $stmt->bindValue(":day", $form['day']);
       $stmt->bindValue(":time", $form['time']);
       $stmt->bindValue(":place", $form['place']);
+		$stmt->bindValue(":campus", $form['campus']);
       $stmt->execute();
 
       $group_id = $db->lastInsertId();
@@ -259,19 +270,29 @@ function has_error($key) {
       </div>
 
       <div class="row form-group <?php has_error('place') ?>">
-        <div class="col-md-6">
+        <div class="col-md-3">
           <label for="place-input">Place (optional)</label>
           <input name=place class="form-control"
-            value="<?= htmlspecialchars($form['place']) ?>">
-
+            value="<?= htmlspecialchars($form['place']) ?>">	
+			</div>
+		<div class="col-md-3">
+			<label for='input-campus'> And Campus</label>
+			<select id="input-campus" name='campus' class='form-control'>
+			<option value=''></option>
+			<option value=1>Corvallis (Main)</option>
+			<option value=2>Cascades</option>
+			<option value=3>Online</option>
+			</select>
+		</div>	
+		</div>		
           <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
           <?php
             if (has_error('place')) {
               echo '<p class="help-block">' . htmlspecialchars($errors['place']);
             }
           ?>
-        </div>
-      </div>
+        
+   
 
       <h2>Add people</h2>
 

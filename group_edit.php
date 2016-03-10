@@ -52,13 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$stmt->execute();
 	}
 
-	if (!empty($_POST['campus']) && !empty($_POST['building'])){
+	if (!empty($_POST['campus'])){
 		$q = $db->prepare("SELECT name FROM campuses WHERE id = :id");
 		$q->bindValue(":id", $_POST['campus']);
 		$q->execute();
 		$campus = $q->fetch();
-
-		$place = $campus['name'] . " " . $_POST['building'];
+		$place = $campus['name'];
+		$stmt=$db->prepare("UPDATE groups SET campus=:campus WHERE id=:group_id");
+		$stmt->bindValue(":group_id", $group['id']);
+		$stmt->bindValue(":campus", $place);
+		$stmt->execute();
+	} 
+	if(!empty($_POST['building'])){
+		$place = $_POST['building'];
 		$stmt=$db->prepare("UPDATE groups SET place=:place WHERE id=:group_id");
 		$stmt->bindValue(":group_id", $group['id']);
 		$stmt->bindValue(":place", $place);
@@ -198,10 +204,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <div class='col-sm-3'>
-          <label for='input-building'>Select a new building (optional)</label>
-          <select name='building' id='input-building' class='form-control'>
-            <option value=''>Select a Building</option>
-          </select>
+          <label for='input-building'>Choose a new place to meet (optional)</label>
+          <input type='text' name='building' id='input-building' class='form-control' value='<?= htmlspecialchars($group['place']) ?>' placeholder='PLACE'>
         </div>
       </div>
 

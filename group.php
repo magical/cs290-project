@@ -106,6 +106,9 @@ $_SESSION['memgid'] = $group['id'];
 
       <dt>Meeting Place
       <dd><?= htmlspecialchars($group['place']) ?>
+		
+	   <dt>Campus</dt>
+		<dd><?= htmlspecialchars($group['campus'])?></dd>
 
       <dt>Meeting Time
       <dd><?= htmlspecialchars(format_time($group['day'], $group['time'])) ?>
