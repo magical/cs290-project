@@ -8,12 +8,14 @@ if(!is_logged_in()) {
 $db = connect_db();
 $user_id = get_logged_in_user_id();
 $user_groups = get_user_groups($db, $user_id);
-if (empty($user_groups)) {
-	header("Location: form.php");
-	exit(0);
-}
+
 if (!isset($_GET['id'])) {
-	$group = get_group($db, $user_groups[0]['id']);
+	if (empty($user_groups)) {
+		header("Location: form.php");
+		exit(0);
+	} else {
+		$group = get_group($db, $user_groups[0]['id']);
+	}
 } else {
 	$group = get_group($db, $_GET['id']);
 }
@@ -29,6 +31,7 @@ $is_member = is_member($db, $user_id, $group['id']);
 if ($is_member) {
   $posts = get_group_posts($db, $group['id']);
 }
+$_SESSION['memgid'] = $group['id'];
 ?>
 <!DOCTYPE html>
 <html>
