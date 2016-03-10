@@ -1,3 +1,4 @@
+<?php die("disabled"); ?>
 <?php require_once 'includes/all.php'; ?>
 <!DOCTYPE html>
 <html>

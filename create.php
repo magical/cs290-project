@@ -2,6 +2,8 @@
 
 // create.php - (re)creates the database and populates with test data
 
+//die("disabled");
+
 require_once "includes/all.php";
 
 // Connect to the database

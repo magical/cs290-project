@@ -1,5 +1,7 @@
 <?php
 
+die("disabled");
+
 // How many users to create
 $NUMBER_OF_USERS = 2000;
 // How many classes to give each user
