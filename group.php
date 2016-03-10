@@ -1,8 +1,8 @@
 <?php
 require_once 'includes/all.php';
 if(!is_logged_in()) {
-	header("Location: signin.php");
-	exit(0);
+    header("Location: signin.php");
+    exit(0);
 }
 
 $db = connect_db();
@@ -10,14 +10,14 @@ $user_id = get_logged_in_user_id();
 $user_groups = get_user_groups($db, $user_id);
 
 if (!isset($_GET['id'])) {
-	if (empty($user_groups)) {
-		header("Location: form.php");
-		exit(0);
-	} else {
-		$group = get_group($db, $user_groups[0]['id']);
-	}
+    if (empty($user_groups)) {
+        header("Location: form.php");
+        exit(0);
+    } else {
+        $group = get_group($db, $user_groups[0]['id']);
+    }
 } else {
-	$group = get_group($db, $_GET['id']);
+    $group = get_group($db, $_GET['id']);
 }
 $user_email = get_user($db, $user_id)['email'];
 
@@ -62,12 +62,12 @@ $_SESSION['memgid'] = $group['id'];
         echo '<div class="alert alert-success">'.$_SESSION['event'].'</div>';
         $_SESSION['event'] = NULL;
       }
-	  if(isset($_SESSION['flash_success'])) {
-		  foreach($_SESSION['flash_success'] as $output){
-			  echo '<div class="alert alert-success">'.htmlspecialchars($output).'</div>';
-		  }
-		  $_SESSION['flash_success'] = NULL;
-	  }
+      if(isset($_SESSION['flash_success'])) {
+          foreach($_SESSION['flash_success'] as $output){
+              echo '<div class="alert alert-success">'.htmlspecialchars($output).'</div>';
+          }
+          $_SESSION['flash_success'] = NULL;
+      }
     ?>
 
     <div class="breadcrumbs">
@@ -92,11 +92,8 @@ $_SESSION['memgid'] = $group['id'];
 
     <h2>Study Group: <?= htmlspecialchars($group['name']) ?></h2>
 
-    <?php if ($is_member) { ?>
-      <a href="group_edit.php?id=<?= htmlspecialchars(urlencode($group['id'])) ?>" class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-cog"></span> Edit
-      </a>
-    <?php } ?>
+    <div class="row">
+    <div class="col-md-6">
 
     <dl class="dl-horizontal">
       <dt>Name
@@ -107,9 +104,9 @@ $_SESSION['memgid'] = $group['id'];
 
       <dt>Meeting Place
       <dd><?= htmlspecialchars($group['place']) ?>
-		
-	   <dt>Campus</dt>
-		<dd><?= htmlspecialchars($group['campus'])?></dd>
+        
+       <dt>Campus</dt>
+        <dd><?= htmlspecialchars($group['campus'])?></dd>
 
       <dt>Meeting Time
       <dd><?= htmlspecialchars(format_time($group['day'], $group['time'])) ?>
@@ -118,29 +115,41 @@ $_SESSION['memgid'] = $group['id'];
       <dd><?= htmlspecialchars($course['department']) ?>
           <?= htmlspecialchars($course['number']) ?>
           <?= htmlspecialchars($course['title']) ?>
+      </dd>
+      <br>
+      <dt><dd>
+              <?php if ($is_member) { ?>
+      <a href="group_edit.php?id=<?= htmlspecialchars(urlencode($group['id'])) ?>" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-cog"></span> Edit
+      </a>
+      <?php } ?>
+
+</dd></dt>
     </dl>
 
-    <h2>Members</h2>
+    </div>
+    <div class="col-md-6">
+    <h2 style="margin-top: 0px;">Members</h2>
 
-    <?php if ($is_member) { ?>
-      <div>
-       <?php $gid = $group['id'];
-		 echo "<a href='members_edit.php?id=$gid' class='btn btn-default btn-sm'>";
-		 ?>
-            <span class="glyphicon glyphicon-cog"></span> Edit
-        </a>
-      </div>
-    <?php } ?>
-
-    <ul>
+    <ul class="list-group">
       <?php foreach ($users as $user) { ?>
-        <li>
+        <li class="list-group-item">
           <a href="profile.php?id=<?= $user['id'] ?>">
             <?= htmlspecialchars($user['name']) ?>
           </a>
         </li>
       <?php } ?>
     </ul>
+
+    <?php if ($is_member) { ?>
+      <div>
+       <?php $gid = $group['id'];
+         echo "<a href='members_edit.php?id=$gid' class='btn btn-primary btn-sm'>";
+         ?>
+            <span class="glyphicon glyphicon-cog"></span> Edit
+        </a>
+      </div>
+    <?php } ?>
 
     <?php if (!$is_member) { ?>
         <form action="members_entry.php" role='form' method='POST' name='mementry'>
@@ -164,6 +173,8 @@ $_SESSION['memgid'] = $group['id'];
               <button class="btn btn-primary">Create Group Meeting </button>
           </div>
       </form>
+</div>
+</div>
 
       <h2>Discussion</h2>
 
@@ -172,7 +183,7 @@ $_SESSION['memgid'] = $group['id'];
         </div>
         <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['id']) ?>">
         <div class="form-group">
-          <textarea name="body" class="form-control"></textarea>
+          <textarea name="body" class="form-control" rows="3"></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary">Post</button>

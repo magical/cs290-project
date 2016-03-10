@@ -114,18 +114,19 @@ function show_error($name) {
       » Edit
     </div>
 
-    <div class="jumbotron">
-      <h1> Your Profile </h1>
-      <p> Please fill out this information </p>
-    </div>
+    <h1> Your Profile </h1>
+    <p> Please fill out this information </p>
+
+    <div class="row">
+      <div class="col-md-6">
 
     <form action="" method="POST">
       <div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
           <label for="input-name">Name</label>
           <input id="input-name" type='text' name='name' class='form-control' value="<?= htmlspecialchars($name) ?>">
         </div>
-        <div class="form-group col-md-4 <?= has_error('phone') ?>">
+        <div class="form-group col-md-6 <?= has_error('phone') ?>">
           <label for="input-phone">Phone</label>
           <input id="input-name" type='text' name='phone' class='form-control' value="<?= htmlspecialchars($phone) ?>">
           <?php show_error('phone') ?>
@@ -133,7 +134,7 @@ function show_error($name) {
       </div>
 
       <div class='row'>
-        <div class='form-group col-md-4 <?= has_error('college') ?>'>
+        <div class='form-group col-md-6 <?= has_error('college') ?>'>
           <label>College</label>
           <select name='collegeselect' class='form-control'>
             <?php
@@ -151,7 +152,7 @@ function show_error($name) {
           <?php show_error('college') ?>
         </div>
 
-        <div class='form-group col-md-4 <?= has_error('campus') ?>'>
+        <div class='form-group col-md-6 <?= has_error('campus') ?>'>
           <label>Campus</label>
           <select name='campus' class='form-control'>
             <option value=""> Select Campus </option>
@@ -179,22 +180,21 @@ function show_error($name) {
 
       <div class="row">
         <div class="col-md-12">
-          <input type='submit' class='btn btn-primary' value='SAVE'>
-          <a class="btn btn-link" href="profile.php?id=<?= $user['id'] ?>">Cancel</a>
+          <input type='submit' class="btn btn-success" value="Save">
+          <a class="btn btn-danger" href="profile.php?id=<?= $user['id'] ?>">Cancel</a>
         </div>
       </div>
     </form>
-
-    <div class='jumbotron'>
+      </div>
+      <div class="col-md-6">
       <h2>Your Profile Picture</h2>
       <?php
         if ($user['pic_id']) {
           echo '<img src="pic_display.php?id='.$user['id'].'" height="250px" width="250px" class="img-rounded">';
         } else {
-          echo "You haven't uploaded a picture yet";
+          echo "<p>You haven't uploaded a picture yet</p>";
         }
       ?>
-    </div>
 
     <form action='upload.php' name='flpd' role='form' method=post enctype=multipart/form-data>
 
@@ -209,17 +209,22 @@ function show_error($name) {
 
     </form>
 
-	<p>
-		<button data-toggle="collapse" data-target="#password">Change Password</button>
-	    <div id="password" class="collapse">
-
-		<form action="passchange.php" name="passwordChange" role="form" method=post>
-		  <input type="password" id="oldPassword" name="oldPassword" class="form-control" placeholder="Old Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
-          <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
-		  <button type="submit">Go</button>
-		</form>
       </div>
-	</p>
+      <div class="col-md-6">
+            <p>
+      <h3>Password Change</h3>
+        <button data-toggle="collapse" data-target="#password" class="btn btn-primary">Change Password</button>
+        <div id="password" class="collapse">
+
+        <form action="passchange.php" name="passwordChange" role="form" method=post>
+          <input type="password" id="oldPassword" name="oldPassword" class="form-control" placeholder="Old Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
+          <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="New Password" required onchange="form.passwordConfirm.pattern = this.value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &quot;\\$&&quot;);">
+          <button type="submit">Go</button>
+        </form>
+      </div>
+    </p>
+</div>
+    </div>
     <?php include 'includes/_footer.php';?>
   </body>
 </html>

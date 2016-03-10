@@ -36,15 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form['time'] = $_POST['time'];
     $form['place'] = $_POST['place'];
     $form['add_user'] = $_POST['add_user'];
-	 
-	 //Get Campus Name
-	 if (!empty($_POST['campus'])){
-		$q = $db->prepare("SELECT name FROM campuses WHERE id = :id");
-		$q->bindValue(":id", $_POST['campus']);
-		$q->execute();
-		$campus = $q->fetch();
-		$form['campus'] = $campus['name'];
-	} 
+     
+     //Get Campus Name
+     if (!empty($_POST['campus'])){
+        $q = $db->prepare("SELECT name FROM campuses WHERE id = :id");
+        $q->bindValue(":id", $_POST['campus']);
+        $q->execute();
+        $campus = $q->fetch();
+        $form['campus'] = $campus['name'];
+    } 
 
     // validation
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $form['time'] = $_POST['time'];
       }
     }
-	
+    
     // Check if all the user ids are numeric
     if (isset($_POST['members']) && is_array($_POST['members'])) {
       foreach ($_POST['members'] as $member_id) {
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       }
     }
-	
+    
     // If the user filled in the add user box,
     // assume they want to add a user instead of submitting the form.
     // Try to find the user and add their id to the member list.
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $stmt->bindValue(":day", $form['day']);
       $stmt->bindValue(":time", $form['time']);
       $stmt->bindValue(":place", $form['place']);
-		$stmt->bindValue(":campus", $form['campus']);
+        $stmt->bindValue(":campus", $form['campus']);
       $stmt->execute();
 
       $group_id = $db->lastInsertId();
@@ -193,6 +193,8 @@ function has_error($key) {
       <p>So you want to start a study group, huh? Great!
       Just follow these three easy steps.
 
+        <div class="row">
+          <div class="col-md-6">
       <h2>Class</h2>
 
       <div class="form-group <?= has_error('course') ?>">
@@ -220,79 +222,6 @@ function has_error($key) {
             go <a href="course_edit.php">add it to your list of classes</a>
       </div>
 
-
-      <h2>Info</h2>
-
-      <div class="form-group <?= has_error('name') ?>">
-        <label for="name-input">Name</label>
-        <input name=name id="name-input" class="form-control"
-          value="<?= htmlspecialchars($form['name']) ?>">
-        <p class="help-block">
-          Give your study group a name to distinguish it from other groups.
-          If you leave this blank, a default name will be filled in.
-      </div>
-
-      <div class="row form-group <?= has_error('day').' '.has_error('time') ?>">
-        <div class='col-md-3'>
-          <label for='input-day'>Day</label>
-          <select id="input-day" name='day' class='form-control'>
-            <option value=''></option>
-            <?php
-              foreach ($week_names as $value) {
-                echo '<option value="'.$value.'">'.$value.'</option>';
-              }
-            ?>
-          </select>
-          <?php
-            if (has_error('day')) {
-              echo '<p class="help-block">' . htmlspecialchars($errors['day']);
-            }
-          ?>
-        </div>
-
-        <div class='col-md-3'>
-          <label for='input-time'> and Time (optional):</label>
-          <select id="input-time" name='time' class='form-control'>
-            <option value=''></option>
-            <?php
-              for($i=0;$i<24;$i++){
-                $time = ($i+8)%24;
-                echo "<option value='$time'>" . htmlspecialchars($time_names[$time]) . '</option>';
-              }
-            ?>
-          </select>
-          <?php
-            if (has_error('time')) {
-              echo '<p class="help-block">' . htmlspecialchars($errors['time']);
-            }
-          ?>
-        </div>
-      </div>
-
-      <div class="row form-group <?php has_error('place') ?>">
-        <div class="col-md-3">
-          <label for="place-input">Place (optional)</label>
-          <input name=place class="form-control"
-            value="<?= htmlspecialchars($form['place']) ?>">	
-			</div>
-		<div class="col-md-3">
-			<label for='input-campus'> And Campus</label>
-			<select id="input-campus" name='campus' class='form-control'>
-			<option value=''></option>
-			<option value=1>Corvallis (Main)</option>
-			<option value=2>Cascades</option>
-			<option value=3>Online</option>
-			</select>
-		</div>	
-		</div>		
-          <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
-          <?php
-            if (has_error('place')) {
-              echo '<p class="help-block">' . htmlspecialchars($errors['place']);
-            }
-          ?>
-        
-   
 
       <h2>Add people</h2>
 
@@ -340,10 +269,87 @@ function has_error($key) {
       </div>
 
       <div class="form-group">
-        <button class="btn btn-primary" type="submit">Create</button>
-        <a class="btn btn-link" href="index.php">Cancel</a>
+        <button class="btn btn-lg btn-success" type="submit">Create</button>
+        <a class="btn btn-lg btn-danger" href="index.php">Cancel</a>
       </div>
     </form>
+
+      </div>
+
+          <div class="col-md-6">
+      <h2>Info</h2>
+
+      <div class="form-group <?= has_error('name') ?>">
+        <label for="name-input">Name</label>
+        <input name=name id="name-input" class="form-control"
+          value="<?= htmlspecialchars($form['name']) ?>">
+        <p class="help-block">
+          Give your study group a name to distinguish it from other groups.
+          If you leave this blank, a default name will be filled in.
+      </div>
+
+      <div class="row form-group <?= has_error('day').' '.has_error('time') ?>">
+        <div class="col-md-6">
+          <label for='input-day'>Day</label>
+          <select id="input-day" name='day' class='form-control'>
+            <option value=''></option>
+            <?php
+              foreach ($week_names as $value) {
+                echo '<option value="'.$value.'">'.$value.'</option>';
+              }
+            ?>
+          </select>
+          <?php
+            if (has_error('day')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['day']);
+            }
+          ?>
+        </div>
+
+        <div class="col-md-6">
+          <label for='input-time'> and Time (optional):</label>
+          <select id="input-time" name='time' class='form-control'>
+            <option value=''></option>
+            <?php
+              for($i=0;$i<24;$i++){
+                $time = ($i+8)%24;
+                echo "<option value='$time'>" . htmlspecialchars($time_names[$time]) . '</option>';
+              }
+            ?>
+          </select>
+          <?php
+            if (has_error('time')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['time']);
+            }
+          ?>
+        </div>
+      </div>
+
+      <div class="row form-group <?php has_error('place') ?>">
+        <div class="col-md-6">
+          <label for="place-input">Place (optional)</label>
+          <input name=place class="form-control"
+            value="<?= htmlspecialchars($form['place']) ?>">    
+            </div>
+        <div class="col-md-6">
+            <label for='input-campus'> And Campus</label>
+            <select id="input-campus" name='campus' class='form-control'>
+            <option value=''></option>
+            <option value=1>Corvallis (Main)</option>
+            <option value=2>Cascades</option>
+            <option value=3>Online</option>
+            </select>
+        </div>  
+        </div>      
+          <p class="help-block">Set a time and place for your study group to meet. You can always change this later.</p>
+          <?php
+            if (has_error('place')) {
+              echo '<p class="help-block">' . htmlspecialchars($errors['place']);
+            }
+          ?>
+
+          </div>
+    </div>
 
     <?php include 'includes/_footer.php' ?>
 

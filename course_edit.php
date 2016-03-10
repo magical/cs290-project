@@ -18,53 +18,53 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // TODO: errors
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('times', $_POST)) {
-	$user = get_user($db, get_logged_in_user_id());
-	$user_courses = get_user_courses($db, get_logged_in_user_id());
-	$user_id=get_logged_in_user_id();
+    $user = get_user($db, get_logged_in_user_id());
+    $user_courses = get_user_courses($db, get_logged_in_user_id());
+    $user_id=get_logged_in_user_id();
 
-	if(isset($_POST['standing_id']) && is_valid_id($db, 'standings', $_POST['standing_id'])) {
-		// check valid standing id
-		$sid = $_POST['standing_id'];
-		$stmt = $db->prepare("
-			UPDATE users
-			SET standing_id = :standing_id
-			WHERE id=:user_id");
-		$stmt->bindValue("standing_id", $sid);
-		$stmt->bindValue("user_id", $user['id']);
-		$stmt->execute();
-	}
+    if(isset($_POST['standing_id']) && is_valid_id($db, 'standings', $_POST['standing_id'])) {
+        // check valid standing id
+        $sid = $_POST['standing_id'];
+        $stmt = $db->prepare("
+            UPDATE users
+            SET standing_id = :standing_id
+            WHERE id=:user_id");
+        $stmt->bindValue("standing_id", $sid);
+        $stmt->bindValue("user_id", $user['id']);
+        $stmt->execute();
+    }
 
-	if (is_valid_day($_POST['week1']) && is_valid_time($_POST['selt1'])) {
-		$stmt = $db->prepare("
-			UPDATE users
-			SET day1 = :day1, time1 = :time1
-			WHERE id=:user_id");
-		$stmt->bindValue("day1", $_POST['week1']);
-		$stmt->bindValue("time1", $_POST['selt1']);
-		$stmt->bindValue("user_id", $user['id']);
-		$stmt->execute();
-	}
+    if (is_valid_day($_POST['week1']) && is_valid_time($_POST['selt1'])) {
+        $stmt = $db->prepare("
+            UPDATE users
+            SET day1 = :day1, time1 = :time1
+            WHERE id=:user_id");
+        $stmt->bindValue("day1", $_POST['week1']);
+        $stmt->bindValue("time1", $_POST['selt1']);
+        $stmt->bindValue("user_id", $user['id']);
+        $stmt->execute();
+    }
 
-	if (is_valid_day($_POST['week2']) && is_valid_time($_POST['selt2'])) {
-		$stmt = $db->prepare("
-			UPDATE users
-			SET day2 = :day2, time2 = :time2
-			WHERE id=:user_id");
-		$stmt->bindValue("day2", $_POST['week2']);
-		$stmt->bindValue("time2", $_POST['selt2']);
-		$stmt->bindValue("user_id", $user['id']);
-		$stmt->execute();
-	}
+    if (is_valid_day($_POST['week2']) && is_valid_time($_POST['selt2'])) {
+        $stmt = $db->prepare("
+            UPDATE users
+            SET day2 = :day2, time2 = :time2
+            WHERE id=:user_id");
+        $stmt->bindValue("day2", $_POST['week2']);
+        $stmt->bindValue("time2", $_POST['selt2']);
+        $stmt->bindValue("user_id", $user['id']);
+        $stmt->execute();
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('course_id', $_POST)) {
-	$stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
-	$stmt->bindValue(":user_id", get_logged_in_user_id());
-	$stmt->bindValue(":course_id", $_POST['course_id']);
-	$stmt->execute();
+    $stmt = $db->prepare("INSERT INTO user_courses (user_id, course_id) VALUES (:user_id, :course_id)");
+    $stmt->bindValue(":user_id", get_logged_in_user_id());
+    $stmt->bindValue(":course_id", $_POST['course_id']);
+    $stmt->execute();
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('remove_id', $_POST)) {
-	$stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
-	$stmt->bindValue(":user_id", get_logged_in_user_id());
-	$stmt->bindValue(":course_id", $_POST['remove_id']);
-	$stmt->execute();
+    $stmt = $db->prepare("DELETE FROM user_courses WHERE user_id = :user_id AND course_id = :course_id");
+    $stmt->bindValue(":user_id", get_logged_in_user_id());
+    $stmt->bindValue(":course_id", $_POST['remove_id']);
+    $stmt->execute();
 }
 
 $user = get_user($db, get_logged_in_user_id());
@@ -87,10 +87,9 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
       » Edit Times and Courses
     </div>
 
-    <div class='jumbotron'>
-      <h2>Study Profile</h2>
-    </div>
-
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Study Profile</h2>
     <form action='' class='form-horizontal' role='form' method='post' name='dentry'>
 
       <div class='form-group row'>
@@ -115,7 +114,7 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
 
       <?php for ($j = 1; $j <= 2; $j++) { ?>
         <div class="form-group row">
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label for="week<?=$j?>">Day</label>
             <select name='week<?=$j?>' id='week<?=$j?>' class='form-control'>
               <option class='ww' value=''>Select Day</option>
@@ -131,7 +130,7 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
             </select>
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label for="selt<?=$j?>">Time</label>
             <select name='selt<?=$j?>' id='selt<?=$j?>' class='form-control'>
               <option value=''>Select Time</option>
@@ -166,6 +165,8 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
 
     </form>
 
+      </div>
+      <div class="col-md-6">
 
     <h2>Your Courses</h2>
 
@@ -183,8 +184,8 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
         ?>
     </table>
 
-    <form action="" method="POST">
-      <select name="course_id">
+    <form action="" method="POST" class="form-horizontal">
+      <select name="course_id" class="form-control">
         <?php
           foreach ($courses as $course) {
             echo '<option value="'.htmlspecialchars($course['id']).'">';
@@ -193,12 +194,14 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
           }
         ?>
       </select>
-      <button class='btn btn-primary'>Add</button>
+      <span class="input-group-btn">
+        <button class='btn btn-success'>Add</button>
+      </span>
     </form>
-   
+   <br>
     <?php if ($user_courses) { ?>
-    <form action="" method="POST">
-      <select name="remove_id">
+    <form action="" method="POST" class="form-horizontal">
+      <select name="remove_id" class="form-control">
         <?php
           foreach ($user_courses as $course) {
             echo '<option value="'.htmlspecialchars($course['id']).'">';
@@ -207,9 +210,13 @@ $user_courses = get_user_courses($db, get_logged_in_user_id());
           }
         ?>
       </select>
-      <button class='btn btn-primary'>Remove</button>
+      <span class="input-group-btn">
+        <button class='btn btn-danger'>Remove</button>
+      </span>
     </form>
     <?php } ?>
+    </div>
+    </div>
 
     <?php include 'includes/_footer.php';?>
   </body>

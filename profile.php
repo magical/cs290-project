@@ -54,72 +54,78 @@ $id = $_GET['id'];
       ?>
     </div>
 
-    <h1><?= htmlspecialchars($user['name']) ?></h1>
+    <div class="row">
+      <div class="col-md-6">
+        <h1><?= htmlspecialchars($user['name']) ?></h1>
 
-    <?php
-      if ($user['pic_id']) {
-        echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px' class='img-circle'/></dd>";
-      } elseif ($is_myself) {
-        echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
-      }
-    ?>
+        <?php
+          if ($user['pic_id']) {
+              echo "<dd><img src='pic_display.php?id=${user['id']}' width='250px' height='250px' class='img-circle'/></dd>";
+          } elseif ($is_myself) {
+              echo '<dd><a href="profile_edit.php?id='.$user['id'].'">Upload a picture »</a>';
+          }
+        ?>
 
-    <h2>Contact</h2>
+        <h2>Contact</h2>
 
-    <dl class="dl-horizontal">
-      <dt>Email:
-      <dd><?= htmlspecialchars($user['email']) ?>
+        <dl class="dl-horizontal">
+          <dt>Email:</dt>
+            <dd><?= htmlspecialchars($user['email']) ?></dd>
 
-      <dt>Phone:
-      <dd><?= htmlspecialchars($user['phone']) ?>
+          <dt>Phone:</dt>
+            <dd><?= htmlspecialchars($user['phone']) ?></dd>
 
-      <?php if ($college) {
-        echo '<dt>College:';
-        echo '<dd>' . htmlspecialchars($college['name'])."\n";
-      } ?>
-    </dl>
+          <?php
+                if ($college) {
+                    echo '<dt>College:';
+                    echo '<dd>' . htmlspecialchars($college['name'])."\n";
+                }
+          ?>
+        </dl>
 
-    <?php if ($is_myself) { ?>
-      <a href="profile_edit.php" class="btn btn-default">
-        <span class="glyphicon glyphicon-cog"></span>
-        Edit Profile
-      </a>
-    <?php } ?>
+        <?php if ($is_myself) { ?>
+        <a href="profile_edit.php" class="btn btn-primary">
+          <span class="glyphicon glyphicon-cog"></span>
+          Edit Profile
+        </a>
+        <?php } ?>
 
-    <h2>Times</h2>
+        <h2>Times</h2>
 
-    <dl class="dl-horizontal">
-      <dt>Time 1:</dt>
-      <dd><?= htmlspecialchars(format_time($user['day1'], $user['time1'])) ?></dd>
+        <dl class="dl-horizontal">
+          <dt>Time 1:</dt>
+          <dd><?= htmlspecialchars(format_time($user['day1'], $user['time1'])) ?></dd>
 
-      <dt>Time 2:</dt>
-      <dd><?= htmlspecialchars(format_time($user['day2'], $user['time2'])) ?></dd>
-    </dl>
+          <dt>Time 2:</dt>
+          <dd><?= htmlspecialchars(format_time($user['day2'], $user['time2'])) ?></dd>
+        </dl>
 
-    <?php if ($is_myself) { ?>
-      <a href="course_edit.php" class="btn btn-default">
-        <span class="glyphicon glyphicon-cog"></span>
-        Edit Times
-      </a>
-    <?php } ?>
+        <?php if ($is_myself) { ?>
+        <a href="course_edit.php" class="btn btn-primary">
+          <span class="glyphicon glyphicon-cog"></span>
+          Edit Times
+        </a>
+        <?php } ?>
+      </div>
+      <div class="col-md-6">
+        <h2>Classes</h2>
 
+        <ul>
+          <?php foreach ($courses as $course) { ?>
+          <li><?= htmlspecialchars($course['department'] . " " .
+                                   $course['number'] . " " .
+                                   $course['title']) ?>
+            <?php } ?>
+        </ul>
 
-    <h2>Classes</h2>
-
-    <ul>
-      <?php foreach ($courses as $course) { ?>
-        <li><?= htmlspecialchars($course['department'] . " " .
-                                 $course['number'] . " " .
-                                 $course['title']) ?>
-      <?php } ?>
-    </ul>
-
-    <?php if ($is_myself) { ?>
-      <a href="course_edit.php" class="btn btn-default">
-        <span class="glyphicon glyphicon-cog"></span>
-        Edit Classes
-      </a>
-    <?php } ?>
+        <?php if ($is_myself) { ?>
+        <a href="course_edit.php" class="btn btn-primary">
+          <span class="glyphicon glyphicon-cog"></span>
+          Edit Classes
+        </a>
+        <?php } ?>
+      </div>
+    </div>
 
     <?php include 'includes/_footer.php';?>
   </body>

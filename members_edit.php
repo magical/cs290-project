@@ -84,33 +84,32 @@ $members = get_group_members($db, $_GET['id']);
     echo '</div>';
 
     ?>
-    <div class='jumbotron'>
     <h2>Group Member Editing For Group: <?= htmlspecialchars($group['name'])?></h2>
-    </div>
 
     <div class='row'>
 
-    <div class ='col-md-4'>
-    <label for='name'>Add a new member(email):</label>
+    <div class ='col-md-6'>
+    <h4>Add a new member(email):</h4>
     <input type='text' class='form-control' name='addmemb' id='addmemb'>
     </div>
 
 
-    <div class ='col-md-4'>
-    <label for='name'>Remove a current member or yourself(email):</label>
+    <div class ='col-md-6'>
+      <h4>Remove a current member or yourself(email):</h4>
+	  <ul class="list-group">
       <?php
 					foreach($members as $user) {
-						echo '<br>'.'<input type="checkbox" name="removemem[]" value="'.htmlspecialchars($user['email']).'">'.htmlspecialchars($user['name']);
+						echo '<li class="list-group-item">'.'<input type="checkbox" class="checkbox-inline" name="removemem[]" value="'.htmlspecialchars($user['email']).'">&nbsp;'.htmlspecialchars($user['name']).'</li>';
 					}
-			?>
+		 ?>
+	  </ul>
     </div>
     </div>
-    <br><br>
-
-    <input type='submit' class='btn btn-info' value='SUBMIT'>
+<br>
+    <input type='submit' class="btn btn-lg btn-success" value="Submit">
     </form>
 	 <?php
-	 echo "<a href='group.php?id=$selectedgid' class='btn btn-info'>Return to Group</a>";
+	 echo "<a href='group.php?id=$selectedgid' class='btn btn-primary'>Return to Group</a>";
 	 ?>
     </div>
     </body>

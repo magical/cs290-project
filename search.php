@@ -141,7 +141,7 @@
 	</nav>
 
 	<form action="form.php">
-		<input type="submit" value="Search Again"><br>
+		<input type="submit" value="Search Again" class="btn btn-primary"><br>
 	</form>
 
 	<?php include 'includes/_footer.php' ?>
