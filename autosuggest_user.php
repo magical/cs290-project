@@ -1,6 +1,12 @@
 <?php
 require_once 'includes/all.php';
 
+if(!is_logged_in()) {
+	header("Location: signin.php");
+	exit(0);
+}
+
+
 $group_id = null;
 
 if (!isset($_GET['q'])) {
