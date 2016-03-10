@@ -137,7 +137,7 @@ foreach ($userids as $userid) {
 // Pick two random times between 8am and 12pm (any day)
 $q = $db->prepare("UPDATE users SET day1 = :day1, time1 = :time1, day2 = :day2, time2 = :time2 WHERE id = :user_id");
 foreach ($userids as $userid) {
-  $day1 = random_day()
+  $day1 = random_day();
   $time1 = random_time();
   $day2 = random_day();
   $time2 = random_time();
