@@ -39,9 +39,15 @@
     <?php if (!is_logged_in()) { ?>
       <div class="jumbotron">
         <h1>Looking for a study group?</h1>
+		  <div class='row'>
+		  <div class="col-md-6 col-md-push-6">
+		  <iframe width="500" height="281" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
+		  </div>
+		  <div class="col-md-6 col-md-pull-6">
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
         <p><a class="btn btn-primary btn-lg" href="signup.php" role="button">Sign up to get started</a></p>
-		  <iframe width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
+		  </div>
+		  </div>
       </div>
 
       <div class="container" style="width: 100%;">
@@ -109,7 +115,9 @@
           </span>
         </a>
       </div>
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
+		<div align='center'>
+		<iframe align='middle' width="560" height="315" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" allowfullscreen></iframe>
+		</div>
 
     <?php } ?>
     <?php include 'includes/_footer.php';?>
