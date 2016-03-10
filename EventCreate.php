@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'includes/all.php';
 if(!is_logged_in()) {
 	header("Location: signin.php");
@@ -9,54 +9,100 @@ if(!is_member($db, get_logged_in_user_id(), $_REQUEST['group_id'])){
 	header("Status: 403 Forbidden");
 	exit("403 Forbidden");
 }
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$_SESSION['event'] = array();
-  if(isset($_POST['STime'])){
-    $_SESSION['event']['STime'] = $_POST['STime'];
-  }else {
-	  $_SESSION['event']['STime'] = "";
-  }
-  if (isset($_POST['ETime'])){
-    $_SESSION['event']['ETime'] = $_POST['ETime'];
-  }else {
-	  $_SESSION['event']['ETime'] = "";
-  }
-  if (isset($_POST['Summary'])){
-    $_SESSION['event']['Summary'] = $_POST['Summary'];
-  }else {
-	  $_SESSION['event']['Summary'] = "Study Group Event";
-  }
-  if (isset($_POST['Description'])){
-    $_SESSION['event']['Description'] = $_POST['Description'];
-  }else {
-	  $_SESSION['event']['Description'] = "Meet to study for classes";
-  }
-  if (isset($_POST['Location'])){
-    $_SESSION['event']['Location'] = $_POST['Location'];
-  }else {
-	  $_SESSION['event']['Location'] = "";
-  }
-  if (isset($_POST['Attending'])){
-	for($i = 0; $i < count($_POST['Attending']); $i++) {
-	  if(get_group_id($db,$_POST['group_id']))
-	  $_SESSION['event']['GrMem'][$i] = array('email' => $_POST['Attending'][$i]);
+
+$errors = array();
+if (isset($_POST['Day'])) {
+	if ($_POST['Day'] === '') {
+		$errors[] = "please enter a date";
+	} elseif (!preg_match("/^\d\d\d\d-\d\d-\d\d$/", $_POST['Day'])) {
+		$errors[] = "date must be in YYYY-MM-DD format";
 	}
-	  $_SESSION['event']['GrMem'][$i] = array('email' => get_user($db, get_logged_in_user_id())['email']);
-  }else {
-	  $_SESSION['event']['GrMem'] = array(array('email' => get_user($db, get_logged_in_user_id())['email']));
-  }
-  if (isset($_POST['group_id'])){
-    $_SESSION['event']['gID'] = $_POST['group_id'];
-  }
-  header("Location: calendar.php");
-  exit(0);
-	
 }
-if(isset($_GET['group_id'])){
-  $Members = get_group_members($db, $_GET['group_id']);
-}else {
-  $Members = array();
+
+if (isset($_POST['STime'])) {
+	if ($_POST['STime'] === '') {
+		$errors[] = "please enter a starting time";
+	} elseif (!preg_match("/^\d\d:\d\d$/", $_POST['STime'])) {
+		$errors[] = "starting time must be in HH:MM format";
+	}
 }
+
+if (isset($_POST['ETime'])) {
+	if ($_POST['ETime'] === '') {
+		// fine
+	} elseif (!preg_match("/^\d\d:\d\d$/", $_POST['ETime'])) {
+		$errors[] = "end time must be in HH:MM format";
+	}
+}
+
+// Defaults
+$Name = "";
+$Day = "";
+$STime = "";
+$ETime = "";
+$Members = array();
+
+$event = array();
+$event['Location'] = "";
+$event['Summary'] = "Study Group Event";
+$event['Description'] = "Meet to study for classes";
+
+if (isset($_GET['group_id'])) {
+	$group = get_group($db, $_GET['group_id']);
+	$Name = "Meeting for ".$group['name'];
+	if (is_valid_day($group['day'])) {
+		$Day = next_weekday($group['day'])->format("Y-m-d");
+	}
+	if (is_valid_time($group['time'])) {
+		$STime = sprintf("%02d:00", $group['time']);
+		$ETime = sprintf("%02d:00", ($group['time']+1)%24);
+	}
+	$Members = get_group_members($db, $_GET['group_id']);
+	$event['Location'] = $group['place'];
+}
+
+if (isset($_POST['Name'])) { $Name = $_POST['Name']; }
+if (isset($_POST['Day'])) { $Day = $_POST['Day']; }
+if (isset($_POST['STime'])) { $STime = $_POST['STime']; }
+if (isset($_POST['ETime'])) { $ETime = $_POST['ETime']; }
+if (isset($_POST['Summary'])) { $event['Summary'] = $_POST['Summary']; }
+if (isset($_POST['Description'])) { $event['Description'] = $_POST['Description']; }
+if (isset($_POST['Location'])) { $event['Location'] = $_POST['Location']; }
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && !$errors) {
+	$event['Name'] = $Name;
+
+	$date = new DateTime("$Day $STime");
+	$edate = clone $date;
+	if ($ETime) {
+		$edate->modify($ETime);
+	} else {
+		$edate->modify("+1 hour");
+	}
+
+	$event['STime'] = $date->format(DateTime::RFC3339);
+	$event['ETime'] = $edate->format(DateTime::RFC3339);
+
+	$event['GrMem'] = array();
+	$event['GrMem'][] = array('email' => get_user($db, get_logged_in_user_id())['email']);
+	if (isset($_POST['Attending'])){
+		for($i = 0; $i < count($_POST['Attending']); $i++) {
+			// Check if they're actually a member of the group
+			if(get_group($db,$_POST['group_id']))
+				$event['GrMem'][] = array('email' => $_POST['Attending'][$i]);
+		}
+	}
+
+	if (isset($_POST['group_id'])){
+		$event['gID'] = $_POST['group_id'];
+	}
+
+	$_SESSION['event'] = $event;
+	header("Location: calendar.php");
+	exit(0);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,20 +112,51 @@ if(isset($_GET['group_id'])){
   </head>
   <body>
     <?php include 'includes/_nav.php';?>
+	<?php
+		if ($errors) {
+			echo '<div class="alert alert-warning">';
+			foreach ($errors as $msg) {
+				echo '<p>'.htmlspecialchars($msg);
+			}
+			echo '</div>';
+		}
+	?>
 	<h3>New group event</h3>
-	  <br>
-	<form class="form" action="EventCreate.php" method="POST">
-		<fieldset class="form-group">
+    <p>This page will help you add an event for your group to your Google calendar.
+	<form class="form" action="" method="POST">
+		<div class="form-group">
 			<label for="Name">Event Name</label>
-			<input class="form-control" id="Name" type='text' name='Summary' placeholder='Title'>
-			<label for="StartingTime">Starting Time</label>
-			<input class="form-control" id="StartingTime" type='text' name='STime' placeholder='Starting time'>
-			<label for="EndingTime">Ending Time</label>
-			<input class="form-control" id="StartingTime" type='text' name='ETime' placeholder='Ending time'>
+			<input class="form-control" id="Name" type='text' name='Summary'
+				value="<?= htmlspecialchars($Name) ?>">
+		</div>
+		<div class="row form-group">
+			<div class="col-md-4">
+				<label for="Day">Day</label>
+				<input class="form-control" id="Day" type="date" name="Day" placeholder="yyyy-mm-dd"
+					value="<?= htmlspecialchars($Day) ?>">
+			</div>
+			<div class="col-md-2">
+				<label for="StartingTime">Starting Time</label>
+				<input class="form-control" id="StartingTime" type='time' name='STime'
+					value="<?= htmlspecialchars($STime) ?>">
+			</div>
+			<div class="col-md-2">
+				<label for="EndingTime">Ending Time</label>
+				<input class="form-control" id="StartingTime" type='time' name='ETime'
+					value="<?= htmlspecialchars($ETime) ?>">
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="Summary">Summary</label>
-			<textarea name="Description" cols="40" rows="5" class="form-control" id="Description" ></textarea>
+			<textarea name="Description" cols="40" rows="5" class="form-control" id="Description"
+				><?= htmlspecialchars($event['Summary']) ?></textarea>
+		</div>
+		<div class="form-group">
 			<label for="Location">Location</label>
-			<input class="form-control" id="Location" type='text' name='Location' placeholder='Where is the event'>
+			<input class="form-control" id="Location" type='text' name='Location' placeholder='Where is the event'
+				value="<?= htmlspecialchars($event['Location']) ?>">
+		</div>
+		<div class="form-group">
 			<label for="Atendees">Group members to invite:</label>
 				<br>
 				<?php
@@ -90,7 +167,7 @@ if(isset($_GET['group_id'])){
 				?>
 			<?php echo "<input type='hidden' value='".urlencode($_GET['group_id'])."' name='group_id'>";?>
 			<input type='submit' value='Create' class='btn btn-default'>
-		</fieldset>
+		</div>
 	</form>
   </body>
 </html>

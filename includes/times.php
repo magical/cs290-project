@@ -22,3 +22,16 @@ function format_time($d, $t) {
     return '<invalid time>';
   }
 }
+
+// Returns the date of the next Monday (or whatever).
+// $weekday should be a string containing Monday - Sunday
+function next_weekday($weekday) {
+  global $week_names;
+  $date = new DateTime();
+  $i = (int)$date->format("w"); // 0=Sunday
+  $j = array_search($weekday, $week_names); // 0=Monday
+  $diff = (($j+1) - $i + 7); // days til next $weekday [0..6]
+  $diff = ($diff+6)%7+1; // days til next $weekday [1..7]
+  $date->modify("+$diff days");
+  return $date;
+}

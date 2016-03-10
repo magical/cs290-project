@@ -1,6 +1,12 @@
 <?php 
 require_once __DIR__ . '/google-api-php-client/src/Google/autoload.php';
 require_once 'includes/all.php';
+
+if (!isset($_SESSION['event'])) {
+  header('Location: EventCreate.php');
+  exit();
+}
+
 /**
  * Returns an authorized API client.
  * @return Google_Client the authorized client object
@@ -42,16 +48,15 @@ $event = new Google_Service_Calendar_Event();
  $event->setDescription($_SESSION['event']['Description']);
  $event->setLocation($_SESSION['event']['Location']);
  $start = new Google_Service_Calendar_EventDateTime();
- $start->setDateTime('2015-04-16T10:00:00.000-07:00');
+ $start->setDateTime($_SESSION['event']['STime']);
  $event->setStart($start);
  $end = new Google_Service_Calendar_EventDateTime();
- $end->setDateTime('2015-04-16T10:25:00.000-07:00');
+ $end->setDateTime($_SESSION['event']['ETime']);
  $event->setEnd($end);
  $event->attendees = $_SESSION['event']['GrMem'];
 
 $calendarId = 'primary';
 $event = $service->events->insert($calendarId, $event);
-
 
 $groupID = $_SESSION["event"]["gID"];
 $_SESSION["event"] = 'Event created: '.'<a href = "'.$event->htmlLink.'">'.$_SESSION["event"]["Summary"].'</a>';
