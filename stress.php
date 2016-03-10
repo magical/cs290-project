@@ -76,6 +76,7 @@ mt_srand(1); // determinism
 
 require_once "config.php";
 require_once "includes/functions.php";
+require_once "includes/times.php";
 $db = connect_db();
 
 
