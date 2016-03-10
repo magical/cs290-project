@@ -36,7 +36,6 @@ if (isset($_POST['ETime'])) {
 }
 
 // Defaults
-$Name = "";
 $Day = "";
 $STime = "";
 $ETime = "";
@@ -49,7 +48,7 @@ $event['Description'] = "Meet to study for classes";
 
 if (isset($_GET['group_id'])) {
 	$group = get_group($db, $_GET['group_id']);
-	$Name = "Meeting for ".$group['name'];
+	$event['Summary'] = "Meeting for ".$group['name'];
 	if (is_valid_day($group['day'])) {
 		$Day = next_weekday($group['day'])->format("Y-m-d");
 	}
@@ -127,7 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !$errors) {
 		<div class="form-group">
 			<label for="Name">Event Name</label>
 			<input class="form-control" id="Name" type='text' name='Summary'
-				value="<?= htmlspecialchars($Name) ?>">
+				value="<?= htmlspecialchars($event['Summary']) ?>">
 		</div>
 		<div class="row form-group">
 			<div class="col-md-4">
@@ -137,19 +136,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !$errors) {
 			</div>
 			<div class="col-md-2">
 				<label for="StartingTime">Starting Time</label>
-				<input class="form-control" id="StartingTime" type='time' name='STime'
+				<input class="form-control" id="StartingTime" type='time' name='STime' placeholer="HH:MM"
 					value="<?= htmlspecialchars($STime) ?>">
 			</div>
 			<div class="col-md-2">
 				<label for="EndingTime">Ending Time</label>
-				<input class="form-control" id="StartingTime" type='time' name='ETime'
+				<input class="form-control" id="StartingTime" type='time' name='ETime' placeholer="HH:MM"
 					value="<?= htmlspecialchars($ETime) ?>">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="Summary">Summary</label>
 			<textarea name="Description" cols="40" rows="5" class="form-control" id="Description"
-				><?= htmlspecialchars($event['Summary']) ?></textarea>
+				><?= htmlspecialchars($event['Description']) ?></textarea>
 		</div>
 		<div class="form-group">
 			<label for="Location">Location</label>
