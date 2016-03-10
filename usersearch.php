@@ -76,7 +76,13 @@
 <body>
 	<?php include 'includes/_nav.php' ?>
 
-	<h2>Search Results</h2>
+	<div class="breadcrumbs">
+	  <a href="index.php">Home</a>
+	  » <a href="form.php">Search</a>
+	  » Results
+	</div>
+
+	<h2>User Search Results</h2>
 	<div>
 		<?php
 			// Search results

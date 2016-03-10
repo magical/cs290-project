@@ -92,7 +92,7 @@
     » Results
   </div>
 
-	<h2>Search Results</h2>
+	<h2>Group Search Results</h2>
 	<div>
 		<?php
 			// Search results
