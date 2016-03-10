@@ -3,6 +3,11 @@
 
 require_once 'includes/all.php';
 
+if(!is_logged_in()) {
+	header("Location: signin.php");
+	exit(0);
+}
+
 $db = connect_db();
 if (array_key_exists('id', $_GET)) {
 	$user_id = $_GET['id'];

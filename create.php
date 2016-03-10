@@ -130,6 +130,7 @@ CREATE TABLE groups (
     day VARCHAR(10), -- Monday - Sunday
     time INTEGER, -- 0-23
     place VARCHAR(255),
+	 campus VARCHAR(255),
     blurb TEXT,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
