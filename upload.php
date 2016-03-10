@@ -1,9 +1,15 @@
 <?php
 require_once 'includes/all.php';
 
+if(!is_logged_in()) {
+	header("Location: signin.php");
+	exit(0);
+}
+
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	header('Status: 405'); // 405 Method Not Allowed
 }
+
 
 $db=connect_db();
 $user_id = get_logged_in_user_id();
