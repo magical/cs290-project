@@ -333,12 +333,9 @@ function has_error($key) {
         ?>
 
         <p class="help-block">
-          Invite people to join your study group.
-          They'll get a notification that you've invited them and have the option to join.
-          You can always invite more people later.
-
-        <p class="help-block">
           To add a user, type their name or email address.
+          These users will be added to your group when you create it.
+          You can always add more people later.
 
       </div>
 
