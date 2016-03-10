@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="<?php if (isset($errors['email'])) echo 'has-error'; ?>">
           <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus value="<?php if (isset($email)) echo htmlspecialchars($email); ?>">
+          <input type="email" id="inputEmail" name="email" class="form-control first" placeholder="Email address" required autofocus value="<?php if (isset($email)) echo htmlspecialchars($email); ?>">
           <?php if (isset($errors['email'])) { ?>
             <p class="help-block"><?= htmlspecialchars($errors['email']) ?></p>
           <?php } ?>
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="<?php if (isset($errors['password'])) echo 'has-error'; ?>">
           <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+          <input type="password" id="inputPassword" name="password" class="form-control last" placeholder="Password" required>
           <?php if (isset($errors['password'])) { ?>
             <p class="help-block"><?= htmlspecialchars($errors['password']) ?></p>
           <?php } ?>
