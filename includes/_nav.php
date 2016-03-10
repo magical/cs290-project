@@ -40,7 +40,7 @@
               <li><a href="course_edit.php">Your Courses</a></li>
 				  <li><a href="group.php">Your Groups</a></li>
               <li><a href="newgroup.php">Create a Group</a></li>
-              <li><a href="form.php">Find Groups</a></li>
+              <li><a href="form.php">Search</a></li>
             </ul>
           </nav>
         </div>
