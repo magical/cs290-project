@@ -41,7 +41,7 @@
         <h1>Looking for a study group?</h1>
 		  <div class='row'>
 		  <div class="col-md-6 col-md-push-6">
-		  <iframe width="500" height="281" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
+		  <iframe width="100%" height="260px" src="https://www.youtube.com/embed/sFoqqAW1NaM" frameborder="0" autoplay='1' allowfullscreen></iframe>
 		  </div>
 		  <div class="col-md-6 col-md-pull-6">
         <p class="lead">We can match you up with other students in your classes who want to form a study group.</p>
@@ -59,8 +59,8 @@
               <footer>Barack Obama</footer>
             </blockquote>
             <blockquote>
-              <p>ur app sucks lol</p>
-              <footer>anonymous</footer>
+              <p>With Study Group Finder I was able to succeed where I would have otherwise failed.</p>
+              <footer>Chris Scaffidi</footer>
             </blockquote>
           </div>
           <div class="col-md-6 col-md-pull-6">
